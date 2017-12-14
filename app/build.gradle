@@ -41,6 +41,8 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroidVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
     implementation "com.google.guava:guava:$guavaVersion-android"
+    implementation "com.jakewharton:butterknife:$butterknifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
     provided "com.google.auto.value:auto-value:$autovalueVersion"
     annotationProcessor "com.google.auto.value:auto-value:$autovalueVersion"
