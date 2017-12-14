@@ -1,10 +1,11 @@
-package com.urizev.birritas.api.data;
+package com.urizev.birritas.data.data;
 
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
+import com.urizev.birritas.data.data.AutoValue_BreweryData;
 
 @AutoValue
 public abstract class BreweryData {

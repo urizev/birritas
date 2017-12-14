@@ -1,13 +1,13 @@
-package com.urizev.birritas.api.adapters;
+package com.urizev.birritas.data.api.adapters;
 
 import com.google.common.collect.ImmutableList;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonReader;
 import com.squareup.moshi.JsonWriter;
 import com.squareup.moshi.Types;
-import com.urizev.birritas.api.data.BeerData;
-import com.urizev.birritas.api.data.BreweryData;
-import com.urizev.birritas.api.data.LiveData;
+import com.urizev.birritas.data.data.BeerData;
+import com.urizev.birritas.data.data.BreweryData;
+import com.urizev.birritas.data.data.LiveData;
 
 import java.io.IOException;
 import java.util.Map;

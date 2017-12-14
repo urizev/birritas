@@ -1,16 +1,16 @@
-package com.urizev.birritas.api;
+package com.urizev.birritas.data.api;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.squareup.moshi.Moshi;
-import com.urizev.birritas.api.adapters.ApiAdapterFactory;
-import com.urizev.birritas.api.adapters.ImmutableListJsonAdapter;
-import com.urizev.birritas.api.adapters.LiveDataJsonAdapter;
-import com.urizev.birritas.api.data.BeerData;
-import com.urizev.birritas.api.data.BreweryData;
-import com.urizev.birritas.api.data.GeopointData;
-import com.urizev.birritas.api.data.LiveData;
-import com.urizev.birritas.api.data.ResultData;
+import com.urizev.birritas.data.api.adapters.ApiAdapterFactory;
+import com.urizev.birritas.data.api.adapters.ImmutableListJsonAdapter;
+import com.urizev.birritas.data.api.adapters.LiveDataJsonAdapter;
+import com.urizev.birritas.data.data.BeerData;
+import com.urizev.birritas.data.data.BreweryData;
+import com.urizev.birritas.data.data.GeopointData;
+import com.urizev.birritas.data.data.LiveData;
+import com.urizev.birritas.data.data.ResultData;
 
 import org.junit.Before;
 import org.junit.Test;

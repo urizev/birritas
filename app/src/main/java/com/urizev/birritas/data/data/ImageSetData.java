@@ -1,8 +1,9 @@
-package com.urizev.birritas.api.data;
+package com.urizev.birritas.data.data;
 
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
+import com.urizev.birritas.data.data.AutoValue_ImageSetData;
 
 @AutoValue
 public abstract class ImageSetData {

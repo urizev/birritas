@@ -1,4 +1,4 @@
-package com.urizev.birritas.api.adapters;
+package com.urizev.birritas.data.api.adapters;
 
 import com.google.common.collect.ImmutableList;
 import com.squareup.moshi.JsonAdapter;

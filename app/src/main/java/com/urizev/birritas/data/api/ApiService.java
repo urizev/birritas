@@ -1,11 +1,11 @@
-package com.urizev.birritas.api;
+package com.urizev.birritas.data.api;
 
 import com.google.common.collect.ImmutableList;
-import com.urizev.birritas.api.data.BeerData;
-import com.urizev.birritas.api.data.BreweryData;
-import com.urizev.birritas.api.data.GeopointData;
-import com.urizev.birritas.api.data.LiveData;
-import com.urizev.birritas.api.data.ResultData;
+import com.urizev.birritas.data.data.BeerData;
+import com.urizev.birritas.data.data.BreweryData;
+import com.urizev.birritas.data.data.GeopointData;
+import com.urizev.birritas.data.data.LiveData;
+import com.urizev.birritas.data.data.ResultData;
 
 import java.util.Map;
 

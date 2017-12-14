@@ -1,4 +1,4 @@
-package com.urizev.birritas.api;
+package com.urizev.birritas.data.api;
 
 import android.support.annotation.NonNull;
 
