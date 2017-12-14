@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "439097523130",
+    "firebase_url": "https://com-urizev-birritas.firebaseio.com",
+    "project_id": "com-urizev-birritas",
+    "storage_bucket": "com-urizev-birritas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439097523130:android:533cffc80fa8d755",
+        "android_client_info": {
+          "package_name": "com.urizev.birritas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "439097523130-v5cinvirrecn08u8duvn470ghkqrp2tn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.urizev.birritas",
+            "certificate_hash": "a8ccef788264480d6d156e8540c787cdf1c579a2"
+          }
+        },
+        {
+          "client_id": "439097523130-5fleslu8bh7hamt8o55uesgtsq6u3sun.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsJcnWz6fs2AR742w4zR9M_3DSaIsUFIw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "439097523130-5fleslu8bh7hamt8o55uesgtsq6u3sun.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
