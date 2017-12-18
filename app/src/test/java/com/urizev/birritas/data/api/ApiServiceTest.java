@@ -8,7 +8,7 @@ import com.urizev.birritas.data.api.adapters.ImmutableListJsonAdapter;
 import com.urizev.birritas.data.api.adapters.LiveDataJsonAdapter;
 import com.urizev.birritas.data.data.BeerData;
 import com.urizev.birritas.data.data.BreweryData;
-import com.urizev.birritas.data.data.GeopointData;
+import com.urizev.birritas.data.data.PlaceData;
 import com.urizev.birritas.data.data.LiveData;
 import com.urizev.birritas.data.data.ResultData;
 
@@ -62,6 +62,7 @@ public class ApiServiceTest {
                 .create(ApiService.class);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void getBeers() throws Exception {
         TestObserver<ResultData<ImmutableList<BeerData>>> observer = new TestObserver<>();
@@ -96,16 +97,17 @@ public class ApiServiceTest {
     }
 
     // /search/geo/point?lat=35.772096&lng=-78.638614
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void searchGeopoint() {
-        TestObserver<ResultData<ImmutableList<GeopointData>>> observer = new TestObserver<>();
+        TestObserver<ResultData<ImmutableList<PlaceData>>> observer = new TestObserver<>();
         ImmutableMap<String, String> params = ImmutableMap.of(ApiService.LATITUDE, LATITUDE, ApiService.LONGITUDE, LONGITUDE, ApiService.RADIUS, MILES);
-        Observable<ResultData<ImmutableList<GeopointData>>> observable = this.api.searchGeoPoint(params);
+        Observable<ResultData<ImmutableList<PlaceData>>> observable = this.api.searchGeoPoint(params);
         observable.subscribe(observer);
         observer.assertComplete();
         observer.assertNoErrors();
         observer.assertValueCount(1);
-        ResultData<ImmutableList<GeopointData>> result = observer.values().get(0);
+        ResultData<ImmutableList<PlaceData>> result = observer.values().get(0);
         assertNotNull(result);
         assertEquals(STATUS_SUCCESS, result.status());
         assertNotNull(result.currentPage());
@@ -117,6 +119,7 @@ public class ApiServiceTest {
     }
 
     // /search
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void liveSearch() {
         TestObserver<ResultData<LiveData>> observer = new TestObserver<>();

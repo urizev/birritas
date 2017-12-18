@@ -2,4 +2,11 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="view_error_message_horizontal_margin">32dp</dimen>
+    <dimen name="cardview_outer_padding">4dp</dimen>
+    <dimen name="cell_beer_label_image_height">48dp</dimen>
+    <dimen name="card_title_padding_top">24dp</dimen>
+    <dimen name="card_title_padding_bottom">8dp</dimen>
+    <dimen name="card_title_padding_horizontal">16dp</dimen>
+    <dimen name="cell_featured_param_padding">8dp</dimen>
 </resources>

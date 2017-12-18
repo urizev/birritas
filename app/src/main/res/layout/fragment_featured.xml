@@ -1,0 +1,28 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/featured_content"
+        app:spanCount="@integer/featured_columns"
+        app:layoutManager="android.support.v7.widget.GridLayoutManager"
+        android:clipToPadding="false"
+        android:padding="@dimen/cardview_outer_padding"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/cell_featured"/>
+    <com.urizev.birritas.ui.ErrorView
+        android:id="@+id/featured_error"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <com.urizev.birritas.ui.LoadingView
+        android:id="@+id/featured_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</FrameLayout>

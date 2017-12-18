@@ -9,7 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary= true
+        vectorDrawables.useSupportLibrary = true
 
         buildConfigField('String', 'BREWERYDB_API_KEY', "$brewerydbApiKey")
     }
@@ -30,27 +30,36 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:support-v4:$supportLibraryVersion"
     implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
+    implementation "com.android.support:cardview-v7:$supportLibraryVersion"
+    implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
     implementation "com.android.support:design:$supportLibraryVersion"
     implementation "com.android.support:support-vector-drawable:$supportLibraryVersion"
     implementation "com.google.firebase:firebase-database:$firebaseVersion"
+    implementation "com.google.guava:guava:$guavaVersion-android"
+    implementation "com.google.dagger:dagger:$daggerVersion"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+    implementation "com.squareup.picasso:picasso:$picassoVersion"
+    implementation "com.jakewharton.picasso:picasso2-okhttp3-downloader:$okhttpdownloaderVersion"
+    implementation "com.jakewharton:butterknife:$butterknifeVersion"
+    implementation "com.jakewharton.timber:timber:$timberVersion"
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroidVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
-    implementation "com.google.guava:guava:$guavaVersion-android"
-    implementation "com.jakewharton:butterknife:$butterknifeVersion"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
     provided "com.google.auto.value:auto-value:$autovalueVersion"
-    annotationProcessor "com.google.auto.value:auto-value:$autovalueVersion"
-    annotationProcessor "com.ryanharter.auto.value:auto-value-moshi:$autovaluemoshiVersion"
     provided "com.ryanharter.auto.value:auto-value-moshi-annotations:$autovaluemoshiVersion"
 
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+    annotationProcessor "com.google.auto.value:auto-value:$autovalueVersion"
+    annotationProcessor "com.ryanharter.auto.value:auto-value-moshi:$autovaluemoshiVersion"
+
     testImplementation "junit:junit:$junitVersion"
-    
+
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }

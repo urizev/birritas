@@ -3,12 +3,11 @@ package com.urizev.birritas.view.common;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.urizev.birritas.App;
+import com.urizev.birritas.app.base.BaseFragment;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -18,7 +17,7 @@ import io.reactivex.schedulers.Schedulers;
  * Creado por jcvallejo en 29/11/17.
  */
 
-public abstract class PresenterFragment<VS extends ViewState, P extends Presenter<VS>> extends Fragment {
+public abstract class PresenterFragment<VS extends ViewState, P extends Presenter<VS>> extends BaseFragment {
     private P mPresenter;
     private Disposable mDisposable;
 
@@ -62,9 +61,5 @@ public abstract class PresenterFragment<VS extends ViewState, P extends Presente
 
     protected P getPresenter() {
         return mPresenter;
-    }
-
-    public App getApp() {
-        return (App) getActivity().getApplication();
     }
 }

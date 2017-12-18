@@ -3,9 +3,9 @@ package com.urizev.birritas.data.data;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableList;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-import com.urizev.birritas.data.data.AutoValue_BeerData;
 
 @AutoValue
 public abstract class BeerData {
@@ -15,6 +15,8 @@ public abstract class BeerData {
     public abstract String description();
     @Nullable
     public abstract String abv();
+    @Nullable
+    public abstract String ibu();
     public abstract String isOrganic();
     public abstract String status();
     @Nullable
@@ -24,6 +26,8 @@ public abstract class BeerData {
     public abstract StyleData style();
     @Nullable
     public abstract ImageSetData labels();
+    @Nullable
+    public abstract ImmutableList<BreweryData> breweries();
 
     public static JsonAdapter<BeerData> jsonAdapter(Moshi moshi) {
         return new AutoValue_BeerData.MoshiJsonAdapter(moshi);

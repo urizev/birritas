@@ -3,7 +3,7 @@ package com.urizev.birritas.data.api;
 import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.data.data.BeerData;
 import com.urizev.birritas.data.data.BreweryData;
-import com.urizev.birritas.data.data.GeopointData;
+import com.urizev.birritas.data.data.PlaceData;
 import com.urizev.birritas.data.data.LiveData;
 import com.urizev.birritas.data.data.ResultData;
 
@@ -21,6 +21,13 @@ public interface ApiService {
     String RADIUS = "radius";
     String UNIT = "unit";
     String QUERY = "q";
+    String HAS_LABELS = "hasLabels";
+    String YES = "Y";
+    String ORDER = "order";
+    String ORDER_UPDATE_DATE = "updateDate";
+    String SORT = "sort";
+    String SORT_DESC = "DESC";
+    String STATUS_VERIFIED = "verified";
 
     @GET("beers")
     Observable<ResultData<ImmutableList<BeerData>>> getBeers(@QueryMap Map<String,String> params);
@@ -29,7 +36,7 @@ public interface ApiService {
     Observable<ResultData<BeerData>> getBeer(@Path("beerId") String beerId);
 
     @GET("search/geo/point")
-    Observable<ResultData<ImmutableList<GeopointData>>> searchGeoPoint(@QueryMap Map<String,String> params);
+    Observable<ResultData<ImmutableList<PlaceData>>> searchGeoPoint(@QueryMap Map<String,String> params);
 
     @GET("search")
     Observable<ResultData<LiveData>> search(@QueryMap Map<String,String> params);

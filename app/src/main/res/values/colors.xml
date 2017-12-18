@@ -7,4 +7,6 @@
     <color name="colorAccent">#795548</color>
 
     <color name="bottomNavigation">#333</color>
+    <color name="no_srm">#CCC</color>
+    <color name="colorImagePlaceholder">#cfc5ad</color>
 </resources>

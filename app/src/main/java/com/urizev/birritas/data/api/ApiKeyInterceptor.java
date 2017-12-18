@@ -10,7 +10,7 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
-class ApiKeyInterceptor implements Interceptor {
+public class ApiKeyInterceptor implements Interceptor {
     private static final String PARAM_NAME = "key";
 
     @Override
