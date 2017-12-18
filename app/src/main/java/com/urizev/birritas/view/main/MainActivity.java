@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import com.urizev.birritas.R;
 import com.urizev.birritas.app.base.BaseActivity;
 import com.urizev.birritas.view.featured.FeaturedFragment;
+import com.urizev.birritas.view.nearby.NearbyFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,7 +64,7 @@ public class MainActivity extends BaseActivity {
                 case POSITION_FEATURED:
                     return new FeaturedFragment();
                 case POSITION_MAP:
-                    return new Fragment();
+                    return new NearbyFragment();
                 case POSITION_FAVORITES:
                     return new Fragment();
             }

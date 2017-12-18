@@ -32,6 +32,7 @@ ext {
     firebaseVersion = '11.6.2'
     autovalueVersion = '1.5.2'
     butterknifeVersion = '8.8.1'
+    playServicesVersion = '11.6.2'
     autovaluemoshiVersion = '0.4.4'
     supportLibraryVersion = '26.1.0'
     okhttpdownloaderVersion = '1.1.0'

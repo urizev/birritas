@@ -9,10 +9,10 @@ import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.R;
 import com.urizev.birritas.app.providers.ImageLoader;
 import com.urizev.birritas.app.providers.ResourceProvider;
-import com.urizev.birritas.domain.repositories.BeerRepository;
+import com.urizev.birritas.domain.usecases.FeaturedBeersUseCase;
 import com.urizev.birritas.ui.ErrorView;
 import com.urizev.birritas.ui.LoadingView;
-import com.urizev.birritas.view.common.PresenterFragment;
+import com.urizev.birritas.view.common.DirectPresenterFragment;
 
 import javax.inject.Inject;
 
@@ -20,14 +20,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class FeaturedFragment extends PresenterFragment<FeaturedViewState,FeaturedPresenter> {
+public class FeaturedFragment extends DirectPresenterFragment<FeaturedViewState,FeaturedPresenter> {
     @BindView(R.id.featured_content) RecyclerView mContentView;
     @BindView(R.id.featured_loading) LoadingView mLoadingView;
     @BindView(R.id.featured_error) ErrorView mErrorView;
 
     @Inject ImageLoader imageLoader;
-    @Inject BeerRepository beerRepository;
     @Inject ResourceProvider resourceProvider;
+    @Inject FeaturedBeersUseCase featuredBeerUseCase;
 
     private FeaturedAdapter mAdapter;
 
@@ -51,7 +51,7 @@ public class FeaturedFragment extends PresenterFragment<FeaturedViewState,Featur
                 .loading(true)
                 .error(null)
                 .build();
-        return new FeaturedPresenter(beerRepository, model, resourceProvider);
+        return new FeaturedPresenter(featuredBeerUseCase, model, resourceProvider);
     }
 
     @Override
@@ -76,9 +76,10 @@ public class FeaturedFragment extends PresenterFragment<FeaturedViewState,Featur
     }
 
     @Override
-    protected void bindView(View view) {
+    protected boolean bindView(View view) {
         ButterKnife.bind(this, view);
         mAdapter = new FeaturedAdapter(imageLoader);
         mContentView.setAdapter(mAdapter);
+        return true;
     }
 }

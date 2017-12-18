@@ -10,7 +10,7 @@ import com.urizev.birritas.domain.entities.Brewery;
 import com.urizev.birritas.domain.entities.ImageSet;
 import com.urizev.birritas.domain.entities.SRM;
 import com.urizev.birritas.domain.entities.Style;
-import com.urizev.birritas.domain.repositories.BeerRepository;
+import com.urizev.birritas.domain.usecases.FeaturedBeersUseCase;
 import com.urizev.birritas.view.common.Presenter;
 
 import java.util.ArrayList;
@@ -21,20 +21,18 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.BehaviorSubject;
 
 class FeaturedPresenter extends Presenter<FeaturedViewState> {
-    private final BeerRepository mRepository;
+    private final FeaturedBeersUseCase mUseCase;
     private final BehaviorSubject<FeaturedModel> mModel;
-    private final ResourceProvider resourceProvider;
     private final int mNoSrmColor;
     private Disposable mLoadingDataDisposable;
     private String mNa;
 
-    FeaturedPresenter(BeerRepository repository, FeaturedModel model, ResourceProvider resourceProvider) {
+    FeaturedPresenter(FeaturedBeersUseCase useCase, FeaturedModel model, ResourceProvider resourceProvider) {
         mNa = resourceProvider.getString(R.string.n_a);
         mNoSrmColor = resourceProvider.getColor(R.color.no_srm);
-        this.mRepository = repository;
+        this.mUseCase = useCase;
         this.mModel = BehaviorSubject.createDefault(model);
-        this.resourceProvider = resourceProvider;
-        this.mModel.doOnNext(this::modelToViewState).subscribe();
+        addDisposable(this.mModel.doOnNext(this::modelToViewState).subscribe());
         loadData();
     }
 
@@ -42,10 +40,11 @@ class FeaturedPresenter extends Presenter<FeaturedViewState> {
         if (mLoadingDataDisposable != null) {
             return;
         }
-        mLoadingDataDisposable = mRepository.getFeaturedBeers()
+        mLoadingDataDisposable = mUseCase.execute(null)
                 .map(beers -> mModel.getValue().withBeers(beers))
                 .onErrorReturn(throwable -> mModel.getValue().withError(throwable))
                 .doOnNext(mModel::onNext)
+                .doFinally(() -> mLoadingDataDisposable = null)
                 .subscribe();
     }
 

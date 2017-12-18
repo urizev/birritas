@@ -8,7 +8,7 @@ import com.urizev.birritas.domain.entities.Place;
 
 import javax.inject.Inject;
 
-class PlaceMapper {
+public class PlaceMapper {
     private final EntityCache entityCache;
     private final CountryMapper countryMapper;
 

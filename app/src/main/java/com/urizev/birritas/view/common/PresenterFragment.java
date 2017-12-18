@@ -17,7 +17,7 @@ import io.reactivex.schedulers.Schedulers;
  * Creado por jcvallejo en 29/11/17.
  */
 
-public abstract class PresenterFragment<VS extends ViewState, P extends Presenter<VS>> extends BaseFragment {
+public abstract class PresenterFragment<VS extends ViewState, PVS extends ViewState, P extends Presenter<PVS>> extends BaseFragment {
     private P mPresenter;
     private Disposable mDisposable;
 
@@ -25,7 +25,7 @@ public abstract class PresenterFragment<VS extends ViewState, P extends Presente
     int getLayoutRes();
     protected abstract P createPresenter(Bundle savedInstanceState);
     protected abstract void renderViewState(VS vs);
-    protected abstract void bindView(View view);
+    protected abstract boolean bindView(View view);
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,12 +46,20 @@ public abstract class PresenterFragment<VS extends ViewState, P extends Presente
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        bindView(view);
+        if (bindView(view)) {
+            bindPresenter();
+        }
+    }
+
+    protected void bindPresenter() {
         mDisposable = mPresenter.observeViewState()
+                .map(this::prepareViewState)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.computation())
                 .subscribe(this::renderViewState);
     }
+
+    protected abstract VS prepareViewState(PVS pvs);
 
     @Override
     public void onDestroyView() {
