@@ -1,10 +1,13 @@
 package com.urizev.birritas.data.mappers;
 
+import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.data.data.ImageSetData;
 import com.urizev.birritas.domain.entities.ImageSet;
 
 class ImageSetMapper {
     public static ImageSet map(ImageSetData data) {
+        RxUtils.assertComputationThread();
+
         if (data == null) {
             return null;
         }

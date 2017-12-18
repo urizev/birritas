@@ -4,6 +4,7 @@ package com.urizev.birritas.data.cache;
 import android.support.v4.util.ArrayMap;
 import android.util.SparseArray;
 
+import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.domain.entities.Beer;
 import com.urizev.birritas.domain.entities.Brewery;
 import com.urizev.birritas.domain.entities.Category;
@@ -38,62 +39,78 @@ public class EntityCache {
     }
 
     public Beer getBeer(String id) {
+        RxUtils.assertComputationThread();
+
         return this.mBeers.get(id);
     }
 
     public void putBeer(Beer beer) {
+        RxUtils.assertComputationThread();
         mBeers.put(beer.id(), beer);
     }
 
     public Category getCategory(int id) {
+        RxUtils.assertComputationThread();
         return mCategories.get(id);
     }
 
     public void putCategory(Category category) {
+        RxUtils.assertComputationThread();
         mCategories.put(category.id(), category);
     }
 
     public Glass getGlass(int id) {
+        RxUtils.assertComputationThread();
         return mGlasses.get(id);
     }
 
     public void putGlass(Glass glass) {
+        RxUtils.assertComputationThread();
         mGlasses.put(glass.id(), glass);
     }
 
     public SRM getSRM(int id) {
+        RxUtils.assertComputationThread();
         return mSrms.get(id);
     }
 
     public void putSRM(SRM srm) {
+        RxUtils.assertComputationThread();
         mSrms.put(srm.id(), srm);
     }
 
     public Style getStyle(int id) {
+        RxUtils.assertComputationThread();
         return mStyles.get(id);
     }
 
     public void putStyle(Style style) {
+        RxUtils.assertComputationThread();
         mStyles.put(style.id(), style);
     }
 
     public Brewery getBrewery(String id) {
+        RxUtils.assertComputationThread();
         return mBreweries.get(id);
     }
 
     public void putBrewery(Brewery brewery) {
+        RxUtils.assertComputationThread();
         mBreweries.put(brewery.id(), brewery);
     }
 
     public Place getPlace(String id) {
+        RxUtils.assertComputationThread();
         return mPlaces.get(id);
     }
 
     public Country getCountry(String id) {
+        RxUtils.assertComputationThread();
         return mCountries.get(id);
     }
 
     public void putCountry(Country country) {
+        RxUtils.assertComputationThread();
         mCountries.put(country.isoCode(), country);
     }
 }

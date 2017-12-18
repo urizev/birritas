@@ -1,5 +1,7 @@
 package com.urizev.birritas.view.nearby;
 
+import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.view.common.ViewState;
@@ -7,6 +9,7 @@ import com.urizev.birritas.view.common.ViewState;
 @AutoValue
 public abstract class NearbyViewState<VS> implements ViewState {
     public abstract boolean loading();
+    @Nullable
     public abstract Throwable error();
     public abstract ImmutableList<VS> viewStates();
 

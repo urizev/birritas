@@ -14,7 +14,7 @@ public abstract class Beer {
     @Nullable
     public abstract Float abv();
     @Nullable
-    public abstract Integer ibu();
+    public abstract Float ibu();
     public abstract boolean isOrganic();
     public abstract int status();
     @Nullable
@@ -37,7 +37,7 @@ public abstract class Beer {
         public abstract Builder name(String name);
         public abstract Builder description(String description);
         public abstract Builder abv(Float abv);
-        public abstract Builder ibu(Integer ibu);
+        public abstract Builder ibu(Float ibu);
         public abstract Builder isOrganic(boolean isOrganic);
         public abstract Builder status(int status);
         public abstract Builder srm(SRM srm);

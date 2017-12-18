@@ -1,5 +1,6 @@
 package com.urizev.birritas.data.mappers;
 
+import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.data.api.ApiService;
 
 class CommonMapper {
@@ -7,6 +8,8 @@ class CommonMapper {
     private static final int VERIFIED = 0;
 
     static Float mapFloat(String str) {
+        RxUtils.assertComputationThread();
+
         if (str == null) {
             return null;
         }

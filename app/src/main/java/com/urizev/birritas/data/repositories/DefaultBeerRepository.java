@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class DefaultBeerRepository implements BeerRepository {
@@ -33,6 +34,8 @@ public class DefaultBeerRepository implements BeerRepository {
     @Override
     public Observable<ImmutableList<Beer>> getFeaturedBeers() {
         return service.getBeers(FEATURED_PARAMS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
                 .map(ResultData::data)
                 .flatMap(Observable::fromIterable)
                 .map(beerMapper::map)

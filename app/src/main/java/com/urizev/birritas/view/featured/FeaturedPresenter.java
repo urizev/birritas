@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.R;
 import com.urizev.birritas.app.providers.ResourceProvider;
+import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.domain.entities.Beer;
 import com.urizev.birritas.domain.entities.Brewery;
 import com.urizev.birritas.domain.entities.ImageSet;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
 class FeaturedPresenter extends Presenter<FeaturedViewState> {
@@ -32,7 +34,11 @@ class FeaturedPresenter extends Presenter<FeaturedViewState> {
         mNoSrmColor = resourceProvider.getColor(R.color.no_srm);
         this.mUseCase = useCase;
         this.mModel = BehaviorSubject.createDefault(model);
-        addDisposable(this.mModel.doOnNext(this::modelToViewState).subscribe());
+        addDisposable(this.mModel
+                .observeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.computation())
+                .doOnNext(this::modelToViewState)
+                .subscribe());
         loadData();
     }
 
@@ -41,14 +47,26 @@ class FeaturedPresenter extends Presenter<FeaturedViewState> {
             return;
         }
         mLoadingDataDisposable = mUseCase.execute(null)
-                .map(beers -> mModel.getValue().withBeers(beers))
-                .onErrorReturn(throwable -> mModel.getValue().withError(throwable))
+                .observeOn(Schedulers.computation())
+                .map(beers -> {
+                    RxUtils.assertComputationThread();
+                    return mModel.getValue().withBeers(beers);
+                })
+                .onErrorReturn(throwable -> {
+                    RxUtils.assertComputationThread();
+                    return mModel.getValue().withError(throwable);
+                })
                 .doOnNext(mModel::onNext)
-                .doFinally(() -> mLoadingDataDisposable = null)
+                .doFinally(() -> {
+                    RxUtils.assertComputationThread();
+                    mLoadingDataDisposable = null;
+                })
                 .subscribe();
     }
 
     private void modelToViewState(FeaturedModel model) {
+        RxUtils.assertComputationThread();
+
         ImmutableList.Builder<FeaturedItemViewState> viewStates = new ImmutableList.Builder<>();
         for (Beer beer : model.beers()){
             FeaturedItemViewState vs = this.beerToViewState(beer);
@@ -59,6 +77,8 @@ class FeaturedPresenter extends Presenter<FeaturedViewState> {
     }
 
     private FeaturedItemViewState beerToViewState(Beer beer) {
+        RxUtils.assertComputationThread();
+
         ImageSet labels = beer.labels();
         String icon = labels != null ? labels.icon() : null;
         int srmColor = mNoSrmColor;
@@ -72,7 +92,7 @@ class FeaturedPresenter extends Presenter<FeaturedViewState> {
             }
             srmValue = String.format(Locale.getDefault(), "%d%s", srm.value(), extra);
         }
-        String ibuValue = beer.ibu() == null ? mNa : String.format(Locale.getDefault(), "%d", beer.ibu());
+        String ibuValue = beer.ibu() == null ? mNa : String.format(Locale.getDefault(), "%.1f", beer.ibu());
         String abvValue = beer.abv() == null ? mNa : String.format(Locale.getDefault(), "%.1f", beer.abv());
         String brewedBy = "";
         ImmutableList<Brewery> breweries = beer.breweries();

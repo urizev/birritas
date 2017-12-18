@@ -19,3 +19,11 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-include proguard-rules-okio.pro
+-include proguard-rules-okhttp3.pro
+-include proguard-rules-retrofit.pro
+-include proguard-rules-picasso.pro
+-include proguard-rules-guava.pro
+
+-ignorewarnings

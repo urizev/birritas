@@ -1,5 +1,6 @@
 package com.urizev.birritas.data.mappers;
 
+import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.data.cache.EntityCache;
 import com.urizev.birritas.data.data.StyleData;
 import com.urizev.birritas.domain.entities.Style;
@@ -17,6 +18,8 @@ class StyleMapper {
     }
 
     Style map(StyleData data) {
+        RxUtils.assertComputationThread();
+
         if (data == null) {
             return null;
         }

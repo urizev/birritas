@@ -13,8 +13,10 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
-public class NearbyUseCase extends UseCase<NearbyUseCase.Param,ImmutableList<Place>>{
+public class NearbyUseCase extends UseCase<NearbyUseCase.SearchSpec,ImmutableList<Place>>{
     private final ApiService apiService;
     private final PlaceMapper placeMapper;
 
@@ -25,28 +27,31 @@ public class NearbyUseCase extends UseCase<NearbyUseCase.Param,ImmutableList<Pla
     }
 
     @Override
-    protected Observable<ImmutableList<Place>> createObservable(Param param) {
-        return apiService.searchGeoPoint(mapParam(param))
+    protected Observable<ImmutableList<Place>> createObservable(SearchSpec searchSpec) {
+        Timber.d("Executing %s", searchSpec);
+        return apiService.searchGeoPoint(mapParam(searchSpec))
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
                 .map(ResultData::data)
                 .map(placeMapper::map);
     }
 
-    private Map<String, String> mapParam(Param param) {
+    private Map<String, String> mapParam(SearchSpec searchSpec) {
         return ImmutableMap.of(
-                ApiService.LATITUDE, String.valueOf(param.latitude()),
-                ApiService.LONGITUDE, String.valueOf(param.longitude()),
-                ApiService.RADIUS, String.valueOf(param.radius())
+                ApiService.LATITUDE, String.valueOf(searchSpec.latitude()),
+                ApiService.LONGITUDE, String.valueOf(searchSpec.longitude()),
+                ApiService.RADIUS, String.valueOf(searchSpec.radius())
         );
     }
 
     @AutoValue
-    public static abstract class Param {
+    public static abstract class SearchSpec {
         public abstract double latitude();
         public abstract double longitude();
         public abstract int radius();
 
-        public static Param create(double latitude, double longitude, int radius) {
-            return new AutoValue_NearbyUseCase_Param(latitude, longitude, radius);
+        public static SearchSpec create(double latitude, double longitude, int radius) {
+            return new AutoValue_NearbyUseCase_SearchSpec(latitude, longitude, radius);
         }
     }
 }

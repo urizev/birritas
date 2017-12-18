@@ -5,11 +5,15 @@ import android.content.Context;
 import com.urizev.birritas.app.App;
 import com.urizev.birritas.app.providers.AndroidResourceProvider;
 import com.urizev.birritas.app.providers.ResourceProvider;
+import com.urizev.birritas.domain.usecases.UseCase;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.Scheduler;
+import io.reactivex.schedulers.Schedulers;
 
 @Module
 public class AppModule {

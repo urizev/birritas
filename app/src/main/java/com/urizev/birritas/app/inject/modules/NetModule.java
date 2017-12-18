@@ -5,6 +5,7 @@ import android.content.Context;
 import com.squareup.moshi.Moshi;
 import com.urizev.birritas.app.providers.ImageLoader;
 import com.urizev.birritas.app.providers.PicassoImageLoader;
+import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.data.api.ApiKeyInterceptor;
 import com.urizev.birritas.data.api.ApiService;
 import com.urizev.birritas.data.api.adapters.ApiAdapterFactory;
@@ -46,7 +47,8 @@ public class NetModule {
     @Provides
     @Singleton
     Interceptor provideLoggingInterceptor() {
-        return new HttpLoggingInterceptor(message -> Timber.tag("OkHttp").d(message));
+        return new HttpLoggingInterceptor(message -> Timber.tag("okhttp").d(message))
+                .setLevel(HttpLoggingInterceptor.Level.BASIC);
     }
 
     @Provides
@@ -62,6 +64,7 @@ public class NetModule {
                 .cache(cache)
                 .addInterceptor(loggingInterceptor)
                 .addInterceptor(new ApiKeyInterceptor())
+                .addInterceptor(RxUtils.interceptor())
                 .build();
     }
 

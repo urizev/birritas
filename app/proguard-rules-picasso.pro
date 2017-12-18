@@ -1,0 +1,2 @@
+-dontwarn com.squareup.picasso.OkHttp3Downloader
+-dontwarn com.squareup.picasso.OkHttpDownloader

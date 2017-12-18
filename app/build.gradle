@@ -15,7 +15,12 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled true
+            useProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -51,8 +56,8 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroidVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
 
-    provided "com.google.auto.value:auto-value:$autovalueVersion"
-    provided "com.ryanharter.auto.value:auto-value-moshi-annotations:$autovaluemoshiVersion"
+    compileOnly "com.google.auto.value:auto-value:$autovalueVersion"
+    compileOnly "com.ryanharter.auto.value:auto-value-moshi-annotations:$autovaluemoshiVersion"
 
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"

@@ -12,7 +12,7 @@ public class FeaturedBeersUseCase extends UseCase<Void,ImmutableList<Beer>> {
     private final BeerRepository repository;
 
     @Inject
-    protected FeaturedBeersUseCase(BeerRepository repository) {
+    FeaturedBeersUseCase(BeerRepository repository) {
         this.repository = repository;
     }
 

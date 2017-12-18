@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.urizev.birritas.app.base.BaseFragment;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -19,7 +20,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public abstract class PresenterFragment<VS extends ViewState, PVS extends ViewState, P extends Presenter<PVS>> extends BaseFragment {
     private P mPresenter;
-    private Disposable mDisposable;
+    private CompositeDisposable mDisposables;
 
     protected abstract @LayoutRes
     int getLayoutRes();
@@ -31,6 +32,7 @@ public abstract class PresenterFragment<VS extends ViewState, PVS extends ViewSt
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        mDisposables = new CompositeDisposable();
         if (mPresenter == null) {
             mPresenter = createPresenter(savedInstanceState);
         }
@@ -52,19 +54,23 @@ public abstract class PresenterFragment<VS extends ViewState, PVS extends ViewSt
     }
 
     protected void bindPresenter() {
-        mDisposable = mPresenter.observeViewState()
+        addDisposable(mPresenter.observeViewState()
                 .map(this::prepareViewState)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.computation())
-                .subscribe(this::renderViewState);
+                .subscribe(this::renderViewState));
+    }
+
+    protected void addDisposable(Disposable disposable) {
+        mDisposables.add(disposable);
     }
 
     protected abstract VS prepareViewState(PVS pvs);
 
     @Override
-    public void onDestroyView() {
-        mDisposable.dispose();
-        super.onDestroyView();
+    public void onDestroy() {
+        mDisposables.dispose();
+        super.onDestroy();
     }
 
     protected P getPresenter() {

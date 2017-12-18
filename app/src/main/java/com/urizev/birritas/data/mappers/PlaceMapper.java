@@ -1,6 +1,7 @@
 package com.urizev.birritas.data.mappers;
 
 import com.google.common.collect.ImmutableList;
+import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.data.api.ApiService;
 import com.urizev.birritas.data.cache.EntityCache;
 import com.urizev.birritas.data.data.PlaceData;
@@ -19,6 +20,8 @@ public class PlaceMapper {
     }
 
     public ImmutableList<Place> map(ImmutableList<PlaceData> data) {
+        RxUtils.assertComputationThread();
+
         if (data == null) {
             return null;
         }

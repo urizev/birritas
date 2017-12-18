@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.R;
 import com.urizev.birritas.app.providers.ImageLoader;
 import com.urizev.birritas.app.providers.ResourceProvider;
+import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.domain.usecases.FeaturedBeersUseCase;
 import com.urizev.birritas.ui.ErrorView;
 import com.urizev.birritas.ui.LoadingView;
@@ -56,6 +57,8 @@ public class FeaturedFragment extends DirectPresenterFragment<FeaturedViewState,
 
     @Override
     protected void renderViewState(FeaturedViewState viewState) {
+        RxUtils.assertMainThread();
+
         mErrorView.setVisibility(View.INVISIBLE);
         mContentView.setVisibility(View.INVISIBLE);
         mLoadingView.setVisibility(View.INVISIBLE);

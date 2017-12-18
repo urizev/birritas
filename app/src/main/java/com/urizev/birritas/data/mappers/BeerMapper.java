@@ -1,5 +1,6 @@
 package com.urizev.birritas.data.mappers;
 
+import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.data.api.ApiService;
 import com.urizev.birritas.data.cache.EntityCache;
 import com.urizev.birritas.data.data.BeerData;
@@ -24,6 +25,8 @@ public class BeerMapper {
     }
 
     public Beer map(BeerData data) {
+        RxUtils.assertComputationThread();
+
         Beer beer = entityCache.getBeer(data.id());
         if (beer == null) {
             beer = Beer.builder()
@@ -33,7 +36,7 @@ public class BeerMapper {
                     .isOrganic(data.isOrganic().equals(ApiService.YES))
                     .srm(srmMapper.map(data.srm()))
                     .abv(CommonMapper.mapFloat(data.abv()))
-                    .ibu(CommonMapper.mapInteger(data.ibu()))
+                    .ibu(CommonMapper.mapFloat(data.ibu()))
                     .status(CommonMapper.mapStatus(data.status()))
                     .glass(glassMapper.map(data.glass()))
                     .style(styleMapper.map(data.style()))
