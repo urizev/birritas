@@ -1,17 +1,26 @@
 package com.urizev.birritas.domain.entities;
 
+import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 
 @AutoValue
 public abstract class Place {
     public abstract String id();
     public abstract String name();
+    @Nullable
     public abstract String streetAddress();
+    @Nullable
     public abstract String extendedAddress();
+    @Nullable
     public abstract String locality();
+    @Nullable
     public abstract String region();
+    @Nullable
     public abstract String postalCode();
+    @Nullable
     public abstract String phone();
+    @Nullable
     public abstract String website();
     public abstract double latitude();
     public abstract double longitude();
@@ -20,6 +29,7 @@ public abstract class Place {
     public abstract boolean isClosed();
     public abstract boolean openToPublic();
     public abstract String locationType();
+    @Nullable
     public abstract Integer yearOpened();
     public abstract int status();
     public abstract Country country();

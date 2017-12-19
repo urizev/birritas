@@ -28,17 +28,23 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
 
     private void subscribeToSearchSpec() {
         addDisposable(mSearchSpec
-                .flatMap(mUseCase::execute)
+                .doOnNext(s -> Timber.d("Searching…"))
+                .doFinally(() -> Timber.d("Completed??"))
+                .subscribeOn(Schedulers.computation())
+                .switchMap(mUseCase::execute)
                 .observeOn(Schedulers.computation())
                 .map(places -> {
                     RxUtils.assertComputationThread();
+                    Timber.d("Places %d", places.size());
                     return mModel.getValue().mergePlaces(places);
                 })
                 .onErrorReturn(throwable -> {
                     RxUtils.assertComputationThread();
+                    Timber.e(throwable);
                     return mModel.getValue().withError(throwable);
                 })
                 .doOnNext(mModel::onNext)
+                .doFinally(() -> Timber.d("Completed!"))
                 .subscribe());
     }
 

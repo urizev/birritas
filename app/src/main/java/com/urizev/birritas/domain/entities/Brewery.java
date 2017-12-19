@@ -1,5 +1,7 @@
 package com.urizev.birritas.domain.entities;
 
+import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 
@@ -7,9 +9,13 @@ import com.google.common.collect.ImmutableList;
 public abstract class Brewery {
     public abstract String id();
     public abstract String name();
+    @Nullable
     public abstract String shortName();
+    @Nullable
     public abstract String description();
+    @Nullable
     public abstract String website();
+    @Nullable
     public abstract Integer established();
     public abstract ImageSet images();
     public abstract boolean isOrganic();

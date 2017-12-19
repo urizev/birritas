@@ -57,7 +57,7 @@ class BreweryMapper {
                     .images(ImageSetMapper.map(data.images()))
                     .isOrganic(data.isOrganic().equals(ApiService.YES))
                     .status(CommonMapper.mapStatus(data.status()))
-                    .locations(placeMapper.map(data.locations()))
+                    .locations(placeMapper.map(data.locations() != null ? data.locations() : ImmutableList.of()))
                     .build();
             entityCache.putBrewery(brewery);
         }

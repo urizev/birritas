@@ -4,6 +4,7 @@ import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.urizev.birritas.data.api.ApiService;
+import com.urizev.birritas.data.data.PlaceData;
 import com.urizev.birritas.data.data.ResultData;
 import com.urizev.birritas.data.mappers.PlaceMapper;
 import com.urizev.birritas.domain.entities.Place;
@@ -13,6 +14,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -32,7 +34,12 @@ public class NearbyUseCase extends UseCase<NearbyUseCase.SearchSpec,ImmutableLis
         return apiService.searchGeoPoint(mapParam(searchSpec))
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
-                .map(ResultData::data)
+                .map((Function<ResultData<ImmutableList<PlaceData>>, ImmutableList<PlaceData>>) data -> {
+                    if (data.data() == null) {
+                        return ImmutableList.of();
+                    }
+                    return data.data();
+                })
                 .map(placeMapper::map);
     }
 
@@ -46,12 +53,14 @@ public class NearbyUseCase extends UseCase<NearbyUseCase.SearchSpec,ImmutableLis
 
     @AutoValue
     public static abstract class SearchSpec {
+        private static final int MAX_RADIUS = 100;
+
         public abstract double latitude();
         public abstract double longitude();
         public abstract int radius();
 
         public static SearchSpec create(double latitude, double longitude, int radius) {
-            return new AutoValue_NearbyUseCase_SearchSpec(latitude, longitude, radius);
+            return new AutoValue_NearbyUseCase_SearchSpec(latitude, longitude, Math.min(radius, MAX_RADIUS));
         }
     }
 }

@@ -56,7 +56,7 @@ public class PlaceMapper {
                     .region(data.region())
                     .country(countryMapper.map(data.country()))
                     .isClosed(data.isClosed().equals(ApiService.YES))
-                    .isPlanning(data.isPlanning().equals(ApiService.YES))
+                    .isPlanning(ApiService.YES.equals(data.isPlanning()))
                     .openToPublic(data.openToPublic().equals(ApiService.YES))
                     .isPrimary(data.isPrimary().equals(ApiService.YES))
                     .latitude(data.latitude())

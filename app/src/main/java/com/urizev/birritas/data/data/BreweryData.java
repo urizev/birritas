@@ -11,6 +11,7 @@ import com.squareup.moshi.Moshi;
 public abstract class BreweryData {
     public abstract String id();
     public abstract String name();
+    @Nullable
     public abstract String shortNameDisplay();
     @Nullable
     public abstract String description();

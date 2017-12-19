@@ -46,7 +46,7 @@ public class MainActivity extends BaseActivity {
 
         viewPager.setCurrentItem(position, false);
 
-        return false;
+        return true;
     };
 
     private class MainPageAdapter extends FragmentStatePagerAdapter {

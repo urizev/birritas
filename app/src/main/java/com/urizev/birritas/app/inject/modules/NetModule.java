@@ -62,9 +62,9 @@ public class NetModule {
     OkHttpClient providesOkHttpClient(Cache cache, Interceptor loggingInterceptor) {
         return new OkHttpClient.Builder()
                 .cache(cache)
-                .addInterceptor(loggingInterceptor)
                 .addInterceptor(new ApiKeyInterceptor())
                 .addInterceptor(RxUtils.interceptor())
+                .addInterceptor(loggingInterceptor)
                 .build();
     }
 

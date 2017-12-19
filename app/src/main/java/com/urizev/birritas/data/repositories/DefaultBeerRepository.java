@@ -3,6 +3,7 @@ package com.urizev.birritas.data.repositories;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.urizev.birritas.data.api.ApiService;
+import com.urizev.birritas.data.data.BeerData;
 import com.urizev.birritas.data.data.ResultData;
 import com.urizev.birritas.data.mappers.BeerMapper;
 import com.urizev.birritas.domain.entities.Beer;
@@ -13,6 +14,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -36,7 +38,12 @@ public class DefaultBeerRepository implements BeerRepository {
         return service.getBeers(FEATURED_PARAMS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
-                .map(ResultData::data)
+                .map((Function<ResultData<ImmutableList<BeerData>>, ImmutableList<BeerData>>) data -> {
+                    if (data.data() == null) {
+                        return ImmutableList.of();
+                    }
+                    return data.data();
+                })
                 .flatMap(Observable::fromIterable)
                 .map(beerMapper::map)
                 .toList()

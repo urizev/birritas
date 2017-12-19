@@ -5,13 +5,13 @@ import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-import com.urizev.birritas.data.data.AutoValue_ResultData;
 
 import java.lang.reflect.Type;
 
 @AutoValue
 public abstract class ResultData<T> {
     public abstract String status();
+    @Nullable
     public abstract T data();
     @Nullable
     public abstract Integer currentPage();
