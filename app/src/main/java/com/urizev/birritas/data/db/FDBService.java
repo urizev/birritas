@@ -37,7 +37,7 @@ public class FDBService {
         return this.db.getReference(REF_USERS).child(user.getId()).child(REF_FAVORITE_BEERS);
     }
 
-    public Observable<ImmutableSet<String>> favoriteBeers() {
+    public Observable<ImmutableSet<String>> favoriteBeerIds() {
         return userRef()
                 .switchMap(RxFDB::read)
                 .map(datasnapshot -> {
