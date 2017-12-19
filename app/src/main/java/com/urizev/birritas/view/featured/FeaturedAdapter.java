@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.R;
-import com.urizev.birritas.app.providers.ImageLoader;
+import com.urizev.birritas.app.providers.image.ImageLoader;
 import com.urizev.birritas.ui.FeatureBeerCellParamView;
 
 import butterknife.BindView;

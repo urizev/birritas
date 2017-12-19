@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.R;
-import com.urizev.birritas.app.providers.ResourceProvider;
+import com.urizev.birritas.app.providers.resources.ResourceProvider;
 import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.domain.entities.Beer;
 import com.urizev.birritas.domain.entities.Brewery;

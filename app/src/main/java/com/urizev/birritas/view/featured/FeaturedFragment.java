@@ -7,8 +7,8 @@ import android.view.View;
 
 import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.R;
-import com.urizev.birritas.app.providers.ImageLoader;
-import com.urizev.birritas.app.providers.ResourceProvider;
+import com.urizev.birritas.app.providers.image.ImageLoader;
+import com.urizev.birritas.app.providers.resources.ResourceProvider;
 import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.domain.usecases.FeaturedBeersUseCase;
 import com.urizev.birritas.ui.ErrorView;

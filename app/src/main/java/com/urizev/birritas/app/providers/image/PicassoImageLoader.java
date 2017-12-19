@@ -1,4 +1,4 @@
-package com.urizev.birritas.app.providers;
+package com.urizev.birritas.app.providers.image;
 
 import android.content.Context;
 import android.widget.ImageView;

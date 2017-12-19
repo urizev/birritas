@@ -3,8 +3,8 @@ package com.urizev.birritas.app.inject.modules;
 import android.content.Context;
 
 import com.squareup.moshi.Moshi;
-import com.urizev.birritas.app.providers.ImageLoader;
-import com.urizev.birritas.app.providers.PicassoImageLoader;
+import com.urizev.birritas.app.providers.image.ImageLoader;
+import com.urizev.birritas.app.providers.image.PicassoImageLoader;
 import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.data.api.ApiKeyInterceptor;
 import com.urizev.birritas.data.api.ApiService;

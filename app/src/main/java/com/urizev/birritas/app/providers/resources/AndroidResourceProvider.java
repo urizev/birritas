@@ -1,4 +1,4 @@
-package com.urizev.birritas.app.providers;
+package com.urizev.birritas.app.providers.resources;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
