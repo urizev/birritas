@@ -1,4 +1,4 @@
-package com.urizev.birritas.data.mappers;
+package com.urizev.birritas.data.api.data.mappers;
 
 import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.data.api.ApiService;

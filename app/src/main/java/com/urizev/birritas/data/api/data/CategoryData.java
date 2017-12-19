@@ -1,9 +1,8 @@
-package com.urizev.birritas.data.data;
+package com.urizev.birritas.data.api.data;
 
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-import com.urizev.birritas.data.data.AutoValue_CategoryData;
 
 @AutoValue
 public abstract class CategoryData {

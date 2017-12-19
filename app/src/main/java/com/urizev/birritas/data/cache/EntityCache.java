@@ -1,10 +1,5 @@
 package com.urizev.birritas.data.cache;
 
-
-import android.support.v4.util.ArrayMap;
-import android.util.SparseArray;
-
-import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.domain.entities.Beer;
 import com.urizev.birritas.domain.entities.Brewery;
 import com.urizev.birritas.domain.entities.Category;
@@ -14,103 +9,36 @@ import com.urizev.birritas.domain.entities.Place;
 import com.urizev.birritas.domain.entities.SRM;
 import com.urizev.birritas.domain.entities.Style;
 
-import javax.inject.Inject;
+public interface EntityCache {
+    Beer getBeer(String id);
 
-public class EntityCache {
-    private final ArrayMap<String,Beer> mBeers;
-    private final ArrayMap<String,Brewery> mBreweries;
-    private final ArrayMap<String,Place> mPlaces;
-    private final ArrayMap<String,Country> mCountries;
-    private final SparseArray<Category> mCategories;
-    private final SparseArray<Glass> mGlasses;
-    private final SparseArray<SRM> mSrms;
-    private final SparseArray<Style> mStyles;
+    void putBeer(Beer beer);
 
-    @Inject
-    public EntityCache() {
-        this.mBeers = new ArrayMap<>();
-        this.mBreweries = new ArrayMap<>();
-        this.mPlaces = new ArrayMap<>();
-        this.mCountries = new ArrayMap<>();
-        this.mCategories = new SparseArray<>();
-        this.mGlasses = new SparseArray<>();
-        this.mSrms = new SparseArray<>();
-        this.mStyles = new SparseArray<>();
-    }
+    Category getCategory(int id);
 
-    public Beer getBeer(String id) {
-        RxUtils.assertComputationThread();
+    void putCategory(Category category);
 
-        return this.mBeers.get(id);
-    }
+    Glass getGlass(int id);
 
-    public void putBeer(Beer beer) {
-        RxUtils.assertComputationThread();
-        mBeers.put(beer.id(), beer);
-    }
+    void putGlass(Glass glass);
 
-    public Category getCategory(int id) {
-        RxUtils.assertComputationThread();
-        return mCategories.get(id);
-    }
+    SRM getSRM(int id);
 
-    public void putCategory(Category category) {
-        RxUtils.assertComputationThread();
-        mCategories.put(category.id(), category);
-    }
+    void putSRM(SRM srm);
 
-    public Glass getGlass(int id) {
-        RxUtils.assertComputationThread();
-        return mGlasses.get(id);
-    }
+    Style getStyle(int id);
 
-    public void putGlass(Glass glass) {
-        RxUtils.assertComputationThread();
-        mGlasses.put(glass.id(), glass);
-    }
+    void putStyle(Style style);
 
-    public SRM getSRM(int id) {
-        RxUtils.assertComputationThread();
-        return mSrms.get(id);
-    }
+    Brewery getBrewery(String id);
 
-    public void putSRM(SRM srm) {
-        RxUtils.assertComputationThread();
-        mSrms.put(srm.id(), srm);
-    }
+    void putBrewery(Brewery brewery);
 
-    public Style getStyle(int id) {
-        RxUtils.assertComputationThread();
-        return mStyles.get(id);
-    }
+    Place getPlace(String id);
 
-    public void putStyle(Style style) {
-        RxUtils.assertComputationThread();
-        mStyles.put(style.id(), style);
-    }
+    void putPlace(Place place);
 
-    public Brewery getBrewery(String id) {
-        RxUtils.assertComputationThread();
-        return mBreweries.get(id);
-    }
+    Country getCountry(String id);
 
-    public void putBrewery(Brewery brewery) {
-        RxUtils.assertComputationThread();
-        mBreweries.put(brewery.id(), brewery);
-    }
-
-    public Place getPlace(String id) {
-        RxUtils.assertComputationThread();
-        return mPlaces.get(id);
-    }
-
-    public Country getCountry(String id) {
-        RxUtils.assertComputationThread();
-        return mCountries.get(id);
-    }
-
-    public void putCountry(Country country) {
-        RxUtils.assertComputationThread();
-        mCountries.put(country.isoCode(), country);
-    }
+    void putCountry(Country country);
 }

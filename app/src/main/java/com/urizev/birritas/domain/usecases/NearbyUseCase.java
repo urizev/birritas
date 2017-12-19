@@ -4,9 +4,9 @@ import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.urizev.birritas.data.api.ApiService;
-import com.urizev.birritas.data.data.PlaceData;
-import com.urizev.birritas.data.data.ResultData;
-import com.urizev.birritas.data.mappers.PlaceMapper;
+import com.urizev.birritas.data.api.data.PlaceData;
+import com.urizev.birritas.data.api.data.ResultData;
+import com.urizev.birritas.data.api.data.mappers.PlaceMapper;
 import com.urizev.birritas.domain.entities.Place;
 
 import java.util.Map;

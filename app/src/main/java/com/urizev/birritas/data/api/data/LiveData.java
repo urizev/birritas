@@ -1,8 +1,7 @@
-package com.urizev.birritas.data.data;
+package com.urizev.birritas.data.api.data;
 
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
-import com.urizev.birritas.data.data.AutoValue_LiveData;
 
 @AutoValue
 public abstract class LiveData {

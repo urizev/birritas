@@ -1,10 +1,10 @@
-package com.urizev.birritas.data.mappers;
+package com.urizev.birritas.data.api.data.mappers;
 
 import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.data.api.ApiService;
 import com.urizev.birritas.data.cache.EntityCache;
-import com.urizev.birritas.data.data.PlaceData;
+import com.urizev.birritas.data.api.data.PlaceData;
 import com.urizev.birritas.domain.entities.Place;
 
 import javax.inject.Inject;
@@ -68,6 +68,7 @@ public class PlaceMapper {
                     .yearOpened(CommonMapper.mapInteger(data.yearOpened()))
                     .website(data.website())
                     .build();
+            entityCache.putPlace(place);
         }
 
         return place;

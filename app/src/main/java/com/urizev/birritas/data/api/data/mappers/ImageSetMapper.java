@@ -1,7 +1,7 @@
-package com.urizev.birritas.data.mappers;
+package com.urizev.birritas.data.api.data.mappers;
 
 import com.urizev.birritas.app.rx.RxUtils;
-import com.urizev.birritas.data.data.ImageSetData;
+import com.urizev.birritas.data.api.data.ImageSetData;
 import com.urizev.birritas.domain.entities.ImageSet;
 
 class ImageSetMapper {

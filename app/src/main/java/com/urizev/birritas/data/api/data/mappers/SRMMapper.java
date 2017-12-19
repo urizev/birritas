@@ -1,10 +1,10 @@
-package com.urizev.birritas.data.mappers;
+package com.urizev.birritas.data.api.data.mappers;
 
 import android.graphics.Color;
 
 import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.data.cache.EntityCache;
-import com.urizev.birritas.data.data.SRMData;
+import com.urizev.birritas.data.api.data.SRMData;
 import com.urizev.birritas.domain.entities.SRM;
 
 import javax.inject.Inject;

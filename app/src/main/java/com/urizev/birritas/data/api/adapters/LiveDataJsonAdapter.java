@@ -5,9 +5,9 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonReader;
 import com.squareup.moshi.JsonWriter;
 import com.squareup.moshi.Types;
-import com.urizev.birritas.data.data.BeerData;
-import com.urizev.birritas.data.data.BreweryData;
-import com.urizev.birritas.data.data.LiveData;
+import com.urizev.birritas.data.api.data.BeerData;
+import com.urizev.birritas.data.api.data.BreweryData;
+import com.urizev.birritas.data.api.data.LiveData;
 
 import java.io.IOException;
 import java.util.Map;

@@ -3,9 +3,9 @@ package com.urizev.birritas.data.repositories;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.urizev.birritas.data.api.ApiService;
-import com.urizev.birritas.data.data.BeerData;
-import com.urizev.birritas.data.data.ResultData;
-import com.urizev.birritas.data.mappers.BeerMapper;
+import com.urizev.birritas.data.api.data.BeerData;
+import com.urizev.birritas.data.api.data.ResultData;
+import com.urizev.birritas.data.api.data.mappers.BeerMapper;
 import com.urizev.birritas.domain.entities.Beer;
 import com.urizev.birritas.domain.repositories.BeerRepository;
 

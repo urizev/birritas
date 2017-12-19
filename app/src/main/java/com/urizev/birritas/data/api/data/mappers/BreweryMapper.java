@@ -1,10 +1,10 @@
-package com.urizev.birritas.data.mappers;
+package com.urizev.birritas.data.api.data.mappers;
 
 import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.data.api.ApiService;
 import com.urizev.birritas.data.cache.EntityCache;
-import com.urizev.birritas.data.data.BreweryData;
+import com.urizev.birritas.data.api.data.BreweryData;
 import com.urizev.birritas.domain.entities.Brewery;
 
 import javax.inject.Inject;

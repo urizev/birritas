@@ -6,11 +6,11 @@ import com.squareup.moshi.Moshi;
 import com.urizev.birritas.data.api.adapters.ApiAdapterFactory;
 import com.urizev.birritas.data.api.adapters.ImmutableListJsonAdapter;
 import com.urizev.birritas.data.api.adapters.LiveDataJsonAdapter;
-import com.urizev.birritas.data.data.BeerData;
-import com.urizev.birritas.data.data.BreweryData;
-import com.urizev.birritas.data.data.PlaceData;
-import com.urizev.birritas.data.data.LiveData;
-import com.urizev.birritas.data.data.ResultData;
+import com.urizev.birritas.data.api.data.BeerData;
+import com.urizev.birritas.data.api.data.BreweryData;
+import com.urizev.birritas.data.api.data.PlaceData;
+import com.urizev.birritas.data.api.data.LiveData;
+import com.urizev.birritas.data.api.data.ResultData;
 
 import org.junit.Before;
 import org.junit.Test;

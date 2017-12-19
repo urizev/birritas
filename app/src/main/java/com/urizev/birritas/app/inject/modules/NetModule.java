@@ -11,6 +11,8 @@ import com.urizev.birritas.data.api.ApiService;
 import com.urizev.birritas.data.api.adapters.ApiAdapterFactory;
 import com.urizev.birritas.data.api.adapters.ImmutableListJsonAdapter;
 import com.urizev.birritas.data.api.adapters.LiveDataJsonAdapter;
+import com.urizev.birritas.data.cache.EntityCache;
+import com.urizev.birritas.data.cache.MemoryEntityCache;
 import com.urizev.birritas.data.repositories.DefaultBeerRepository;
 import com.urizev.birritas.domain.repositories.BeerRepository;
 
@@ -87,5 +89,11 @@ public class NetModule {
     @Singleton
     ApiService providesApiService(Retrofit retrofit) {
         return retrofit.create(ApiService.class);
+    }
+
+    @Provides
+    @Singleton
+    EntityCache providesEntityCache(MemoryEntityCache entityCache) {
+        return entityCache;
     }
 }

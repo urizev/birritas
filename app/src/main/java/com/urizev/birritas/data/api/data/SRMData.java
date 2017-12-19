@@ -1,4 +1,4 @@
-package com.urizev.birritas.data.data;
+package com.urizev.birritas.data.api.data;
 
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;

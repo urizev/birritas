@@ -1,4 +1,4 @@
-package com.urizev.birritas.data.data;
+package com.urizev.birritas.data.api.data;
 
 import android.support.annotation.Nullable;
 
