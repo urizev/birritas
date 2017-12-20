@@ -7,22 +7,22 @@ import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.domain.entities.Beer;
 
 @AutoValue
-public abstract class FeaturedModel {
+public abstract class FeaturedBeersModel {
     public abstract ImmutableList<Beer> beers();
     @Nullable
     public abstract Throwable error();
     public abstract boolean loading();
 
-    FeaturedModel withBeers(ImmutableList<Beer> beers) {
-        return FeaturedModel.builder()
+    FeaturedBeersModel withBeers(ImmutableList<Beer> beers) {
+        return FeaturedBeersModel.builder()
                 .beers(beers)
                 .loading(false)
                 .error(null)
                 .build();
     }
 
-    FeaturedModel withError(Throwable error) {
-        return FeaturedModel.builder()
+    FeaturedBeersModel withError(Throwable error) {
+        return FeaturedBeersModel.builder()
                 .beers(beers())
                 .loading(false)
                 .error(error)
@@ -30,7 +30,7 @@ public abstract class FeaturedModel {
     }
 
     public static Builder builder () {
-        return new AutoValue_FeaturedModel.Builder();
+        return new AutoValue_FeaturedBeersModel.Builder();
     }
 
     @AutoValue.Builder
@@ -39,6 +39,6 @@ public abstract class FeaturedModel {
         public abstract Builder error(Throwable error);
         public abstract Builder loading(boolean loading);
 
-        public abstract FeaturedModel build();
+        public abstract FeaturedBeersModel build();
     }
 }

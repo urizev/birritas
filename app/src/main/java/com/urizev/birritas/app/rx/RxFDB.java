@@ -10,6 +10,7 @@ import com.google.firebase.database.ValueEventListener;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
+import timber.log.Timber;
 
 public class RxFDB {
     public static Observable<DataSnapshot> read(DatabaseReference ref) {
@@ -63,6 +64,8 @@ public class RxFDB {
                     e.onError(task.getException());
                 }
             };
+
+            Timber.d("Setting %s to %s", ref, value);
             Task<Void> task = ref.setValue(value);
             task.addOnCompleteListener(listener);
 

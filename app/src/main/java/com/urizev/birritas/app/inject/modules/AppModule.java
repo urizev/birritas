@@ -3,6 +3,8 @@ package com.urizev.birritas.app.inject.modules;
 import android.content.Context;
 
 import com.urizev.birritas.app.App;
+import com.urizev.birritas.app.providers.auth.Auth;
+import com.urizev.birritas.app.providers.auth.FireAuth;
 import com.urizev.birritas.app.providers.resources.AndroidResourceProvider;
 import com.urizev.birritas.app.providers.resources.ResourceProvider;
 
@@ -35,5 +37,11 @@ public class AppModule {
     @Singleton
     ResourceProvider providesResourceProvider(AndroidResourceProvider resourceProvider) {
         return resourceProvider;
+    }
+
+    @Provides
+    @Singleton
+    Auth providesAuth(FireAuth auth) {
+        return auth;
     }
 }

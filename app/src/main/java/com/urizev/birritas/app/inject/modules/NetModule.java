@@ -3,6 +3,7 @@ package com.urizev.birritas.app.inject.modules;
 import android.content.Context;
 
 import com.squareup.moshi.Moshi;
+import com.urizev.birritas.BuildConfig;
 import com.urizev.birritas.app.providers.image.ImageLoader;
 import com.urizev.birritas.app.providers.image.PicassoImageLoader;
 import com.urizev.birritas.app.rx.RxUtils;
@@ -25,6 +26,7 @@ import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
@@ -50,7 +52,7 @@ public class NetModule {
     @Singleton
     Interceptor provideLoggingInterceptor() {
         return new HttpLoggingInterceptor(message -> Timber.tag("okhttp").d(message))
-                .setLevel(HttpLoggingInterceptor.Level.BASIC);
+                .setLevel(BuildConfig.DEBUG ? Level.BASIC : Level.NONE);
     }
 
     @Provides

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.R;
 import com.urizev.birritas.app.providers.image.ImageLoader;
@@ -17,13 +18,17 @@ import com.urizev.birritas.ui.FeatureBeerCellParamView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 
 class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.FeaturedViewHolder> {
-    private final ImageLoader imageLoader;
-    private ImmutableList<FeaturedItemViewState> viewStates;
+    private final ImageLoader mImageLoader;
+    private ImmutableList<FeaturedItemViewState> mViewStates;
+    private PublishSubject<FavoriteEvent> mFavoriteEvents;
 
     FeaturedAdapter(ImageLoader imageLoader) {
-        this.imageLoader = imageLoader;
+        this.mImageLoader = imageLoader;
+        this.mFavoriteEvents = PublishSubject.create();
     }
 
     @Override
@@ -33,20 +38,24 @@ class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.FeaturedViewH
 
     @Override
     public void onBindViewHolder(FeaturedViewHolder holder, int position) {
-        holder.update(viewStates.get(position));
+        holder.update(mViewStates.get(position));
+    }
+
+    public Observable<FavoriteEvent> favoriteEvents() {
+        return mFavoriteEvents;
     }
 
     @Override
     public int getItemCount() {
-        return viewStates == null ? 0 : viewStates.size();
+        return mViewStates == null ? 0 : mViewStates.size();
     }
 
     void update(ImmutableList<FeaturedItemViewState> viewStates) {
-        this.viewStates = viewStates;
+        this.mViewStates = viewStates;
         this.notifyDataSetChanged();
     }
 
-    class FeaturedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class FeaturedViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.beer_label) ImageView labelView;
         @BindView(R.id.beer_title) TextView titleView;
         @BindView(R.id.brewed_by) TextView brewedBy;
@@ -63,7 +72,7 @@ class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.FeaturedViewH
         }
 
         void update(FeaturedItemViewState vs) {
-            imageLoader.load(vs.imageUrl(), labelView);
+            mImageLoader.load(vs.imageUrl(), labelView);
             titleView.setText(vs.title());
             ImageViewCompat.setImageTintList(srcColorView, ColorStateList.valueOf(vs.srmColor()));
             styleView.setText(vs.style());
@@ -75,9 +84,23 @@ class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.FeaturedViewH
         }
 
         @OnClick(R.id.card)
-        @Override
-        public void onClick(View view) {
+        void onCardClick(View view) {
 
+        }
+
+        @OnClick(R.id.fav_action)
+        void onFavClick(View view) {
+            mFavoriteEvents.onNext(FavoriteEvent.create(this.getAdapterPosition(), !favView.isSelected()));
+        }
+    }
+
+    @AutoValue
+    public static abstract class FavoriteEvent {
+        public abstract int position();
+        public abstract boolean isFavorite();
+
+        public static FavoriteEvent create(int position, boolean isFavorite) {
+            return new AutoValue_FeaturedAdapter_FavoriteEvent(position, isFavorite);
         }
     }
 }

@@ -118,11 +118,11 @@
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="32dp"/>
-                <ImageView
+                <ImageButton
                     android:contentDescription="@string/action_favorite"
                     android:id="@+id/fav_action"
                     android:background="?selectableItemBackgroundBorderless"
-                    android:src="@drawable/fav_selector"
+                    app:srcCompat="@drawable/fav_selector"
                     android:tint="@color/colorAccent"
                     android:layout_width="32dp"
                     android:layout_height="32dp"/>

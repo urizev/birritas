@@ -5,7 +5,7 @@ import com.urizev.birritas.domain.entities.User;
 import io.reactivex.Observable;
 
 public interface Auth {
-    User NO_USER = new User() {};
+    User NO_USER = () -> "";
 
     Observable<User> observeUser();
 }

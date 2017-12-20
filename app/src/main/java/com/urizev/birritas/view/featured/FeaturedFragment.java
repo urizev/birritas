@@ -5,12 +5,13 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.R;
 import com.urizev.birritas.app.providers.image.ImageLoader;
 import com.urizev.birritas.app.providers.resources.ResourceProvider;
 import com.urizev.birritas.app.rx.RxUtils;
+import com.urizev.birritas.domain.usecases.FavoritesBeerIdsUseCase;
 import com.urizev.birritas.domain.usecases.FeaturedBeersUseCase;
+import com.urizev.birritas.domain.usecases.UpdateFavoriteBeerUseCase;
 import com.urizev.birritas.ui.ErrorView;
 import com.urizev.birritas.ui.LoadingView;
 import com.urizev.birritas.view.common.DirectPresenterFragment;
@@ -19,6 +20,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class FeaturedFragment extends DirectPresenterFragment<FeaturedViewState,FeaturedPresenter> {
@@ -26,9 +28,11 @@ public class FeaturedFragment extends DirectPresenterFragment<FeaturedViewState,
     @BindView(R.id.featured_loading) LoadingView mLoadingView;
     @BindView(R.id.featured_error) ErrorView mErrorView;
 
-    @Inject ImageLoader imageLoader;
-    @Inject ResourceProvider resourceProvider;
-    @Inject FeaturedBeersUseCase featuredBeerUseCase;
+    @Inject ImageLoader mImageLoader;
+    @Inject ResourceProvider mResourceProvider;
+    @Inject FeaturedBeersUseCase mFeaturedBeerUseCase;
+    @Inject FavoritesBeerIdsUseCase mFavoriteBeerIdsUseCase;
+    @Inject UpdateFavoriteBeerUseCase mUpdateFavoriteBeerUseCase;
 
     private FeaturedAdapter mAdapter;
 
@@ -47,12 +51,7 @@ public class FeaturedFragment extends DirectPresenterFragment<FeaturedViewState,
 
     @Override
     protected FeaturedPresenter createPresenter(Bundle savedInstanceState) {
-        FeaturedModel model = FeaturedModel.builder()
-                .beers(ImmutableList.of())
-                .loading(true)
-                .error(null)
-                .build();
-        return new FeaturedPresenter(featuredBeerUseCase, model, resourceProvider);
+        return new FeaturedPresenter(mFeaturedBeerUseCase, mFavoriteBeerIdsUseCase, mUpdateFavoriteBeerUseCase, mResourceProvider);
     }
 
     @Override
@@ -81,7 +80,12 @@ public class FeaturedFragment extends DirectPresenterFragment<FeaturedViewState,
     @Override
     protected boolean bindView(View view) {
         ButterKnife.bind(this, view);
-        mAdapter = new FeaturedAdapter(imageLoader);
+        mAdapter = new FeaturedAdapter(mImageLoader);
+        addDisposable(mAdapter.favoriteEvents()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(Schedulers.computation())
+                .doOnNext(e -> getPresenter().onFavoriteEvent(e))
+                .subscribe());
         mContentView.setAdapter(mAdapter);
         return true;
     }

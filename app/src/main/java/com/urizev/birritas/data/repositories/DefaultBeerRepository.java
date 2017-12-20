@@ -79,7 +79,8 @@ public class DefaultBeerRepository implements BeerRepository {
             }
         }).map(beerMapper::map);
 
-        return Observable.concat(cache, network);
+        return Observable.concat(cache.subscribeOn(Schedulers.computation()), network)
+                .subscribeOn(Schedulers.computation());
     }
 
     private Observable<Beer> getBeerFromCache(String id) {
