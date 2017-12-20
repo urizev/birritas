@@ -5,9 +5,10 @@ import com.google.auto.value.AutoValue;
 
 @AutoValue
 public abstract class MarkerViewState {
+    public abstract String id();
     public abstract MarkerOptions markerOptions();
 
-    public static MarkerViewState create(MarkerOptions markerOptions) {
-        return new AutoValue_MarkerViewState(markerOptions);
+    public static MarkerViewState create(String id, MarkerOptions markerOptions) {
+        return new AutoValue_MarkerViewState(id, markerOptions);
     }
 }

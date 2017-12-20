@@ -32,12 +32,14 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
     private GoogleMap mMap;
     @Inject
     NearbyUseCase nearbyUseCase;
-    private Map<Marker, MarkerViewState> markers;
+    private Map<Marker, MarkerViewState> viewStatesByMarker;
+    private Map<String,Marker> markersById;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        markers = new HashMap<>();
+        markersById = new HashMap<>();
+        viewStatesByMarker = new HashMap<>();
     }
 
     @Override
@@ -64,10 +66,14 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
     protected void renderViewState(NearbyViewState<MarkerViewState> vs) {
         RxUtils.assertMainThread();
 
-        mMap.clear();
         for (MarkerViewState movs : vs.viewStates()) {
-            Marker marker = mMap.addMarker(movs.markerOptions());
-            markers.put(marker, movs);
+            Marker marker = markersById.get(movs.id());
+            if (marker == null) {
+                marker = mMap.addMarker(movs.markerOptions());
+                markersById.put(movs.id(), marker);
+            }
+
+            viewStatesByMarker.put(marker, movs);
         }
     }
 
@@ -120,6 +126,6 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
         MarkerOptions options = new MarkerOptions()
                 .title(pvs.name())
                 .position(new LatLng(pvs.latitude(), pvs.longitude()));
-        return MarkerViewState.create(options);
+        return MarkerViewState.create(pvs.id(), options);
     }
 }

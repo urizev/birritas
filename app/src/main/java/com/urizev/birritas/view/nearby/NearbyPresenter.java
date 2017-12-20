@@ -21,7 +21,8 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
         this.mSearchSpec = BehaviorSubject.create();
         addDisposable(this.mModel
                 .observeOn(Schedulers.computation())
-                .doOnNext(this::modelToViewState)
+                .map(this::modelToViewState)
+                .doOnNext(this::publishViewState)
                 .subscribe());
         subscribeToSearchSpec();
     }
@@ -48,7 +49,7 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
                 .subscribe());
     }
 
-    private NearbyViewState modelToViewState(NearbyModel model) {
+    private NearbyViewState<PlaceViewState> modelToViewState(NearbyModel model) {
         RxUtils.assertComputationThread();
 
         ImmutableList.Builder<PlaceViewState> builder = new ImmutableList.Builder<>();
