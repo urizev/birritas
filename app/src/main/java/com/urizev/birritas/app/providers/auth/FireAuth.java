@@ -5,11 +5,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.urizev.birritas.domain.entities.User;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 import timber.log.Timber;
 
+@Singleton
 public class FireAuth implements Auth {
     private final FirebaseAuth mAuth;
     private final BehaviorSubject<User> mUserSubject;

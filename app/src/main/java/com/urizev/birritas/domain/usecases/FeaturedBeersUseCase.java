@@ -5,9 +5,11 @@ import com.urizev.birritas.domain.entities.Beer;
 import com.urizev.birritas.domain.repositories.BeerRepository;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 
+@Singleton
 public class FeaturedBeersUseCase extends UseCase<Void,ImmutableList<Beer>> {
     private final BeerRepository repository;
 

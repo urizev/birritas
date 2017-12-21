@@ -2,6 +2,7 @@ package com.urizev.birritas.app.inject.components;
 
 import com.urizev.birritas.app.inject.modules.AppModule;
 import com.urizev.birritas.app.inject.modules.NetModule;
+import com.urizev.birritas.view.favorites.FavoriteBeersFragment;
 import com.urizev.birritas.view.featured.FeaturedFragment;
 import com.urizev.birritas.view.nearby.NearbyFragment;
 
@@ -14,4 +15,5 @@ import dagger.Component;
 public interface NetComponent {
     void inject(FeaturedFragment fragment);
     void inject(NearbyFragment fragment);
+    void inject(FavoriteBeersFragment fragment);
 }

@@ -33,6 +33,8 @@ public abstract class Place {
     public abstract Integer yearOpened();
     public abstract int status();
     public abstract Country country();
+    @Nullable
+    public abstract Brewery brewery();
 
     public static Builder builder() {
         return new AutoValue_Place.Builder();
@@ -59,6 +61,7 @@ public abstract class Place {
         public abstract Builder yearOpened(Integer year);
         public abstract Builder status(int status);
         public abstract Builder country(Country country);
+        public abstract Builder brewery(Brewery brewery);
 
         public abstract Place build();
     }

@@ -3,20 +3,26 @@ package com.urizev.birritas.data.api.data.mappers;
 import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.data.api.ApiService;
-import com.urizev.birritas.data.cache.EntityCache;
 import com.urizev.birritas.data.api.data.PlaceData;
+import com.urizev.birritas.data.cache.EntityCache;
 import com.urizev.birritas.domain.entities.Place;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+import dagger.Lazy;
+
+@Singleton
 public class PlaceMapper {
     private final EntityCache entityCache;
     private final CountryMapper countryMapper;
+    private final Lazy<BreweryMapper> breweryMapper;
 
     @Inject
-    PlaceMapper(EntityCache entityCache, CountryMapper countryMapper) {
+    PlaceMapper(EntityCache entityCache, CountryMapper countryMapper, Lazy<BreweryMapper> breweryMapper) {
         this.entityCache = entityCache;
         this.countryMapper = countryMapper;
+        this.breweryMapper = breweryMapper;
     }
 
     public ImmutableList<Place> map(ImmutableList<PlaceData> data) {
@@ -67,6 +73,7 @@ public class PlaceMapper {
                     .website(data.website())
                     .yearOpened(CommonMapper.mapInteger(data.yearOpened()))
                     .website(data.website())
+                    .brewery(breweryMapper.get().map(data.brewery()))
                     .build();
             entityCache.putPlace(place);
         }

@@ -12,6 +12,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.annotations.NonNull;
 
 @Module
 public class AppModule {
@@ -28,12 +29,14 @@ public class AppModule {
     }
 
     @Provides
+    @NonNull
     @Singleton
     Context providesContext() {
         return mApp;
     }
 
     @Provides
+    @NonNull
     @Singleton
     ResourceProvider providesResourceProvider(AndroidResourceProvider resourceProvider) {
         return resourceProvider;

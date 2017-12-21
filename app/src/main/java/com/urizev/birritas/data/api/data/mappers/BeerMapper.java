@@ -2,12 +2,14 @@ package com.urizev.birritas.data.api.data.mappers;
 
 import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.data.api.ApiService;
-import com.urizev.birritas.data.cache.EntityCache;
 import com.urizev.birritas.data.api.data.BeerData;
+import com.urizev.birritas.data.cache.EntityCache;
 import com.urizev.birritas.domain.entities.Beer;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class BeerMapper {
     private final EntityCache entityCache;
     private final BreweryMapper breweryMapper;

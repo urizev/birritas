@@ -15,7 +15,9 @@ import com.urizev.birritas.domain.entities.SRM;
 import com.urizev.birritas.domain.entities.Style;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class MemoryEntityCache implements EntityCache {
     private final ArrayMap<String,Beer> mBeers;
     private final ArrayMap<String,Brewery> mBreweries;
@@ -27,7 +29,7 @@ public class MemoryEntityCache implements EntityCache {
     private final SparseArray<Style> mStyles;
 
     @Inject
-    public MemoryEntityCache() {
+    MemoryEntityCache() {
         this.mBeers = new ArrayMap<>();
         this.mBreweries = new ArrayMap<>();
         this.mPlaces = new ArrayMap<>();

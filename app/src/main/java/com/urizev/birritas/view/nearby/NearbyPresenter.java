@@ -1,7 +1,10 @@
 package com.urizev.birritas.view.nearby;
 
 import com.google.common.collect.ImmutableList;
+import com.urizev.birritas.R;
+import com.urizev.birritas.app.providers.resources.ResourceProvider;
 import com.urizev.birritas.app.rx.RxUtils;
+import com.urizev.birritas.domain.entities.Brewery;
 import com.urizev.birritas.domain.entities.Place;
 import com.urizev.birritas.domain.usecases.NearbyUseCase;
 import com.urizev.birritas.view.common.Presenter;
@@ -14,8 +17,10 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
     private final NearbyUseCase mUseCase;
     private final BehaviorSubject<NearbyModel> mModel;
     private final BehaviorSubject<NearbyUseCase.SearchSpec> mSearchSpec;
+    private final String mNa;
 
-    NearbyPresenter(NearbyUseCase useCase, NearbyModel model) {
+    NearbyPresenter(NearbyUseCase useCase, NearbyModel model, ResourceProvider resourceProvider) {
+        this.mNa = resourceProvider.getString(R.string.n_a);
         this.mUseCase = useCase;
         this.mModel = BehaviorSubject.createDefault(model);
         this.mSearchSpec = BehaviorSubject.create();
@@ -62,7 +67,17 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
     private PlaceViewState placeToPlaceViewState(Place place) {
         RxUtils.assertComputationThread();
 
-        return PlaceViewState.create(place.id(), place.name(), place.latitude(), place.longitude());
+        String name = mNa;
+        Brewery brewery = place.brewery();
+        if (brewery != null) {
+            if (brewery.shortName() != null) {
+                name = brewery.shortName();
+            } else if (brewery.name() != null) {
+                name = brewery.name();
+            }
+        }
+
+        return PlaceViewState.create(place.id(), name, place.latitude(), place.longitude());
     }
 
     void mapMoveTo(double latitude, double longitude, int radius) {

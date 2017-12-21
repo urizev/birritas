@@ -1,12 +1,14 @@
 package com.urizev.birritas.data.api.data.mappers;
 
 import com.urizev.birritas.app.rx.RxUtils;
-import com.urizev.birritas.data.cache.EntityCache;
 import com.urizev.birritas.data.api.data.StyleData;
+import com.urizev.birritas.data.cache.EntityCache;
 import com.urizev.birritas.domain.entities.Style;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 class StyleMapper {
     private final EntityCache entityCache;
     private final CategoryMapper categoryMapper;

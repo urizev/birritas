@@ -7,9 +7,11 @@ import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import okhttp3.OkHttpClient;
 
+@Singleton
 public class PicassoImageLoader implements ImageLoader{
     private final Picasso picasso;
 

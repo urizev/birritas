@@ -11,11 +11,13 @@ import com.urizev.birritas.domain.entities.User;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import timber.log.Timber;
 
+@Singleton
 public class FDBService {
     private static final GenericTypeIndicator<Map<String,Boolean>> TYPE_GET_FAVORITES = new GenericTypeIndicator<Map<String,Boolean>>(){};
     private static final String REF_USERS = "users";
@@ -25,7 +27,7 @@ public class FDBService {
     private final Auth auth;
 
     @Inject
-    public FDBService(Auth auth) {
+    FDBService(Auth auth) {
         this.db = FirebaseDatabase.getInstance();
         this.auth = auth;
     }

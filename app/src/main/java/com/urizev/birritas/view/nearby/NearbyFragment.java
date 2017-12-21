@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.urizev.birritas.R;
+import com.urizev.birritas.app.providers.resources.ResourceProvider;
 import com.urizev.birritas.app.rx.RxMap;
 import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.domain.usecases.NearbyUseCase;
@@ -30,8 +31,8 @@ import io.reactivex.schedulers.Schedulers;
 
 public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerViewState>,NearbyViewState<PlaceViewState>,NearbyPresenter> {
     private GoogleMap mMap;
-    @Inject
-    NearbyUseCase nearbyUseCase;
+    @Inject NearbyUseCase nearbyUseCase;
+    @Inject ResourceProvider resourceProvider;
     private Map<Marker, MarkerViewState> viewStatesByMarker;
     private Map<String,Marker> markersById;
 
@@ -59,7 +60,7 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
                 .loading(true)
                 .places(ImmutableSet.of())
                 .build();
-        return new NearbyPresenter(nearbyUseCase, model);
+        return new NearbyPresenter(nearbyUseCase, model, resourceProvider);
     }
 
     @Override

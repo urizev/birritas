@@ -17,6 +17,7 @@ public abstract class Brewery {
     public abstract String website();
     @Nullable
     public abstract Integer established();
+    @Nullable
     public abstract ImageSet images();
     public abstract boolean isOrganic();
     public abstract int status();

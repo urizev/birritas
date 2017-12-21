@@ -28,6 +28,8 @@ public interface ApiService {
     String SORT = "sort";
     String SORT_DESC = "DESC";
     String STATUS_VERIFIED = "verified";
+    String WITH_BREWERIES = "withBreweries";
+    java.lang.String KM = "km";
 
     @GET("beers")
     Observable<ResultData<ImmutableList<BeerData>>> getBeers(@QueryMap Map<String,String> params);

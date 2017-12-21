@@ -9,12 +9,14 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.urizev.birritas.app.base.BaseActivity;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
+@Singleton
 public class AndroidPermissionProvider {
     private final Context mContext;
     private final ArrayMap<String,BehaviorSubject<Boolean>> subjects;

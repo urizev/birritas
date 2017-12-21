@@ -5,10 +5,12 @@ import com.google.auto.value.AutoValue;
 import com.urizev.birritas.data.db.FDBService;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 
+@Singleton
 public class UpdateFavoriteBeerUseCase extends UseCase<UpdateFavoriteBeerUseCase.FavoriteEvent,Void>{
     private final FDBService service;
 

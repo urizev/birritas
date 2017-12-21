@@ -14,17 +14,20 @@ import com.urizev.birritas.domain.repositories.BeerRepository;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 
+@Singleton
 public class DefaultBeerRepository implements BeerRepository {
     private static final Map<String, String> FEATURED_PARAMS = ImmutableMap.of(
             ApiService.HAS_LABELS, ApiService.YES,
             ApiService.ORDER, ApiService.ORDER_UPDATE_DATE,
-            ApiService.SORT, ApiService.SORT_DESC
+            ApiService.SORT, ApiService.SORT_DESC,
+            ApiService.WITH_BREWERIES, ApiService.YES
     );
     private final ApiService service;
     private final BeerMapper beerMapper;

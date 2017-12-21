@@ -6,16 +6,18 @@ import com.urizev.birritas.domain.entities.Beer;
 import com.urizev.birritas.domain.repositories.BeerRepository;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
+@Singleton
 public class FavoriteBeersUseCase extends UseCase <Void,ImmutableList<Beer>> {
     private final FDBService service;
     private final BeerRepository repository;
 
     @Inject
-    public FavoriteBeersUseCase(FDBService service, BeerRepository repository) {
+    FavoriteBeersUseCase(FDBService service, BeerRepository repository) {
         this.service = service;
         this.repository = repository;
     }

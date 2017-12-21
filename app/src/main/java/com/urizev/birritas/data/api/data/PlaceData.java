@@ -37,7 +37,7 @@ public abstract class PlaceData {
     public abstract String yearOpened();
     public abstract String status();
     public abstract CountryData country();
-
+    @Nullable
     public abstract BreweryData brewery();
 
     public static JsonAdapter<PlaceData> jsonAdapter(Moshi moshi) {

@@ -1,4 +1,4 @@
-package com.urizev.birritas.app.providers;
+package com.urizev.birritas.app.providers.location;
 
 import android.location.Location;
 
@@ -9,7 +9,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
 public abstract class LocationProvider {
-    protected final BehaviorSubject<Location> subject;
+    private final BehaviorSubject<Location> subject;
     private int subscriberCount;
 
     LocationProvider() {

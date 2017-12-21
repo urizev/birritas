@@ -12,18 +12,20 @@ import com.urizev.birritas.domain.entities.Place;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
+@Singleton
 public class NearbyUseCase extends UseCase<NearbyUseCase.SearchSpec,ImmutableList<Place>>{
     private final ApiService apiService;
     private final PlaceMapper placeMapper;
 
     @Inject
-    public NearbyUseCase(ApiService apiService, PlaceMapper placeMapper) {
+    NearbyUseCase(ApiService apiService, PlaceMapper placeMapper) {
         this.apiService = apiService;
         this.placeMapper = placeMapper;
     }
@@ -45,9 +47,10 @@ public class NearbyUseCase extends UseCase<NearbyUseCase.SearchSpec,ImmutableLis
 
     private Map<String, String> mapParam(SearchSpec searchSpec) {
         return ImmutableMap.of(
+                ApiService.UNIT, ApiService.KM,
+                ApiService.RADIUS, String.valueOf(searchSpec.radius()),
                 ApiService.LATITUDE, String.valueOf(searchSpec.latitude()),
-                ApiService.LONGITUDE, String.valueOf(searchSpec.longitude()),
-                ApiService.RADIUS, String.valueOf(searchSpec.radius())
+                ApiService.LONGITUDE, String.valueOf(searchSpec.longitude())
         );
     }
 

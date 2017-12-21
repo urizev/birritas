@@ -1,4 +1,4 @@
-package com.urizev.birritas.app.providers;
+package com.urizev.birritas.app.providers.location;
 
 import android.content.Context;
 
@@ -7,7 +7,9 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class PlayServicesLocationProvider extends LocationProvider {
     private static final long REQUEST_INTERVAL = 60 * 1000;
     private static final long REQUEST_FASTEST_INTERVAL = 10 * 1000;

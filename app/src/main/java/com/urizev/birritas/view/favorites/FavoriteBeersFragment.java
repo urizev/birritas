@@ -1,5 +1,6 @@
 package com.urizev.birritas.view.favorites;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -24,6 +25,12 @@ public class FavoriteBeersFragment extends DirectPresenterFragment<FavoriteBeers
     @Inject FavoriteBeersUseCase mFavoriteBeersUseCase;
     @Inject UpdateFavoriteBeerUseCase mUpdateFavoriteBeerUseCase;
     @Inject ResourceProvider mResourceProvider;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.getApp().getNetComponent().inject(this);
+    }
 
     @Override
     protected int getLayoutRes() {
