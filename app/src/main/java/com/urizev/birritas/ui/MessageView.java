@@ -1,6 +1,7 @@
 package com.urizev.birritas.ui;
 
 import android.content.Context;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -14,31 +15,31 @@ import com.urizev.birritas.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Creado por jcvallejo en 29/11/17.
- */
-
-public class ErrorView extends LinearLayout {
+public class MessageView extends LinearLayout {
     @BindView(R.id.icon) ImageView mIcon;
     @BindView(R.id.message) TextView mMessage;
 
-    public ErrorView(Context context) {
+    public MessageView(Context context) {
         this(context, null, 0);
     }
 
-    public ErrorView(Context context, @Nullable AttributeSet attrs) {
+    public MessageView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ErrorView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public MessageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER);
-        View.inflate(context, R.layout.view_error, this);
+        View.inflate(context, R.layout.view_message, this);
         ButterKnife.bind(this, this);
     }
 
     public void setMessage(String message) {
         this.mMessage.setText(message);
+    }
+
+    public void setIcon(@DrawableRes int resId) {
+        this.mIcon.setImageResource(resId);
     }
 }

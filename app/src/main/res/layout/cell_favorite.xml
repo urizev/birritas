@@ -1,86 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cell_favorite"
-    android:orientation="horizontal"
+<FrameLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:id="@+id/beer_label"
-        android:background="@color/colorImagePlaceholder"
-        android:contentDescription="@string/beer_label_image"
-        android:layout_width="@dimen/cell_beer_label_image_height"
-        android:layout_height="@dimen/cell_beer_label_image_height" />
+    <FrameLayout
+        android:id="@+id/cell_favorite_background"
+        android:background="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_gravity="start"
+            android:gravity="center|end"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:textAllCaps="true"
+            android:drawableStart="@drawable/ic_delete_white_24dp"
+            android:drawableLeft="@drawable/ic_delete_white_24dp"
+            android:drawablePadding="@dimen/cell_swipe_drawable_padding"
+            android:text="@string/action_deleted"
+            android:textColor="?android:attr/textColorPrimaryInverse"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 
     <LinearLayout
-        android:paddingBottom="@dimen/card_title_padding_bottom"
-        android:orientation="vertical"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content">
+        android:background="@android:color/white"
+        android:id="@+id/cell_favorite_foreground"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/cell_favorite_padding_vertical"
+        android:paddingBottom="@dimen/cell_favorite_padding_vertical"
+        android:paddingLeft="@dimen/cell_favorite_padding_horizontal"
+        android:paddingStart="@dimen/cell_favorite_padding_horizontal"
+        android:paddingRight="@dimen/cell_favorite_padding_horizontal"
+        android:paddingEnd="@dimen/cell_favorite_padding_horizontal"
+        xmlns:tools="http://schemas.android.com/tools">
 
-        <TextView
-            android:id="@+id/beer_title"
-            tools:text="Recipe title"
-            android:includeFontPadding="false"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:layout_marginRight="@dimen/card_title_padding_horizontal"
-            android:layout_marginEnd="@dimen/card_title_padding_horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/TextAppearance.AppCompat.Title"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/beer_label"
+            android:src="@color/colorImagePlaceholder"
+            android:contentDescription="@string/beer_label_image"
+            android:layout_marginRight="@dimen/cell_favorite_image_margin"
+            android:layout_marginEnd="@dimen/cell_favorite_image_margin"
+            android:layout_width="@dimen/cell_beer_label_image_height"
+            android:layout_height="@dimen/cell_beer_label_image_height" />
 
-        <TextView
-            android:id="@+id/beer_style"
-            tools:text="American Pale Ale"
+        <LinearLayout
+            android:paddingBottom="@dimen/card_title_padding_bottom"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/beer_title"
+                tools:text="Recipe title"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_marginRight="@dimen/card_title_padding_horizontal"
+                android:layout_marginEnd="@dimen/card_title_padding_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Subhead"/>
+
+            <TextView
+                android:id="@+id/beer_style"
+                tools:text="American Pale Ale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Base.TextAppearance.AppCompat.Body2"/>
+
+            <TextView
+                android:id="@+id/brewed_by"
+                tools:text="brewed by La Quince"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Base.TextAppearance.AppCompat.Caption"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:paddingBottom="@dimen/card_title_padding_bottom"
+            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Base.TextAppearance.AppCompat.Body2"/>
-
-        <TextView
-            android:id="@+id/brewed_by"
-            tools:text="brewed by La Quince"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/Base.TextAppearance.AppCompat.Caption"/>
+            android:layout_height="wrap_content">
+            <com.urizev.birritas.ui.FeatureBeerCellParamView
+                android:id="@+id/abv_param"
+                app:nameText="@string/ABV"
+                app:valueText="@string/n_a"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <com.urizev.birritas.ui.FeatureBeerCellParamView
+                android:id="@+id/ibu_param"
+                app:nameText="@string/IBU"
+                app:valueText="@string/n_a"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
     </LinearLayout>
 
-
-    <LinearLayout
-        android:paddingBottom="@dimen/card_title_padding_bottom"
-        android:paddingLeft="@dimen/card_title_padding_horizontal"
-        android:paddingStart="@dimen/card_title_padding_horizontal"
-        android:paddingRight="@dimen/card_title_padding_horizontal"
-        android:paddingEnd="@dimen/card_title_padding_horizontal"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <com.urizev.birritas.ui.FeatureBeerCellParamView
-            android:id="@+id/abv_param"
-            app:nameText="@string/ABV"
-            app:valueText="@string/n_a"
-            android:paddingStart="@dimen/cell_featured_param_padding"
-            android:paddingLeft="@dimen/cell_featured_param_padding"
-            android:paddingEnd="@dimen/cell_featured_param_padding"
-            android:paddingRight="@dimen/cell_featured_param_padding"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <com.urizev.birritas.ui.FeatureBeerCellParamView
-            android:id="@+id/ibu_param"
-            app:nameText="@string/IBU"
-            app:valueText="@string/n_a"
-            android:paddingStart="@dimen/cell_featured_param_padding"
-            android:paddingLeft="@dimen/cell_featured_param_padding"
-            android:paddingEnd="@dimen/cell_featured_param_padding"
-            android:paddingRight="@dimen/cell_featured_param_padding"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-
-</LinearLayout>
+</FrameLayout>

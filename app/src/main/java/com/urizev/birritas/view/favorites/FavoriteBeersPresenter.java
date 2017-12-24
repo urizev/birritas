@@ -98,4 +98,22 @@ class FavoriteBeersPresenter extends Presenter<FavoriteBeersViewState> {
 
         return FavoriteBeersItemViewState.create(beer.name(), icon, styleName, brewedBy, ibuValue, abvValue);
     }
+
+    void deleteFavorite(int position) {
+        FavoriteBeersModel model = this.model.getValue();
+        if (model == null) {
+            return;
+        }
+
+        ImmutableList<Beer> beers = model.beers();
+        if (beers.size() <= position) {
+            return;
+        }
+
+        Beer beer = beers.get(position);
+        updateFavoriteBeerUseCase.execute(UpdateFavoriteBeerUseCase.FavoriteEvent.create(beer.id(), false))
+                .subscribeOn(Schedulers.computation())
+                .observeOn(Schedulers.computation())
+                .subscribe();
+    }
 }

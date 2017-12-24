@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,8 +29,6 @@ public class FeatureBeerCellParamView extends LinearLayout {
 
     public FeatureBeerCellParamView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        setOrientation(VERTICAL);
-        setGravity(Gravity.CENTER);
         View.inflate(context, R.layout.view_featured_cell_value, this);
         ButterKnife.bind(this, this);
 
@@ -45,6 +44,20 @@ public class FeatureBeerCellParamView extends LinearLayout {
             } finally {
                 a.recycle();
             }
+        }
+
+        switch(getOrientation()) {
+            case HORIZONTAL:
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.weight = 1;
+                params.setMarginEnd((int) context.getResources().getDimension(R.dimen.view_param_view_internal_horizontal_margin));
+                this.mParamName.setLayoutParams(params);
+                this.mParamName.setGravity(Gravity.START);
+                this.mParamValue.setGravity(Gravity.END);
+                break;
+            case VERTICAL:
+                setGravity(Gravity.CENTER);
+                break;
         }
     }
 

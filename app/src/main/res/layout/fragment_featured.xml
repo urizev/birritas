@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/cell_featured"/>
-    <com.urizev.birritas.ui.ErrorView
+    <com.urizev.birritas.ui.MessageView
         android:id="@+id/featured_error"
         android:visibility="invisible"
         android:layout_width="match_parent"

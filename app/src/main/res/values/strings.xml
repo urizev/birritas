@@ -14,4 +14,6 @@
     <string name="ABV">ABV</string>
     <string name="IBU">IBU</string>
     <string name="action_favorite">Mark as favorite</string>
+    <string name="action_deleted">Deleted</string>
+    <string name="no_favorites">No favorites found</string>
 </resources>

@@ -12,7 +12,7 @@ import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.domain.usecases.FavoritesBeerIdsUseCase;
 import com.urizev.birritas.domain.usecases.FeaturedBeersUseCase;
 import com.urizev.birritas.domain.usecases.UpdateFavoriteBeerUseCase;
-import com.urizev.birritas.ui.ErrorView;
+import com.urizev.birritas.ui.MessageView;
 import com.urizev.birritas.ui.LoadingView;
 import com.urizev.birritas.view.common.DirectPresenterFragment;
 
@@ -26,7 +26,8 @@ import timber.log.Timber;
 public class FeaturedFragment extends DirectPresenterFragment<FeaturedViewState,FeaturedPresenter> {
     @BindView(R.id.featured_content) RecyclerView mContentView;
     @BindView(R.id.featured_loading) LoadingView mLoadingView;
-    @BindView(R.id.featured_error) ErrorView mErrorView;
+    @BindView(R.id.featured_error)
+    MessageView mMessageView;
 
     @Inject ImageLoader mImageLoader;
     @Inject ResourceProvider mResourceProvider;
@@ -58,15 +59,15 @@ public class FeaturedFragment extends DirectPresenterFragment<FeaturedViewState,
     protected void renderViewState(FeaturedViewState viewState) {
         RxUtils.assertMainThread();
 
-        mErrorView.setVisibility(View.INVISIBLE);
+        mMessageView.setVisibility(View.INVISIBLE);
         mContentView.setVisibility(View.INVISIBLE);
         mLoadingView.setVisibility(View.INVISIBLE);
 
         Throwable error = viewState.error();
         if (error != null) {
             Timber.e(error);
-            mErrorView.setMessage(error.getMessage());
-            mErrorView.setVisibility(View.VISIBLE);
+            mMessageView.setMessage(error.getMessage());
+            mMessageView.setVisibility(View.VISIBLE);
         }
         else if (viewState.loading()) {
             mLoadingView.setVisibility(View.VISIBLE);

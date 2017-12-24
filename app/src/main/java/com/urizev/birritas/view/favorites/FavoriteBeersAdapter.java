@@ -15,17 +15,13 @@ import com.urizev.birritas.ui.FeatureBeerCellParamView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
 
 class FavoriteBeersAdapter extends RecyclerView.Adapter<FavoriteBeersAdapter.ViewHolder> {
     private final ImageLoader mImageLoader;
     private ImmutableList<FavoriteBeersItemViewState> mViewStates;
-    private PublishSubject<Integer> mDeletionEvents;
 
     FavoriteBeersAdapter(ImageLoader imageLoader) {
         this.mImageLoader = imageLoader;
-        this.mDeletionEvents = PublishSubject.create();
     }
 
     @Override
@@ -38,9 +34,6 @@ class FavoriteBeersAdapter extends RecyclerView.Adapter<FavoriteBeersAdapter.Vie
         holder.update(mViewStates.get(position));
     }
 
-    public Observable<Integer> deletionEvents() {
-        return mDeletionEvents;
-    }
 
     @Override
     public int getItemCount() {
@@ -53,13 +46,14 @@ class FavoriteBeersAdapter extends RecyclerView.Adapter<FavoriteBeersAdapter.Vie
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.cell_favorite_foreground) View foreground;
+        @BindView(R.id.cell_favorite_background) View background;
         @BindView(R.id.beer_label) ImageView labelView;
         @BindView(R.id.beer_title) TextView titleView;
         @BindView(R.id.brewed_by) TextView brewedBy;
         @BindView(R.id.beer_style) TextView styleView;
         @BindView(R.id.abv_param) FeatureBeerCellParamView abvParamView;
         @BindView(R.id.ibu_param) FeatureBeerCellParamView ibuParamView;
-        @BindView(R.id.fav_action) ImageView favView;
 
         ViewHolder(ViewGroup parent) {
             super(LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_favorite, parent, false));
@@ -75,7 +69,7 @@ class FavoriteBeersAdapter extends RecyclerView.Adapter<FavoriteBeersAdapter.Vie
             ibuParamView.setValueText(vs.ibuValue());
         }
 
-        @OnClick(R.id.cell_favorite)
+        @OnClick(R.id.cell_favorite_foreground)
         void onCellClick(View view) {
 
         }

@@ -69,6 +69,7 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroidVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
     implementation "com.tbruyelle.rxpermissions2:rxpermissions:$rxpermissionsVersion"
+    implementation "de.hdodenhof:circleimageview:$circleimageviewVersion"
 
     compileOnly "com.google.auto.value:auto-value:$autovalueVersion"
     compileOnly "com.ryanharter.auto.value:auto-value-moshi-annotations:$autovaluemoshiVersion"

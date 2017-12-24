@@ -9,4 +9,9 @@
     <dimen name="card_title_padding_bottom">8dp</dimen>
     <dimen name="card_title_padding_horizontal">16dp</dimen>
     <dimen name="cell_featured_param_padding">8dp</dimen>
+    <dimen name="cell_favorite_padding_vertical">8dp</dimen>
+    <dimen name="cell_favorite_padding_horizontal">16dp</dimen>
+    <dimen name="cell_favorite_image_margin">16dp</dimen>
+    <dimen name="view_param_view_internal_horizontal_margin">8dp</dimen>
+    <dimen name="cell_swipe_drawable_padding">8dp</dimen>
 </resources>
