@@ -31,6 +31,22 @@ public abstract class Beer {
         return new AutoValue_Beer.Builder();
     }
 
+    public Builder toBuilder() {
+        return Beer.builder()
+                .id(id())
+                .name(name())
+                .description(description())
+                .abv(abv())
+                .ibu(ibu())
+                .isOrganic(isOrganic())
+                .status(status())
+                .srm(srm())
+                .glass(glass())
+                .style(style())
+                .labels(labels())
+                .breweries(breweries());
+    }
+
     @AutoValue.Builder
     public static abstract class Builder {
         public abstract Builder id(String id);

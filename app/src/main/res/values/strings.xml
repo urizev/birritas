@@ -16,4 +16,7 @@
     <string name="action_favorite">Mark as favorite</string>
     <string name="action_deleted">Deleted</string>
     <string name="no_favorites">No favorites found</string>
+    <string name="brewed_by">Brewed by</string>
+    <string name="style">Style</string>
+    <string name="hyphen">-</string>
 </resources>

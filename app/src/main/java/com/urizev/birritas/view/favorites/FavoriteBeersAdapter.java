@@ -1,5 +1,7 @@
 package com.urizev.birritas.view.favorites;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.R;
 import com.urizev.birritas.app.providers.image.ImageLoader;
 import com.urizev.birritas.ui.FeatureBeerCellParamView;
+import com.urizev.birritas.view.beer.BeerActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,6 +57,7 @@ class FavoriteBeersAdapter extends RecyclerView.Adapter<FavoriteBeersAdapter.Vie
         @BindView(R.id.beer_style) TextView styleView;
         @BindView(R.id.abv_param) FeatureBeerCellParamView abvParamView;
         @BindView(R.id.ibu_param) FeatureBeerCellParamView ibuParamView;
+        private String mBeerId;
 
         ViewHolder(ViewGroup parent) {
             super(LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_favorite, parent, false));
@@ -61,6 +65,7 @@ class FavoriteBeersAdapter extends RecyclerView.Adapter<FavoriteBeersAdapter.Vie
         }
 
         void update(FavoriteBeersItemViewState vs) {
+            this.mBeerId = vs.id();
             mImageLoader.load(vs.imageUrl(), labelView);
             titleView.setText(vs.title());
             styleView.setText(vs.style());
@@ -71,7 +76,10 @@ class FavoriteBeersAdapter extends RecyclerView.Adapter<FavoriteBeersAdapter.Vie
 
         @OnClick(R.id.cell_favorite_foreground)
         void onCellClick(View view) {
-
+            Context context = view.getContext();
+            Intent intent = new Intent(itemView.getContext(), BeerActivity.class);
+            intent.putExtra(BeerActivity.EXTRA_BEER_ID, mBeerId);
+            context.startActivity(intent);
         }
     }
 }

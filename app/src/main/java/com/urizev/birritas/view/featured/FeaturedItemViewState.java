@@ -5,6 +5,7 @@ import com.urizev.birritas.view.common.ViewState;
 
 @AutoValue
 abstract class FeaturedItemViewState implements ViewState {
+    public abstract String id();
     public abstract String title();
     public abstract String imageUrl();
     public abstract String style();
@@ -15,7 +16,7 @@ abstract class FeaturedItemViewState implements ViewState {
     public abstract String abvValue();
     public abstract boolean favorite();
 
-    public static FeaturedItemViewState create(String title, String imageUrl, String style, String brewedBy, int srmColor, String srmValue, String ibuValue, String abvValue, boolean favorite) {
-        return new AutoValue_FeaturedItemViewState(title, imageUrl, style, brewedBy, srmColor, srmValue, ibuValue, abvValue, favorite);
+    public static FeaturedItemViewState create(String id, String title, String imageUrl, String style, String brewedBy, int srmColor, String srmValue, String ibuValue, String abvValue, boolean favorite) {
+        return new AutoValue_FeaturedItemViewState(id, title, imageUrl, style, brewedBy, srmColor, srmValue, ibuValue, abvValue, favorite);
     }
 }

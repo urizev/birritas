@@ -30,8 +30,11 @@ public class BeerMapper {
         RxUtils.assertComputationThread();
 
         Beer beer = entityCache.getBeer(data.id());
+        Beer.Builder builder;
+        boolean saveToCache = false;
         if (beer == null) {
-            beer = Beer.builder()
+            saveToCache = true;
+            builder = Beer.builder()
                     .id(data.id())
                     .name(data.name())
                     .description(data.description())
@@ -43,8 +46,57 @@ public class BeerMapper {
                     .glass(glassMapper.map(data.glass()))
                     .style(styleMapper.map(data.style()))
                     .breweries(breweryMapper.map(data.breweries()))
-                    .labels(ImageSetMapper.map(data.labels()))
-                    .build();
+                    .labels(ImageSetMapper.map(data.labels()));
+        } else {
+            builder = beer.toBuilder();
+            if (data.name() != null) {
+                saveToCache = true;
+                builder = builder.name(data.name());
+            }
+            if (data.description() != null) {
+                saveToCache = true;
+                builder = builder.description(data.description());
+            }
+            if (data.isOrganic() != null) {
+                saveToCache = true;
+                builder = builder.isOrganic(data.isOrganic().equals(ApiService.YES));
+            }
+            if (data.srm() != null) {
+                saveToCache = true;
+                builder = builder.srm(srmMapper.map(data.srm()));
+            }
+            if (data.abv() != null) {
+                saveToCache = true;
+                builder = builder.abv(CommonMapper.mapFloat(data.abv()));
+            }
+            if (data.ibu() != null) {
+                saveToCache = true;
+                builder = builder.ibu(CommonMapper.mapFloat(data.ibu()));
+            }
+            if (data.status() != null) {
+                saveToCache = true;
+                builder = builder.status(CommonMapper.mapStatus(data.status()));
+            }
+            if (data.glass() != null) {
+                saveToCache = true;
+                builder = builder.glass(glassMapper.map(data.glass()));
+            }
+            if (data.style() != null) {
+                saveToCache = true;
+                builder = builder.style(styleMapper.map(data.style()));
+            }
+            if (data.breweries() != null) {
+                saveToCache = true;
+                builder = builder.breweries(breweryMapper.map(data.breweries()));
+            }
+            if (data.labels() != null) {
+                saveToCache = true;
+                builder = builder.labels(ImageSetMapper.map(data.labels()));
+            }
+        }
+
+        if (saveToCache) {
+            beer = builder.build();
             entityCache.putBeer(beer);
         }
 

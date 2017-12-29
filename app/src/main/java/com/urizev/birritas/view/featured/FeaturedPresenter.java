@@ -145,7 +145,7 @@ class FeaturedPresenter extends Presenter<FeaturedViewState> {
             styleName = style.shortName();
         }
 
-        return FeaturedItemViewState.create(beer.name(), icon, styleName, brewedBy,srmColor, srmValue, ibuValue, abvValue, favorite);
+        return FeaturedItemViewState.create(beer.id(), beer.name(), icon, styleName, brewedBy,srmColor, srmValue, ibuValue, abvValue, favorite);
     }
 
     void onFavoriteEvent(FeaturedAdapter.FavoriteEvent e) {

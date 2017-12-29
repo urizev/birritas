@@ -1,5 +1,7 @@
 package com.urizev.birritas.view.featured;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +16,7 @@ import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.R;
 import com.urizev.birritas.app.providers.image.ImageLoader;
 import com.urizev.birritas.ui.FeatureBeerCellParamView;
+import com.urizev.birritas.view.beer.BeerActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,7 +44,7 @@ class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.FeaturedViewH
         holder.update(mViewStates.get(position));
     }
 
-    public Observable<FavoriteEvent> favoriteEvents() {
+    Observable<FavoriteEvent> favoriteEvents() {
         return mFavoriteEvents;
     }
 
@@ -65,6 +68,7 @@ class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.FeaturedViewH
         @BindView(R.id.abv_param) FeatureBeerCellParamView abvParamView;
         @BindView(R.id.ibu_param) FeatureBeerCellParamView ibuParamView;
         @BindView(R.id.fav_action) ImageView favView;
+        private String mBeerId;
 
         FeaturedViewHolder(ViewGroup parent) {
             super(LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_featured, parent, false));
@@ -72,6 +76,7 @@ class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.FeaturedViewH
         }
 
         void update(FeaturedItemViewState vs) {
+            mBeerId = vs.id();
             mImageLoader.load(vs.imageUrl(), labelView);
             titleView.setText(vs.title());
             ImageViewCompat.setImageTintList(srcColorView, ColorStateList.valueOf(vs.srmColor()));
@@ -85,12 +90,15 @@ class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.FeaturedViewH
 
         @OnClick(R.id.card)
         void onCardClick(View view) {
-
+            Context context = view.getContext();
+            Intent intent = new Intent(itemView.getContext(), BeerActivity.class);
+            intent.putExtra(BeerActivity.EXTRA_BEER_ID, mBeerId);
+            context.startActivity(intent);
         }
 
         @OnClick(R.id.fav_action)
         void onFavClick(View view) {
-            mFavoriteEvents.onNext(FavoriteEvent.create(this.getAdapterPosition(), !favView.isSelected()));
+            mFavoriteEvents.onNext(FavoriteEvent.create(this.getAdapterPosition(), !view.isSelected()));
         }
     }
 

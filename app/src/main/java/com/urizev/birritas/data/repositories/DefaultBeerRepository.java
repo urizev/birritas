@@ -72,15 +72,16 @@ public class DefaultBeerRepository implements BeerRepository {
     @Override
     public Observable<Beer> getBeer(String id, boolean cached) {
         Observable<Beer> cache = cached ? this.getBeerFromCache(id) : Observable.empty();
-        Observable<Beer> network = service.getBeer(id).flatMap(result -> {
-            BeerData data = result.data();
-            if (data == null) {
-                return Observable.empty();
-            }
-            else {
-                return Observable.just(data);
-            }
-        }).map(beerMapper::map);
+        Observable<Beer> network = service.getBeer(id)
+                .observeOn(Schedulers.computation())
+                .flatMap(result -> {
+                    BeerData data = result.data();
+                    if (data == null) {
+                        return Observable.empty();
+                    } else {
+                        return Observable.just(data);
+                    }
+                }).map(beerMapper::map);
 
         return Observable.concat(cache.subscribeOn(Schedulers.computation()), network)
                 .subscribeOn(Schedulers.computation());

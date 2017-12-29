@@ -14,4 +14,5 @@
     <dimen name="cell_favorite_image_margin">16dp</dimen>
     <dimen name="view_param_view_internal_horizontal_margin">8dp</dimen>
     <dimen name="cell_swipe_drawable_padding">8dp</dimen>
+    <dimen name="detail_beer_label_image_width">128dp</dimen>
 </resources>

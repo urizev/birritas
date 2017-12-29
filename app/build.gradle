@@ -71,6 +71,7 @@ dependencies {
     implementation "com.tbruyelle.rxpermissions2:rxpermissions:$rxpermissionsVersion"
     implementation "de.hdodenhof:circleimageview:$circleimageviewVersion"
 
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compileOnly "com.google.auto.value:auto-value:$autovalueVersion"
     compileOnly "com.ryanharter.auto.value:auto-value-moshi-annotations:$autovaluemoshiVersion"
 

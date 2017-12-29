@@ -96,7 +96,7 @@ class FavoriteBeersPresenter extends Presenter<FavoriteBeersViewState> {
             styleName = style.shortName();
         }
 
-        return FavoriteBeersItemViewState.create(beer.name(), icon, styleName, brewedBy, ibuValue, abvValue);
+        return FavoriteBeersItemViewState.create(beer.id(), beer.name(), icon, styleName, brewedBy, ibuValue, abvValue);
     }
 
     void deleteFavorite(int position) {
