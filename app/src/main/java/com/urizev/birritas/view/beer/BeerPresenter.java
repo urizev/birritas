@@ -33,27 +33,29 @@ class BeerPresenter extends Presenter<BeerViewState> {
     private final BeerDetailsUseCase mBeerDetailsUseCase;
     private final FavoritesBeerIdsUseCase mFavoritesBeerIdsUseCase;
     private final String mNa;
+    private final String mBeerId;
 
     BeerPresenter(@NonNull String beerId,
                   @NonNull BeerDetailsUseCase beerDetailsUseCase,
                   @NonNull FavoritesBeerIdsUseCase favoritesBeerIdsUseCase,
                   @NonNull ResourceProvider resourceProvider) {
+        this.mBeerId = beerId;
         this.mBeerDetailsUseCase = beerDetailsUseCase;
         this.mFavoritesBeerIdsUseCase = favoritesBeerIdsUseCase;
         this.mNa = resourceProvider.getString(R.string.n_a);
         this.mHyphen = resourceProvider.getString(R.string.hyphen);
-        this.mBeerModel = BehaviorSubject.createDefault(BeerModel.builder(beerId).build());
+        this.mBeerModel = BehaviorSubject.createDefault(BeerModel.builder().build());
         observeModels();
-        loadBeer();
+        loadBeer(mBeerId);
     }
 
-    private void loadBeer() {
-        addDisposable(mBeerModel
+    private void loadBeer(String beerId) {
+        addDisposable(Observable.just(beerId)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(Schedulers.computation())
-                .map(BeerModel::id)
                 .flatMap(id -> mBeerDetailsUseCase.execute(id).subscribeOn(Schedulers.computation()))
                 .map(beer -> mBeerModel.getValue().withBeer(beer))
+                .doOnNext(mBeerModel::onNext)
                 .subscribe());
     }
 
@@ -78,8 +80,8 @@ class BeerPresenter extends Presenter<BeerViewState> {
         String srmText = mNa;
         String ibuText = mNa;
         String abvText = mNa;
-        boolean favorite = favorites.contains(model.id());
         Beer beer = model.beer();
+        boolean favorite = favorites.contains(mBeerId);
         if (beer != null) {
             name = beer.name();
             ImageSet labels = beer.labels();

@@ -5,6 +5,7 @@
     <color name="colorPrimaryLight">#FFECB3</color>
     <color name="colorSecondary">#77FFC107</color>
     <color name="colorAccent">#795548</color>
+    <color name="colorBackground">#FFF</color>
 
     <color name="bottomNavigation">#333</color>
     <color name="no_srm">#CCC</color>

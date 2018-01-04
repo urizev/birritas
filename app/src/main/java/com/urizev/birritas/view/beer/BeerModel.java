@@ -7,28 +7,21 @@ import com.urizev.birritas.domain.entities.Beer;
 
 @AutoValue
 public abstract class BeerModel {
-    public abstract String id();
     @Nullable
     public abstract Beer beer();
 
-    public static Builder builder(String beerId) {
-        return new AutoValue_BeerModel.Builder().id(beerId);
-    }
-
-    private Builder toBuilder() {
-        return builder(id())
-                .beer(beer());
+    public static Builder builder() {
+        return new AutoValue_BeerModel.Builder();
     }
 
     BeerModel withBeer(Beer beer) {
-        return builder(id())
+        return builder()
                 .beer(beer)
                 .build();
     }
 
     @AutoValue.Builder
     public static abstract class Builder {
-        public abstract Builder id(String id);
         public abstract Builder beer(Beer beer);
 
         public abstract BeerModel build();
