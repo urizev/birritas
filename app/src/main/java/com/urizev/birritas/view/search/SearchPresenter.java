@@ -18,17 +18,28 @@ import com.urizev.birritas.view.search.adapter.SearchResultItemViewStateAdapterD
 import java.util.Locale;
 
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.BehaviorSubject;
 
 class SearchPresenter extends Presenter<SearchViewState> {
     private final SearchUseCase mUseCase;
     private final String mBeersHeader;
     private final String mBreweriesHeader;
     private Disposable mSearchDisposable;
+    private final BehaviorSubject<SearchResult> mModel;
 
     SearchPresenter(SearchUseCase useCase, ResourceProvider resourceProvider) {
         this.mUseCase = useCase;
+        this.mModel = BehaviorSubject.create();
         this.mBeersHeader = resourceProvider.getString(R.string.header_beers).toUpperCase(Locale.getDefault());
         this.mBreweriesHeader = resourceProvider.getString(R.string.header_breweries).toUpperCase(Locale.getDefault());
+
+        addDisposable(mModel
+                .subscribeOn(Schedulers.computation())
+                .observeOn(Schedulers.computation())
+                .map(this::resultToViewState)
+                .doOnNext(this::publishViewState)
+                .subscribe());
     }
 
     public void search(String query) {
@@ -39,8 +50,9 @@ class SearchPresenter extends Presenter<SearchViewState> {
         }
 
         mSearchDisposable = mUseCase.execute(query)
-                .map(this::resultToViewState)
-                .doOnNext(this::publishViewState)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(Schedulers.computation())
+                .doOnNext(mModel::onNext)
                 .subscribe();
     }
 
@@ -68,7 +80,7 @@ class SearchPresenter extends Presenter<SearchViewState> {
                 if (breweries != null  && !breweries.isEmpty()) {
                     subtitle = breweries.get(0).name();
                 }
-                viewStates = viewStates.add(SearchResultItemViewStateAdapterDelegate.ViewState.create(imageUrl, beer.name(), subtitle));
+                viewStates = viewStates.add(SearchResultItemViewStateAdapterDelegate.ViewState.create(beer.id(), SearchResultItemViewStateAdapterDelegate.ViewState.TYPE_BEER, imageUrl, beer.name(), subtitle));
             }
         }
 
@@ -85,7 +97,7 @@ class SearchPresenter extends Presenter<SearchViewState> {
                 if (place != null) {
                     subtitle = place.locality();
                 }
-                viewStates = viewStates.add(SearchResultItemViewStateAdapterDelegate.ViewState.create(imageUrl, brewery.name(), subtitle));
+                viewStates = viewStates.add(SearchResultItemViewStateAdapterDelegate.ViewState.create(brewery.id(), SearchResultItemViewStateAdapterDelegate.ViewState.TYPE_BREWERY, imageUrl, brewery.name(), subtitle));
             }
         }
 

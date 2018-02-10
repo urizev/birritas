@@ -21,7 +21,8 @@ import butterknife.ButterKnife;
 public class SearchResultItemViewStateAdapterDelegate extends ViewStateAdapterDelegate<SearchResultItemViewStateAdapterDelegate.ViewState, SearchResultItemViewStateAdapterDelegate.ViewHolder> {
     private final ImageLoader mImageLoader;
 
-    public SearchResultItemViewStateAdapterDelegate(ImageLoader imageLoader) {
+    public SearchResultItemViewStateAdapterDelegate(ImageLoader imageLoader, ViewStateAdapterDelegateClickListener listener) {
+        super(listener);
         this.mImageLoader = imageLoader;
     }
 
@@ -41,34 +42,49 @@ public class SearchResultItemViewStateAdapterDelegate extends ViewStateAdapterDe
         holder.bind(item);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.image) ImageView image;
         @BindView(R.id.title) TextView title;
         @BindView(R.id.subtitle) TextView subtitle;
+        private ViewState mViewState;
 
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+            itemView.setOnClickListener(this);
         }
 
-
         public void bind(ViewState item) {
+            this.mViewState = item;
             mImageLoader.load(item.imageUrl(), image);
             title.setText(item.title());
             subtitle.setText(item.subtitle());
+        }
+
+        @Override
+        public void onClick(View view) {
+            ViewStateAdapterDelegateClickListener l = mListener.get();
+            if (l != null) {
+                l.onViewStateAdapterDelegateClicked(mViewState, getAdapterPosition());
+            }
         }
     }
 
     @AutoValue
     public static abstract class ViewState implements com.urizev.birritas.view.common.ViewState {
+        public static final String TYPE_BEER = "beer";
+        public static final String TYPE_BREWERY = "brewery";
+
+        public abstract String id();
+        public abstract String type();
         @Nullable
         public abstract String imageUrl();
         public abstract String title();
         @Nullable
         public abstract String subtitle();
 
-        public static ViewState create(String imageUrl, String title, String subtitle) {
-            return new AutoValue_SearchResultItemViewStateAdapterDelegate_ViewState(imageUrl, title, subtitle);
+        public static ViewState create(String id, String type, String imageUrl, String title, String subtitle) {
+            return new AutoValue_SearchResultItemViewStateAdapterDelegate_ViewState(id, type, imageUrl, title, subtitle);
         }
     }
 }
