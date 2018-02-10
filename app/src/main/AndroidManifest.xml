@@ -16,20 +16,25 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".view.main.MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".view.beer.BeerActivity">
+        </activity>
+        <activity android:name=".view.brewery.BreweryActivity">
+        </activity>
+        <activity android:name=".view.search.SearchActivity"
+                  android:theme="@style/AppTheme.NoActionBar">
+        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_api_key"/>
-
-        <activity android:name=".view.beer.BeerActivity">
-        </activity>
     </application>
 
 </manifest>

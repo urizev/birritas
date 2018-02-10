@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/image"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/cell_search_result_margin_end"
+        android:layout_marginTop="@dimen/cell_search_result_margin_vertical"
+        android:layout_marginBottom="@dimen/cell_search_result_margin_vertical"
+        android:src="@color/colorImagePlaceholder"
+        android:layout_width="40dp"
+        android:layout_height="40dp"/>
+
+    <TextView
+        android:id="@+id/title"
+        tools:text="Hop Fiction"
+        android:layout_toEndOf="@id/image"
+        android:layout_alignTop="@id/image"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+    <TextView
+        android:id="@+id/subtitle"
+        tools:text="Hop Fiction"
+        android:layout_toEndOf="@id/image"
+        android:layout_below="@id/title"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.AppCompat.Caption"/>
+
+</RelativeLayout>

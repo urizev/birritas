@@ -15,7 +15,9 @@ import com.urizev.birritas.data.api.adapters.LiveDataJsonAdapter;
 import com.urizev.birritas.data.cache.EntityCache;
 import com.urizev.birritas.data.cache.MemoryEntityCache;
 import com.urizev.birritas.data.repositories.DefaultBeerRepository;
+import com.urizev.birritas.data.repositories.DefaultBreweryRepository;
 import com.urizev.birritas.domain.repositories.BeerRepository;
+import com.urizev.birritas.domain.repositories.BreweryRepository;
 
 import javax.inject.Singleton;
 
@@ -39,6 +41,12 @@ public class NetModule {
     @Provides
     @Singleton
     BeerRepository providesBeerRepository(DefaultBeerRepository repository) {
+        return repository;
+    }
+
+    @Provides
+    @Singleton
+    BreweryRepository providesBreweryRepository(DefaultBreweryRepository repository) {
         return repository;
     }
 

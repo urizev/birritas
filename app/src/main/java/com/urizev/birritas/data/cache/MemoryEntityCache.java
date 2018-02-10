@@ -10,9 +10,12 @@ import com.urizev.birritas.domain.entities.Brewery;
 import com.urizev.birritas.domain.entities.Category;
 import com.urizev.birritas.domain.entities.Country;
 import com.urizev.birritas.domain.entities.Glass;
+import com.urizev.birritas.domain.entities.Hop;
+import com.urizev.birritas.domain.entities.Malt;
 import com.urizev.birritas.domain.entities.Place;
 import com.urizev.birritas.domain.entities.SRM;
 import com.urizev.birritas.domain.entities.Style;
+import com.urizev.birritas.domain.entities.Yeast;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -27,6 +30,9 @@ public class MemoryEntityCache implements EntityCache {
     private final SparseArray<Glass> mGlasses;
     private final SparseArray<SRM> mSrms;
     private final SparseArray<Style> mStyles;
+    private final SparseArray<Hop> mHops;
+    private final SparseArray<Yeast> mYeasts;
+    private final SparseArray<Malt> mMalts;
 
     @Inject
     MemoryEntityCache() {
@@ -38,6 +44,9 @@ public class MemoryEntityCache implements EntityCache {
         this.mGlasses = new SparseArray<>();
         this.mSrms = new SparseArray<>();
         this.mStyles = new SparseArray<>();
+        this.mHops = new SparseArray<>();
+        this.mYeasts = new SparseArray<>();
+        this.mMalts = new SparseArray<>();
     }
 
     @Override
@@ -135,5 +144,41 @@ public class MemoryEntityCache implements EntityCache {
     public void putCountry(Country country) {
         RxUtils.assertComputationThread();
         mCountries.put(country.isoCode(), country);
+    }
+
+    @Override
+    public Hop getHop(int id) {
+        RxUtils.assertComputationThread();
+        return mHops.get(id);
+    }
+
+    @Override
+    public void putHop(Hop hop) {
+        RxUtils.assertComputationThread();
+        mHops.put(hop.id(), hop);
+    }
+
+    @Override
+    public Yeast getYeast(int id) {
+        RxUtils.assertComputationThread();
+        return mYeasts.get(id);
+    }
+
+    @Override
+    public void putYeast(Yeast yeast) {
+        RxUtils.assertComputationThread();
+        mYeasts.put(yeast.id(), yeast);
+    }
+
+    @Override
+    public Malt getMalt(int id) {
+        RxUtils.assertComputationThread();
+        return mMalts.get(id);
+    }
+
+    @Override
+    public void putMalt(Malt malt) {
+        RxUtils.assertComputationThread();
+        mMalts.put(malt.id(), malt);
     }
 }

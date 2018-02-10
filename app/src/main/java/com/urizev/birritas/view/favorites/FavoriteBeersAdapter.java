@@ -60,7 +60,7 @@ class FavoriteBeersAdapter extends RecyclerView.Adapter<FavoriteBeersAdapter.Vie
         private String mBeerId;
 
         ViewHolder(ViewGroup parent) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_favorite, parent, false));
+            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_beer_slim, parent, false));
             ButterKnife.bind(this, itemView);
         }
 

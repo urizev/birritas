@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-class BreweryMapper {
+public class BreweryMapper {
     private final EntityCache entityCache;
     private final PlaceMapper placeMapper;
 

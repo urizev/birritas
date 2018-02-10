@@ -8,12 +8,16 @@ import com.google.common.collect.ImmutableSet;
 import com.urizev.birritas.R;
 import com.urizev.birritas.app.providers.resources.ResourceProvider;
 import com.urizev.birritas.app.rx.RxUtils;
-import com.urizev.birritas.domain.usecases.BeerDetailsUseCase;
 import com.urizev.birritas.domain.entities.Beer;
 import com.urizev.birritas.domain.entities.Brewery;
+import com.urizev.birritas.domain.entities.Hop;
 import com.urizev.birritas.domain.entities.ImageSet;
+import com.urizev.birritas.domain.entities.Ingredients;
+import com.urizev.birritas.domain.entities.Malt;
 import com.urizev.birritas.domain.entities.SRM;
 import com.urizev.birritas.domain.entities.Style;
+import com.urizev.birritas.domain.entities.Yeast;
+import com.urizev.birritas.domain.usecases.BeerDetailsUseCase;
 import com.urizev.birritas.domain.usecases.FavoritesBeerIdsUseCase;
 import com.urizev.birritas.view.common.Presenter;
 
@@ -27,13 +31,14 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
-class BeerPresenter extends Presenter<BeerViewState> {
+class BeerPresenter extends Presenter<PresenterBeerViewState> {
     private final BehaviorSubject<BeerModel> mBeerModel;
     private final String mHyphen;
     private final BeerDetailsUseCase mBeerDetailsUseCase;
     private final FavoritesBeerIdsUseCase mFavoritesBeerIdsUseCase;
     private final String mNa;
     private final String mBeerId;
+    private final int mNoSrm;
 
     BeerPresenter(@NonNull String beerId,
                   @NonNull BeerDetailsUseCase beerDetailsUseCase,
@@ -43,6 +48,7 @@ class BeerPresenter extends Presenter<BeerViewState> {
         this.mBeerDetailsUseCase = beerDetailsUseCase;
         this.mFavoritesBeerIdsUseCase = favoritesBeerIdsUseCase;
         this.mNa = resourceProvider.getString(R.string.n_a);
+        this.mNoSrm = resourceProvider.getColor(R.color.no_srm);
         this.mHyphen = resourceProvider.getString(R.string.hyphen);
         this.mBeerModel = BehaviorSubject.createDefault(BeerModel.builder().build());
         observeModels();
@@ -70,7 +76,7 @@ class BeerPresenter extends Presenter<BeerViewState> {
                 .subscribe());
     }
 
-    private BeerViewState modelToViewState(BeerModel model, ImmutableSet<String> favorites) {
+    private PresenterBeerViewState modelToViewState(BeerModel model, ImmutableSet<String> favorites) {
         RxUtils.assertComputationThread();
 
         String name = "";
@@ -80,6 +86,8 @@ class BeerPresenter extends Presenter<BeerViewState> {
         String srmText = mNa;
         String ibuText = mNa;
         String abvText = mNa;
+        int srmColor = mNoSrm;
+        ImmutableList.Builder<String> ingredients = new ImmutableList.Builder<>();
         Beer beer = model.beer();
         boolean favorite = favorites.contains(mBeerId);
         if (beer != null) {
@@ -116,8 +124,22 @@ class BeerPresenter extends Presenter<BeerViewState> {
             if (beer.abv() != null) {
                 abvText = String.format(Locale.getDefault(), "%.1f", beer.abv());
             }
+
+            if (beer.ingredients() != null) {
+                Ingredients beerIngredients = beer.ingredients();
+                for (Yeast yeast : beerIngredients.yeasts()) {
+                    ingredients = ingredients.add(yeast.name());
+                }
+                for (Malt malt : beerIngredients.malts()) {
+                    ingredients = ingredients.add(malt.name());
+                }
+                for (Hop hop : beerIngredients.hops()) {
+                    ingredients = ingredients.add(hop.name());
+                }
+            }
         }
 
-        return BeerViewState.create(name, imageUrl, brewedBy, styleText, srmText, ibuText, abvText, favorite);
+        return PresenterBeerViewState.create(name, imageUrl, brewedBy, styleText, srmText, srmColor,
+                ibuText, abvText, ingredients.build(), favorite);
     }
 }

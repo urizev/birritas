@@ -7,9 +7,12 @@ import com.urizev.birritas.domain.entities.Brewery;
 import com.urizev.birritas.domain.entities.Category;
 import com.urizev.birritas.domain.entities.Country;
 import com.urizev.birritas.domain.entities.Glass;
+import com.urizev.birritas.domain.entities.Hop;
+import com.urizev.birritas.domain.entities.Malt;
 import com.urizev.birritas.domain.entities.Place;
 import com.urizev.birritas.domain.entities.SRM;
 import com.urizev.birritas.domain.entities.Style;
+import com.urizev.birritas.domain.entities.Yeast;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -243,6 +246,90 @@ public class CompositeEntityCache implements EntityCache {
     public void putCountry(Country country) {
         for (EntityCache cache : caches) {
             cache.putCountry(country);
+        }
+    }
+
+    @Override
+    public Hop getHop(int id) {
+        List<EntityCache> toAdd = new LinkedList<>();
+        Hop hop = null;
+        for (EntityCache cache : caches) {
+            hop = cache.getHop(id);
+            if (hop != null) {
+                break;
+            }
+            toAdd.add(cache);
+        }
+
+        if (hop != null) {
+            for (EntityCache cache : toAdd) {
+                cache.putHop(hop);
+            }
+        }
+
+        return hop;
+    }
+
+    @Override
+    public void putHop(Hop hop) {
+        for (EntityCache cache : caches) {
+            cache.putHop(hop);
+        }
+    }
+
+    @Override
+    public Yeast getYeast(int id) {
+        List<EntityCache> toAdd = new LinkedList<>();
+        Yeast yeast = null;
+        for (EntityCache cache : caches) {
+            yeast = cache.getYeast(id);
+            if (yeast != null) {
+                break;
+            }
+            toAdd.add(cache);
+        }
+
+        if (yeast != null) {
+            for (EntityCache cache : toAdd) {
+                cache.putYeast(yeast);
+            }
+        }
+
+        return yeast;
+    }
+
+    @Override
+    public void putYeast(Yeast yeast) {
+        for (EntityCache cache : caches) {
+            cache.putYeast(yeast);
+        }
+    }
+
+    @Override
+    public Malt getMalt(int id) {
+        List<EntityCache> toAdd = new LinkedList<>();
+        Malt malt = null;
+        for (EntityCache cache : caches) {
+            malt = cache.getMalt(id);
+            if (malt != null) {
+                break;
+            }
+            toAdd.add(cache);
+        }
+
+        if (malt != null) {
+            for (EntityCache cache : toAdd) {
+                cache.putMalt(malt);
+            }
+        }
+
+        return malt;
+    }
+
+    @Override
+    public void putMalt(Malt malt) {
+        for (EntityCache cache : caches) {
+            cache.putMalt(malt);
         }
     }
 }

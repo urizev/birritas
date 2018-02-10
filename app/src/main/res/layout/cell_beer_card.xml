@@ -76,14 +76,15 @@
                 android:paddingStart="@dimen/card_title_padding_horizontal"
                 android:paddingRight="@dimen/card_title_padding_horizontal"
                 android:paddingEnd="@dimen/card_title_padding_horizontal"
+                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/srm_color"
                     android:src="@drawable/circle"
                     app:tint="@color/colorPrimaryDark"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp" />
+                    android:layout_width="@dimen/cell_beer_card_color_size"
+                    android:layout_height="@dimen/cell_beer_card_color_size" />
                 <com.urizev.birritas.ui.FeatureBeerCellParamView
                     android:id="@+id/srm_param"
                     app:nameText="@string/SRM"

@@ -18,8 +18,8 @@ public class AndroidResourceProvider implements ResourceProvider {
     }
 
     @Override
-    public String getString(int res) {
-        return mContext.getResources().getString(res);
+    public String getString(int res, Object ... args) {
+        return mContext.getResources().getString(res, args);
     }
 
     @Override

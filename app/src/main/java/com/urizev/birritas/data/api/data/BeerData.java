@@ -23,11 +23,14 @@ public abstract class BeerData {
     public abstract SRMData srm();
     @Nullable
     public abstract GlassData glass();
+    @Nullable
     public abstract StyleData style();
     @Nullable
     public abstract ImageSetData labels();
     @Nullable
     public abstract ImmutableList<BreweryData> breweries();
+    @Nullable
+    public abstract IngredientsData ingredients();
 
     public static JsonAdapter<BeerData> jsonAdapter(Moshi moshi) {
         return new AutoValue_BeerData.MoshiJsonAdapter(moshi);

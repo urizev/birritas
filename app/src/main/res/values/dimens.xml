@@ -15,4 +15,14 @@
     <dimen name="view_param_view_internal_horizontal_margin">8dp</dimen>
     <dimen name="cell_swipe_drawable_padding">8dp</dimen>
     <dimen name="detail_beer_label_image_width">128dp</dimen>
+    <dimen name="brewery_side_width">240dp</dimen>
+    <dimen name="header_top_margin">32dp</dimen>
+    <dimen name="search_box_elevation">2dp</dimen>
+    <dimen name="search_box_corner_radius">2dp</dimen>
+    <dimen name="search_box_horizontal_margin">16dp</dimen>
+    <dimen name="search_box_vertical_margin">8dp</dimen>
+    <dimen name="search_text_horizontal_margin">8dp</dimen>
+    <dimen name="cell_beer_card_color_size">24dp</dimen>
+    <dimen name="cell_search_result_margin_vertical">8dp</dimen>
+    <dimen name="cell_search_result_margin_end">12dp</dimen>
 </resources>

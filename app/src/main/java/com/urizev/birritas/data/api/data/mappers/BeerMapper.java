@@ -16,14 +16,21 @@ public class BeerMapper {
     private final SRMMapper srmMapper;
     private final GlassMapper glassMapper;
     private final StyleMapper styleMapper;
+    private final IngredientsMapper ingredientsMapper;
 
     @Inject
-    BeerMapper(EntityCache entityCache, BreweryMapper breweryMapper, SRMMapper srmMapper, GlassMapper glassMapper, StyleMapper styleMapper) {
+    BeerMapper(EntityCache entityCache,
+               BreweryMapper breweryMapper,
+               SRMMapper srmMapper,
+               GlassMapper glassMapper,
+               StyleMapper styleMapper,
+               IngredientsMapper ingredientsMapper) {
         this.entityCache = entityCache;
         this.breweryMapper = breweryMapper;
         this.srmMapper = srmMapper;
         this.glassMapper = glassMapper;
         this.styleMapper = styleMapper;
+        this.ingredientsMapper = ingredientsMapper;
     }
 
     public Beer map(BeerData data) {
@@ -46,6 +53,7 @@ public class BeerMapper {
                     .glass(glassMapper.map(data.glass()))
                     .style(styleMapper.map(data.style()))
                     .breweries(breweryMapper.map(data.breweries()))
+                    .ingredients(ingredientsMapper.map(data.ingredients()))
                     .labels(ImageSetMapper.map(data.labels()));
         } else {
             builder = beer.toBuilder();
@@ -92,6 +100,10 @@ public class BeerMapper {
             if (data.labels() != null) {
                 saveToCache = true;
                 builder = builder.labels(ImageSetMapper.map(data.labels()));
+            }
+            if (data.ingredients() != null) {
+                saveToCache = true;
+                builder = builder.ingredients(ingredientsMapper.map(data.ingredients()));
             }
         }
 

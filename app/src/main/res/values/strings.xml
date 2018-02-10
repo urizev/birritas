@@ -19,4 +19,10 @@
     <string name="brewed_by">Brewed by</string>
     <string name="style">Style</string>
     <string name="hyphen">-</string>
+    <string name="since_established">Since %d</string>
+    <string name="n_beers">%d BEERS</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="search_hint">Search beer or brewery</string>
+    <string name="header_beers">Beers</string>
+    <string name="header_breweries">Breweries</string>
 </resources>

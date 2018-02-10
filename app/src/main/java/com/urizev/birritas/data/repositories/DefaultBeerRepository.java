@@ -27,7 +27,8 @@ public class DefaultBeerRepository implements BeerRepository {
             ApiService.HAS_LABELS, ApiService.YES,
             ApiService.ORDER, ApiService.ORDER_UPDATE_DATE,
             ApiService.SORT, ApiService.SORT_DESC,
-            ApiService.WITH_BREWERIES, ApiService.YES
+            ApiService.WITH_BREWERIES, ApiService.YES,
+            ApiService.WITH_INGREDIENTS, ApiService.YES
     );
     private final ApiService service;
     private final BeerMapper beerMapper;

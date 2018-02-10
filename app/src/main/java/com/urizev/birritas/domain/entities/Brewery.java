@@ -22,9 +22,24 @@ public abstract class Brewery {
     public abstract boolean isOrganic();
     public abstract int status();
     public abstract ImmutableList<Place> locations();
+    public abstract ImmutableList<Beer> beers();
 
     public static Builder builder() {
-        return new AutoValue_Brewery.Builder();
+        return new AutoValue_Brewery.Builder().beers(ImmutableList.of());
+    }
+
+    public Place getMainPlace() {
+        for (Place place : locations()) {
+            if (place.isPrimary()) {
+                return place;
+            }
+        }
+
+        if (!locations().isEmpty()) {
+            return locations().get(0);
+        }
+
+        return null;
     }
 
     @AutoValue.Builder
@@ -39,6 +54,7 @@ public abstract class Brewery {
         public abstract Builder isOrganic(boolean organic);
         public abstract Builder status(int status);
         public abstract Builder locations(ImmutableList<Place> locations);
+        public abstract Builder beers(ImmutableList<Beer> beers);
 
         public abstract Brewery build();
     }

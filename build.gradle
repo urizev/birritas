@@ -30,6 +30,7 @@ ext {
     retrofitVersion = '2.3.0'
     firebaseVersion = '11.8.0'
     rxandroidVersion = '2.0.1'
+    rxbindingVersion = '2.1.0'
     autovalueVersion = '1.5.2'
     butterknifeVersion = '8.8.1'
     playServicesVersion = '11.8.0'
@@ -38,6 +39,7 @@ ext {
     autovaluemoshiVersion = '0.4.4'
     supportLibraryVersion = '26.1.0'
     okhttpdownloaderVersion = '1.1.0'
+    adapterdelegatesVersion = '3.0.1'
 }
 
 task clean(type: Delete) {

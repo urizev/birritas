@@ -68,8 +68,10 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timberVersion"
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroidVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
+    implementation "com.jakewharton.rxbinding2:rxbinding:$rxbindingVersion"
     implementation "com.tbruyelle.rxpermissions2:rxpermissions:$rxpermissionsVersion"
     implementation "de.hdodenhof:circleimageview:$circleimageviewVersion"
+    implementation "com.hannesdorfmann:adapterdelegates3:$adapterdelegatesVersion"
 
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compileOnly "com.google.auto.value:auto-value:$autovalueVersion"

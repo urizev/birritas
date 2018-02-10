@@ -21,11 +21,13 @@ public abstract class Beer {
     public abstract SRM srm();
     @Nullable
     public abstract Glass glass();
+    @Nullable
     public abstract Style style();
     @Nullable
     public abstract ImageSet labels();
     @Nullable
     public abstract ImmutableList<Brewery> breweries();
+    public abstract Ingredients ingredients();
 
     public static Builder builder() {
         return new AutoValue_Beer.Builder();
@@ -44,6 +46,7 @@ public abstract class Beer {
                 .glass(glass())
                 .style(style())
                 .labels(labels())
+                .ingredients(ingredients())
                 .breweries(breweries());
     }
 
@@ -61,6 +64,7 @@ public abstract class Beer {
         public abstract Builder style(Style style);
         public abstract Builder labels(ImageSet labels);
         public abstract Builder breweries(ImmutableList<Brewery> breweries);
+        public abstract Builder ingredients(Ingredients ingredients);
 
         public abstract Beer build();
     }

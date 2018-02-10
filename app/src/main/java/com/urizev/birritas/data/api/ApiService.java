@@ -12,6 +12,7 @@ import java.util.Map;
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 public interface ApiService {
@@ -20,6 +21,7 @@ public interface ApiService {
     String LONGITUDE = "lng";
     String RADIUS = "radius";
     String UNIT = "unit";
+    String KM = "km";
     String QUERY = "q";
     String HAS_LABELS = "hasLabels";
     String YES = "Y";
@@ -29,7 +31,7 @@ public interface ApiService {
     String SORT_DESC = "DESC";
     String STATUS_VERIFIED = "verified";
     String WITH_BREWERIES = "withBreweries";
-    java.lang.String KM = "km";
+    String WITH_INGREDIENTS = "withIngredients";
 
     @GET("beers")
     Observable<ResultData<ImmutableList<BeerData>>> getBeers(@QueryMap Map<String,String> params);
@@ -41,7 +43,7 @@ public interface ApiService {
     Observable<ResultData<ImmutableList<PlaceData>>> searchGeoPoint(@QueryMap Map<String,String> params);
 
     @GET("search")
-    Observable<ResultData<LiveData>> search(@QueryMap Map<String,String> params);
+    Observable<ResultData<LiveData>> search(@Query(value = QUERY, encoded = true) String query, @QueryMap Map<String,String> params);
 
     @GET("brewery/{breweryId}")
     Observable<ResultData<BreweryData>> getBrewery(@Path("breweryId") String beerId);

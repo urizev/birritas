@@ -71,7 +71,7 @@ class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.FeaturedViewH
         private String mBeerId;
 
         FeaturedViewHolder(ViewGroup parent) {
-            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_featured, parent, false));
+            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_beer_card, parent, false));
             ButterKnife.bind(this, itemView);
         }
 

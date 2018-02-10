@@ -3,9 +3,11 @@ package com.urizev.birritas.app.inject.components;
 import com.urizev.birritas.app.inject.modules.AppModule;
 import com.urizev.birritas.app.inject.modules.NetModule;
 import com.urizev.birritas.view.beer.BeerFragment;
+import com.urizev.birritas.view.brewery.BreweryFragment;
 import com.urizev.birritas.view.favorites.FavoriteBeersFragment;
 import com.urizev.birritas.view.featured.FeaturedFragment;
 import com.urizev.birritas.view.nearby.NearbyFragment;
+import com.urizev.birritas.view.search.SearchFragment;
 
 import javax.inject.Singleton;
 
@@ -18,4 +20,6 @@ public interface NetComponent {
     void inject(NearbyFragment fragment);
     void inject(FavoriteBeersFragment fragment);
     void inject(BeerFragment fragment);
+    void inject(BreweryFragment fragment);
+    void inject(SearchFragment fragment);
 }
