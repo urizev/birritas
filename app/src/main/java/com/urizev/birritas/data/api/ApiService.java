@@ -32,12 +32,14 @@ public interface ApiService {
     String STATUS_VERIFIED = "verified";
     String WITH_BREWERIES = "withBreweries";
     String WITH_INGREDIENTS = "withIngredients";
+    String WITH_SOCIAL_ACCOUNTS = "withSocialAccounts";
+    String WITH_LOCATIONS = "withLocations";
 
     @GET("beers")
     Observable<ResultData<ImmutableList<BeerData>>> getBeers(@QueryMap Map<String,String> params);
 
     @GET("beer/{beerId}")
-    Observable<ResultData<BeerData>> getBeer(@Path("beerId") String beerId);
+    Observable<ResultData<BeerData>> getBeer(@Path("beerId") String beerId, @QueryMap Map<String,String> params);
 
     @GET("search/geo/point")
     Observable<ResultData<ImmutableList<PlaceData>>> searchGeoPoint(@QueryMap Map<String,String> params);
@@ -46,5 +48,5 @@ public interface ApiService {
     Observable<ResultData<LiveData>> search(@Query(value = QUERY, encoded = true) String query, @QueryMap Map<String,String> params);
 
     @GET("brewery/{breweryId}")
-    Observable<ResultData<BreweryData>> getBrewery(@Path("breweryId") String beerId);
+    Observable<ResultData<BreweryData>> getBrewery(@Path("breweryId") String beerId, @QueryMap Map<String, String> params);
 }

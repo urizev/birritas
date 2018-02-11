@@ -30,6 +30,11 @@ public class DefaultBeerRepository implements BeerRepository {
             ApiService.WITH_BREWERIES, ApiService.YES,
             ApiService.WITH_INGREDIENTS, ApiService.YES
     );
+    private static final Map<String, String> BEER_PARAMS = ImmutableMap.of(
+            ApiService.WITH_BREWERIES, ApiService.YES,
+            ApiService.WITH_SOCIAL_ACCOUNTS, ApiService.YES,
+            ApiService.WITH_INGREDIENTS, ApiService.YES
+    );
     private final ApiService service;
     private final BeerMapper beerMapper;
     private final EntityCache entityCache;
@@ -73,7 +78,7 @@ public class DefaultBeerRepository implements BeerRepository {
     @Override
     public Observable<Beer> getBeer(String id, boolean cached) {
         Observable<Beer> cache = cached ? this.getBeerFromCache(id) : Observable.empty();
-        Observable<Beer> network = service.getBeer(id)
+        Observable<Beer> network = service.getBeer(id, BEER_PARAMS)
                 .observeOn(Schedulers.computation())
                 .flatMap(result -> {
                     BeerData data = result.data();

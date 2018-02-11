@@ -23,6 +23,7 @@ import com.urizev.birritas.view.common.ViewState;
 import com.urizev.birritas.view.common.ViewStateAdapter;
 import com.urizev.birritas.view.common.ViewStateAdapterDelegate;
 import com.urizev.birritas.view.common.adapter.HeaderViewStateAdapterDelegate;
+import com.urizev.birritas.view.common.adapter.NoResultsViewStateAdapterDelegate;
 import com.urizev.birritas.view.search.adapter.SearchResultItemViewStateAdapterDelegate;
 
 import java.util.concurrent.TimeUnit;
@@ -56,6 +57,7 @@ public class SearchFragment extends DirectPresenterFragment<SearchViewState,Sear
 
     private void createAdapterDelegates() {
         mAdapterDelegates = new ImmutableList.Builder<ViewStateAdapterDelegate>()
+                .add(new NoResultsViewStateAdapterDelegate())
                 .add(new HeaderViewStateAdapterDelegate())
                 .add(new SearchResultItemViewStateAdapterDelegate(mImageLoader, this))
                 .build();

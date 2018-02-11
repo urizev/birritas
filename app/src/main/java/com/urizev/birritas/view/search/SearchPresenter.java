@@ -13,6 +13,7 @@ import com.urizev.birritas.domain.usecases.SearchUseCase;
 import com.urizev.birritas.view.common.Presenter;
 import com.urizev.birritas.view.common.ViewState;
 import com.urizev.birritas.view.common.adapter.HeaderViewStateAdapterDelegate;
+import com.urizev.birritas.view.common.adapter.NoResultsViewStateAdapterDelegate;
 import com.urizev.birritas.view.search.adapter.SearchResultItemViewStateAdapterDelegate;
 
 import java.util.Locale;
@@ -99,6 +100,10 @@ class SearchPresenter extends Presenter<SearchViewState> {
                 }
                 viewStates = viewStates.add(SearchResultItemViewStateAdapterDelegate.ViewState.create(brewery.id(), SearchResultItemViewStateAdapterDelegate.ViewState.TYPE_BREWERY, imageUrl, brewery.name(), subtitle));
             }
+        }
+
+        if (result.beers().isEmpty() && result.breweries().isEmpty()) {
+            viewStates = viewStates.add(NoResultsViewStateAdapterDelegate.ViewState.create());
         }
 
         return SearchViewState.create(viewStates.build());

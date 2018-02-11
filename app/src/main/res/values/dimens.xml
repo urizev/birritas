@@ -1,5 +1,4 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="view_error_message_horizontal_margin">32dp</dimen>
@@ -16,7 +15,8 @@
     <dimen name="cell_swipe_drawable_padding">8dp</dimen>
     <dimen name="detail_beer_label_image_width">128dp</dimen>
     <dimen name="brewery_side_width">240dp</dimen>
-    <dimen name="header_top_margin">32dp</dimen>
+    <dimen name="header_top_margin">16dp</dimen>
+    <dimen name="header_bottom_margin">8dp</dimen>
     <dimen name="search_box_elevation">2dp</dimen>
     <dimen name="search_box_corner_radius">2dp</dimen>
     <dimen name="search_box_horizontal_margin">16dp</dimen>
@@ -25,4 +25,7 @@
     <dimen name="cell_beer_card_color_size">24dp</dimen>
     <dimen name="cell_search_result_margin_vertical">8dp</dimen>
     <dimen name="cell_search_result_margin_end">12dp</dimen>
+    <dimen name="cell_single_line_vertical_margin">8dp</dimen>
+    <dimen name="toolbar_elevation">4dp</dimen>
+    <dimen name="cell_ingredient_drawable_padding">8dp</dimen>
 </resources>

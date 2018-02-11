@@ -83,7 +83,7 @@ public class ApiServiceTest {
     @Test
     public void getBeer() throws Exception {
         TestObserver<ResultData<BeerData>> observer = new TestObserver<>();
-        Observable<ResultData<BeerData>> observable = this.api.getBeer(BEER_ID);
+        Observable<ResultData<BeerData>> observable = this.api.getBeer(BEER_ID, ImmutableMap.of());
         observable.subscribe(observer);
         observer.assertComplete();
         observer.assertNoErrors();
@@ -123,8 +123,7 @@ public class ApiServiceTest {
     @Test
     public void liveSearch() {
         TestObserver<ResultData<LiveData>> observer = new TestObserver<>();
-        ImmutableMap<String, String> params = ImmutableMap.of(ApiService.QUERY, SEARCH_QUERY);
-        Observable<ResultData<LiveData>> observable = this.api.search(params);
+        Observable<ResultData<LiveData>> observable = this.api.search(SEARCH_QUERY, ImmutableMap.of());
         observable.subscribe(observer);
         observer.assertComplete();
         observer.assertNoErrors();
@@ -147,7 +146,7 @@ public class ApiServiceTest {
     @Test
     public void getBrewery() {
         TestObserver<ResultData<BreweryData>> observer = new TestObserver<>();
-        Observable<ResultData<BreweryData>> observable = this.api.getBrewery(BREWERY_ID);
+        Observable<ResultData<BreweryData>> observable = this.api.getBrewery(BREWERY_ID, ImmutableMap.of());
         observable.subscribe(observer);
         observer.assertComplete();
         observer.assertNoErrors();

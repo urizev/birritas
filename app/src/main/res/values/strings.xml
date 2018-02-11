@@ -25,4 +25,5 @@
     <string name="search_hint">Search beer or brewery</string>
     <string name="header_beers">Beers</string>
     <string name="header_breweries">Breweries</string>
+    <string name="no_results">No results found</string>
 </resources>
