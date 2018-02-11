@@ -12,6 +12,7 @@ public abstract class PresenterBeerViewState implements ViewState {
     @Nullable
     public abstract String imageUrl();
     public abstract String brewedBy();
+    public abstract String brewedById();
     public abstract String style();
     public abstract String srm();
     public abstract int srmColor();
@@ -23,6 +24,7 @@ public abstract class PresenterBeerViewState implements ViewState {
     public static PresenterBeerViewState create(String name,
                                                 String imageUrl,
                                                 String brewedBy,
+                                                String brewedById,
                                                 String style,
                                                 String srm,
                                                 int srmColor,
@@ -30,6 +32,6 @@ public abstract class PresenterBeerViewState implements ViewState {
                                                 String abv,
                                                 ImmutableList<String> ingredients,
                                                 boolean favorite) {
-        return new AutoValue_PresenterBeerViewState(name, imageUrl, brewedBy, style, srm, srmColor, ibu, abv, ingredients, favorite);
+        return new AutoValue_PresenterBeerViewState(name, imageUrl, brewedBy, brewedById, style, srm, srmColor, ibu, abv, ingredients, favorite);
     }
 }

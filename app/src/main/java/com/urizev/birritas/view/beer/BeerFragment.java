@@ -1,6 +1,7 @@
 package com.urizev.birritas.view.beer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,8 +18,10 @@ import com.urizev.birritas.app.providers.resources.ResourceProvider;
 import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.domain.usecases.BeerDetailsUseCase;
 import com.urizev.birritas.domain.usecases.FavoritesBeerIdsUseCase;
+import com.urizev.birritas.view.beer.adapter.BeerBreweryViewStateAdapterDelegate;
 import com.urizev.birritas.view.beer.adapter.IbuAbvSrmViewStateAdapterDelegate;
 import com.urizev.birritas.view.beer.adapter.IngredientViewStateAdapterDelegate;
+import com.urizev.birritas.view.brewery.BreweryActivity;
 import com.urizev.birritas.view.common.PresenterFragment;
 import com.urizev.birritas.view.common.ViewState;
 import com.urizev.birritas.view.common.ViewStateAdapter;
@@ -33,7 +36,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerViewState,BeerPresenter> {
+public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerViewState,BeerPresenter> implements ViewStateAdapterDelegate.ViewStateAdapterDelegateClickListener {
     private static final String EXTRA_BEER_ID = "beerId";
 
     @Nullable
@@ -74,6 +77,7 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
                 .add(new ImageViewStateAdapterDelegate(mImageLoader))
                 .add(new IbuAbvSrmViewStateAdapterDelegate())
                 .add(new HeaderViewStateAdapterDelegate())
+                .add(new BeerBreweryViewStateAdapterDelegate(this))
                 .add(new SingleLineViewStateAdapterDelegate())
                 .add(new DescriptionViewStateAdapterDelegate())
                 .add(new IngredientViewStateAdapterDelegate())
@@ -138,7 +142,7 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
         builder = builder.add(ImageViewStateAdapterDelegate.ViewState.create(pvs.imageUrl()));
         builder = builder.add(IbuAbvSrmViewStateAdapterDelegate.ViewState.create(pvs.ibu(), pvs.abv(), pvs.srm(), pvs.srmColor()));
         builder = builder.add(HeaderViewStateAdapterDelegate.ViewState.create(getResources().getString(R.string.brewed_by)));
-        builder = builder.add(SingleLineViewStateAdapterDelegate.ViewState.create(pvs.brewedBy()));
+        builder = builder.add(BeerBreweryViewStateAdapterDelegate.ViewState.create(pvs.brewedById(), pvs.brewedBy()));
         builder = builder.add(HeaderViewStateAdapterDelegate.ViewState.create(getResources().getString(R.string.style)));
         builder = builder.add(SingleLineViewStateAdapterDelegate.ViewState.create(pvs.style()));
         if (!pvs.ingredients().isEmpty()) {
@@ -149,5 +153,16 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
         }
 
         return BeerViewState.create(pvs.imageUrl(), pvs.abv(), pvs.ibu(), pvs.srm(), pvs.srmColor(), builder.build());
+    }
+
+    @Override
+    public void onViewStateAdapterDelegateClicked(ViewState viewState, int position) {
+        if (viewState instanceof BeerBreweryViewStateAdapterDelegate.ViewState) {
+            BeerBreweryViewStateAdapterDelegate.ViewState vs;
+            vs = (BeerBreweryViewStateAdapterDelegate.ViewState) viewState;
+            Intent intent = new Intent(getContext(), BreweryActivity.class);
+            intent.putExtra(BreweryActivity.EXTRA_BREWERY_ID, vs.id());
+            startActivity(intent);
+        }
     }
 }

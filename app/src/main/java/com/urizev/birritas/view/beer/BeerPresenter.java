@@ -82,6 +82,7 @@ class BeerPresenter extends Presenter<PresenterBeerViewState> {
         String name = "";
         String imageUrl = null;
         String brewedBy = mHyphen;
+        String brewedById = null;
         String styleText = mHyphen;
         String srmText = mNa;
         String ibuText = mNa;
@@ -103,6 +104,7 @@ class BeerPresenter extends Presenter<PresenterBeerViewState> {
                     names.add(brewery.name());
                 }
                 brewedBy = TextUtils.join(", ", names);
+                brewedById = breweries.get(0).id();
             }
             Style style = beer.style();
             if (style != null) {
@@ -139,7 +141,7 @@ class BeerPresenter extends Presenter<PresenterBeerViewState> {
             }
         }
 
-        return PresenterBeerViewState.create(name, imageUrl, brewedBy, styleText, srmText, srmColor,
+        return PresenterBeerViewState.create(name, imageUrl, brewedBy, brewedById, styleText, srmText, srmColor,
                 ibuText, abvText, ingredients.build(), favorite);
     }
 }

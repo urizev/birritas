@@ -10,11 +10,15 @@ import javax.annotation.Nullable;
 @AutoValue
 public abstract class BreweryPresenterViewState implements ViewState {
     public abstract String name();
+    @Nullable
     public abstract String imageUrl();
+    @Nullable
     public abstract String established();
     @Nullable
     public abstract Coordinate coordinate();
+    @Nullable
     public abstract String address();
+    @Nullable
     public abstract String description();
     public abstract ImmutableList<BreweryBeerPresenterViewState> beers();
 
