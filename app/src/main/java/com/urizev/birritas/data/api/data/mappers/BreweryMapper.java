@@ -5,6 +5,7 @@ import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.data.api.ApiService;
 import com.urizev.birritas.data.api.data.BreweryData;
 import com.urizev.birritas.data.cache.EntityCache;
+import com.urizev.birritas.domain.entities.Beer;
 import com.urizev.birritas.domain.entities.Brewery;
 
 import javax.inject.Inject;
@@ -12,15 +13,14 @@ import javax.inject.Singleton;
 
 @Singleton
 public class BreweryMapper {
-    private final EntityCache entityCache;
-    private final PlaceMapper placeMapper;
+    private final EntityCache mEntityCache;
+    private final PlaceMapper mPlaceMapper;
 
     @Inject
     BreweryMapper(EntityCache entityCache, PlaceMapper placeMapper) {
-        this.entityCache = entityCache;
-        this.placeMapper = placeMapper;
+        this.mEntityCache = entityCache;
+        this.mPlaceMapper = placeMapper;
     }
-
 
     public ImmutableList<Brewery> map(ImmutableList<BreweryData> data) {
         RxUtils.assertComputationThread();
@@ -40,16 +40,23 @@ public class BreweryMapper {
 
         return builder.build();
     }
-
     public Brewery map(BreweryData data) {
+        return this.map(data, ImmutableList.of());
+    }
+
+    public Brewery map(BreweryData data, ImmutableList<Beer> beers) {
+        RxUtils.assertComputationThread();
+
         if (data == null) {
             return null;
         }
 
-        String id = data.id();
-        Brewery brewery = entityCache.getBrewery(id);
+        Brewery brewery = mEntityCache.getBrewery(data.id());
+        Brewery.Builder builder;
+        boolean saveToCache = false;
         if (brewery == null) {
-            brewery = Brewery.builder()
+            saveToCache = true;
+            builder = Brewery.builder()
                     .id(data.id())
                     .name(data.name())
                     .shortName(data.shortNameDisplay())
@@ -59,9 +66,57 @@ public class BreweryMapper {
                     .images(ImageSetMapper.map(data.images()))
                     .isOrganic(data.isOrganic().equals(ApiService.YES))
                     .status(CommonMapper.mapStatus(data.status()))
-                    .locations(placeMapper.map(data.locations() != null ? data.locations() : ImmutableList.of()))
-                    .build();
-            entityCache.putBrewery(brewery);
+                    .locations(mPlaceMapper.map(data.locations() != null ? data.locations() : ImmutableList.of()));
+            if (beers != null) {
+                builder = builder.beers(beers);
+            }
+        } else {
+            builder = brewery.toBuilder();
+            if (data.name() != null) {
+                saveToCache = true;
+                builder = builder.name(data.name());
+            }
+            if (data.description() != null) {
+                saveToCache = true;
+                builder = builder.description(data.description());
+            }
+            if (data.isOrganic() != null) {
+                saveToCache = true;
+                builder = builder.isOrganic(data.isOrganic().equals(ApiService.YES));
+            }
+            if (data.shortNameDisplay() != null) {
+                saveToCache = true;
+                builder = builder.shortName(data.shortNameDisplay());
+            }
+            if (data.website() != null) {
+                saveToCache = true;
+                builder = builder.website(data.website());
+            }
+            if (data.established() != null) {
+                saveToCache = true;
+                builder = builder.established(CommonMapper.mapInteger(data.established()));
+            }
+            if (data.status() != null) {
+                saveToCache = true;
+                builder = builder.status(CommonMapper.mapStatus(data.status()));
+            }
+            if (data.images() != null) {
+                saveToCache = true;
+                builder = builder.images(ImageSetMapper.map(data.images()));
+            }
+            if (data.locations() != null) {
+                saveToCache = true;
+                builder = builder.locations(mPlaceMapper.map(data.locations()));
+            }
+            if (beers != null) {
+                saveToCache = true;
+                builder = builder.beers(beers);
+            }
+        }
+
+        if (saveToCache) {
+            brewery = builder.build();
+            mEntityCache.putBrewery(brewery);
         }
 
         return brewery;

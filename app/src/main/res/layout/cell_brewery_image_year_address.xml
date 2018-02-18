@@ -2,24 +2,36 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:adjustViewBounds="true"
+        android:layout_width="@dimen/cell_brewery_image_width"
+        android:layout_height="@dimen/cell_brewery_image_height" />
 
     <TextView
         android:id="@+id/established"
         tools:text="Since 1893"
+        android:layout_marginBottom="@dimen/cell_brewery_margin_bottom"
+        android:layout_alignTop="@id/image"
+        android:layout_toEndOf="@id/image"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.AppCompat.Body2" />
 
     <TextView
         android:id="@+id/address"
         tools:text="Rue de Panneries, 17\nBrunehault, Hainaut, 7823 BE"
+        android:layout_toEndOf="@id/image"
+        android:layout_below="@id/established"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        style="@style/TextAppearance.AppCompat.Body1"/>
 
 </RelativeLayout>

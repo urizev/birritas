@@ -105,6 +105,8 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
     protected void renderViewState(BeerViewState vs) {
         RxUtils.assertMainThread();
 
+        getBaseActivity().getSupportActionBar().setTitle(vs.name());
+
         if (labelView != null && srmView != null && ibuView != null && abvView != null) {
             mImageLoader.load(vs.imageUrl(), labelView);
             srmView.setText(vs.srm());
@@ -152,7 +154,7 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
             }
         }
 
-        return BeerViewState.create(pvs.imageUrl(), pvs.abv(), pvs.ibu(), pvs.srm(), pvs.srmColor(), builder.build());
+        return BeerViewState.create(pvs.name(), pvs.imageUrl(), pvs.abv(), pvs.ibu(), pvs.srm(), pvs.srmColor(), builder.build());
     }
 
     @Override

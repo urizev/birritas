@@ -28,6 +28,21 @@ public abstract class Brewery {
         return new AutoValue_Brewery.Builder().beers(ImmutableList.of());
     }
 
+    public Brewery.Builder toBuilder() {
+        return Brewery.builder()
+                .id(id())
+                .name(name())
+                .description(description())
+                .shortName(shortName())
+                .website(website())
+                .isOrganic(isOrganic())
+                .status(status())
+                .established(established())
+                .locations(locations())
+                .beers(beers())
+                .images(images());
+    }
+
     public Place getMainPlace() {
         for (Place place : locations()) {
             if (place.isPrimary()) {

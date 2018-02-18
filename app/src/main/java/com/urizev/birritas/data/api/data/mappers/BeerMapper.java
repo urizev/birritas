@@ -1,5 +1,6 @@
 package com.urizev.birritas.data.api.data.mappers;
 
+import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.data.api.ApiService;
 import com.urizev.birritas.data.api.data.BeerData;
@@ -31,6 +32,26 @@ public class BeerMapper {
         this.glassMapper = glassMapper;
         this.styleMapper = styleMapper;
         this.ingredientsMapper = ingredientsMapper;
+    }
+
+
+    public ImmutableList<Beer> map(ImmutableList<BeerData> data) {
+        RxUtils.assertComputationThread();
+
+        if (data == null) {
+            return null;
+        }
+
+        ImmutableList.Builder<Beer> builder = new ImmutableList.Builder<>();
+
+        for (BeerData datum : data) {
+            Beer beer = this.map(datum);
+            if (beer != null) {
+                builder = builder.add(beer);
+            }
+        }
+
+        return builder.build();
     }
 
     public Beer map(BeerData data) {

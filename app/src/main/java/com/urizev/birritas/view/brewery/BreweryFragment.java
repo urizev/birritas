@@ -1,6 +1,7 @@
 package com.urizev.birritas.view.brewery;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,21 +15,22 @@ import com.urizev.birritas.app.providers.image.ImageLoader;
 import com.urizev.birritas.app.providers.resources.ResourceProvider;
 import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.domain.usecases.BreweryDetailsUseCase;
+import com.urizev.birritas.view.beer.BeerActivity;
 import com.urizev.birritas.view.brewery.adapter.ImageYearAddressViewStateAdapterDelegate;
 import com.urizev.birritas.view.common.PresenterFragment;
 import com.urizev.birritas.view.common.ViewState;
 import com.urizev.birritas.view.common.ViewStateAdapter;
 import com.urizev.birritas.view.common.ViewStateAdapterDelegate;
+import com.urizev.birritas.view.common.adapter.BeerSlimViewStateAdapterDelegate;
 import com.urizev.birritas.view.common.adapter.DescriptionViewStateAdapterDelegate;
 import com.urizev.birritas.view.common.adapter.HeaderViewStateAdapterDelegate;
-import com.urizev.birritas.view.favorites.FavoriteBeersItemViewState;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class BreweryFragment extends PresenterFragment<BreweryViewState,BreweryPresenterViewState,BreweryPresenter> {
+public class BreweryFragment extends PresenterFragment<BreweryViewState,BreweryPresenterViewState,BreweryPresenter> implements ViewStateAdapterDelegate.ViewStateAdapterDelegateClickListener {
     private static final String EXTRA_BREWERY_ID = "beerId";
 
     @BindView(R.id.main_recycler) RecyclerView mMainRecycler;
@@ -60,6 +62,7 @@ public class BreweryFragment extends PresenterFragment<BreweryViewState,BreweryP
                 .add(new ImageYearAddressViewStateAdapterDelegate(mImageLoader))
                 .add(new DescriptionViewStateAdapterDelegate())
                 .add(new HeaderViewStateAdapterDelegate())
+                .add(new BeerSlimViewStateAdapterDelegate(mImageLoader, this))
                 .build();
     }
 
@@ -83,6 +86,8 @@ public class BreweryFragment extends PresenterFragment<BreweryViewState,BreweryP
     @Override
     protected void renderViewState(BreweryViewState vs) {
         RxUtils.assertMainThread();
+
+        getBaseActivity().getSupportActionBar().setTitle(vs.name());
 
         mMainAdapter.setItems(vs.mainViewStates());
         mMainAdapter.notifyDataSetChanged();
@@ -112,11 +117,28 @@ public class BreweryFragment extends PresenterFragment<BreweryViewState,BreweryP
         if (!mTablet) {
             mainViewStates.add(ImageYearAddressViewStateAdapterDelegate.ViewState.create(vs.imageUrl(), vs.established(), vs.address()));
         }
-        mainViewStates.add(DescriptionViewStateAdapterDelegate.ViewState.create(vs.description()));
-        mainViewStates.add(HeaderViewStateAdapterDelegate.ViewState.create(getResources().getString(R.string.n_beers, vs.beers().size())));
-        for (BreweryBeerPresenterViewState beer : vs.beers()) {
-            mainViewStates.add(FavoriteBeersItemViewState.create(beer.id(), beer.title(), beer.imageUrl(), beer.style(), beer.brewedBy(), beer.ibuValue(), beer.abvValue()));
+
+        if (vs.description() != null) {
+            mainViewStates.add(DescriptionViewStateAdapterDelegate.ViewState.create(vs.description()));
         }
-        return BreweryViewState.create(vs.imageUrl(), vs.established(), vs.coordinate(), vs.address(), mainViewStates.build());
+
+        if (!vs.beers().isEmpty()) {
+            mainViewStates.add(HeaderViewStateAdapterDelegate.ViewState.create(getResources().getString(R.string.n_beers, vs.beers().size())));
+            for (BreweryBeerPresenterViewState beer : vs.beers()) {
+                mainViewStates.add(BeerSlimViewStateAdapterDelegate.ViewState.create(beer.id(), beer.title(), beer.imageUrl(), beer.style(), beer.brewedBy(), beer.ibuValue(), beer.abvValue()));
+            }
+        }
+        return BreweryViewState.create(vs.name(), vs.imageUrl(), vs.established(), vs.coordinate(), vs.address(), mainViewStates.build());
+    }
+
+    @Override
+    public void onViewStateAdapterDelegateClicked(ViewState viewState, int position) {
+        if (viewState instanceof BeerSlimViewStateAdapterDelegate.ViewState) {
+            BeerSlimViewStateAdapterDelegate.ViewState vs;
+            vs = (BeerSlimViewStateAdapterDelegate.ViewState) viewState;
+            Intent intent = new Intent(getContext(), BeerActivity.class);
+            intent.putExtra(BeerActivity.EXTRA_BEER_ID, vs.id());
+            startActivity(intent);
+        }
     }
 }

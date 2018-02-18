@@ -48,5 +48,8 @@ public interface ApiService {
     Observable<ResultData<LiveData>> search(@Query(value = QUERY, encoded = true) String query, @QueryMap Map<String,String> params);
 
     @GET("brewery/{breweryId}")
-    Observable<ResultData<BreweryData>> getBrewery(@Path("breweryId") String beerId, @QueryMap Map<String, String> params);
+    Observable<ResultData<BreweryData>> getBrewery(@Path("breweryId") String breweryId, @QueryMap Map<String, String> params);
+
+    @GET("brewery/{breweryId}/beers")
+    Observable<ResultData<ImmutableList<BeerData>>> getBreweryBeers(@Path("breweryId") String breweryId);
 }

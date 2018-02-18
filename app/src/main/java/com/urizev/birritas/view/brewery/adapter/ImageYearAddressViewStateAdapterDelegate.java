@@ -1,6 +1,7 @@
 package com.urizev.birritas.view.brewery.adapter;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,8 +61,11 @@ public class ImageYearAddressViewStateAdapterDelegate extends ViewStateAdapterDe
 
     @AutoValue
     public static abstract class ViewState implements com.urizev.birritas.view.common.ViewState {
+        @Nullable
         public abstract String imageUrl();
+        @Nullable
         public abstract String established();
+        @Nullable
         public abstract String address();
 
         public static ViewState create(String imageUrl, String established, String address) {

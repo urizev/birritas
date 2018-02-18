@@ -26,7 +26,8 @@
         </activity>
         <activity android:name=".view.beer.BeerActivity">
         </activity>
-        <activity android:name=".view.brewery.BreweryActivity">
+        <activity android:name=".view.brewery.BreweryActivity"
+            android:exported="true">
         </activity>
         <activity android:name=".view.search.SearchActivity"
                   android:theme="@style/AppTheme.NoActionBar">

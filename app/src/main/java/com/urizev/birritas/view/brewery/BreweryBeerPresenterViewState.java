@@ -1,5 +1,7 @@
 package com.urizev.birritas.view.brewery;
 
+import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.urizev.birritas.view.common.ViewState;
 
@@ -7,6 +9,7 @@ import com.urizev.birritas.view.common.ViewState;
 abstract class BreweryBeerPresenterViewState implements ViewState {
     public abstract String id();
     public abstract String title();
+    @Nullable
     public abstract String imageUrl();
     public abstract String style();
     public abstract String brewedBy();

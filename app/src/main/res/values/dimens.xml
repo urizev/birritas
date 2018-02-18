@@ -28,4 +28,7 @@
     <dimen name="cell_single_line_vertical_margin">8dp</dimen>
     <dimen name="toolbar_elevation">4dp</dimen>
     <dimen name="cell_ingredient_drawable_padding">8dp</dimen>
+    <dimen name="cell_brewery_image_width">120dp</dimen>
+    <dimen name="cell_brewery_image_height">60dp</dimen>
+    <dimen name="cell_brewery_margin_bottom">6dp</dimen>
 </resources>
