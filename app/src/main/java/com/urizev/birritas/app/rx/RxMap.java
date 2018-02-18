@@ -8,7 +8,7 @@ import io.reactivex.disposables.Disposable;
 
 public class RxMap {
 
-    public static Observable<LatLngBounds> cameraIdle(GoogleMap map) {
+    public static Observable<LatLngBounds> cameraIdleBounds(GoogleMap map) {
         return Observable.create(e -> {
             GoogleMap.OnCameraIdleListener listener = () -> {
                 if (!e.isDisposed()) {
