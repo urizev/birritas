@@ -31,4 +31,6 @@
     <dimen name="cell_brewery_image_width">120dp</dimen>
     <dimen name="cell_brewery_image_height">60dp</dimen>
     <dimen name="cell_brewery_margin_bottom">6dp</dimen>
+    <dimen name="map_place_card">160dp</dimen>
+    <dimen name="map_region_padding">16dp</dimen>
 </resources>

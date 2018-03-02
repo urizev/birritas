@@ -37,6 +37,7 @@ public class RxLocation extends LocationCallback {
 
     @Inject
     RxLocation(Context context, RxForeground foreground) {
+        this.mContext = context.getApplicationContext();
         this.mDefaultLocation = new Location("internal");
         this.mDefaultLocation.setLatitude(37.774929);
         this.mDefaultLocation.setLongitude(-122.419416);
@@ -47,9 +48,8 @@ public class RxLocation extends LocationCallback {
                 .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-        this.mLastLocationSubject = BehaviorSubject.create();
+        this.mLastLocationSubject = BehaviorSubject.createDefault(mDefaultLocation);
         this.mPermissionStatusSubject = BehaviorSubject.createDefault(checkPermission());
-        this.mContext = context.getApplicationContext();
         Observable<Boolean> fgObservable = foreground.observe()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(Schedulers.computation());

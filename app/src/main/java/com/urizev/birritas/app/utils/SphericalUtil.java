@@ -1,6 +1,7 @@
 package com.urizev.birritas.app.utils;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import static java.lang.Math.toRadians;
 
@@ -10,8 +11,9 @@ import static java.lang.Math.toRadians;
 
 public class SphericalUtil {
     private static final double EARTH_RADIUS = 6371009;
+    private static final double sqrt2 = Math.sqrt(2);
 
-    public static LatLng computeOffset(LatLng from, double distance, double heading) {
+    private static LatLng computeOffset(LatLng from, double distance, double heading) {
         distance /= EARTH_RADIUS;
         heading = Math.toRadians(heading);
         double fromLat = toRadians(from.latitude);
@@ -25,5 +27,19 @@ public class SphericalUtil {
                 sinDistance * cosFromLat * Math.sin(heading),
                 cosDistance - sinFromLat * sinLat);
         return new LatLng(Math.toDegrees(Math.asin(sinLat)), Math.toDegrees(fromLng + dLng));
+    }
+
+    public static LatLngBounds createBounds(LatLng center, int radius) {
+        LatLng ne = SphericalUtil.computeOffset(center, radius * sqrt2, 135);
+        LatLng sw = SphericalUtil.computeOffset(center, radius * sqrt2, 315);
+
+        double lngDiff = ne.latitude - sw.latitude;
+        if (lngDiff < 0) {
+            double lng = ne.longitude;
+            ne = new LatLng(ne.latitude, sw.longitude);
+            sw = new LatLng(sw.latitude, lng);
+        }
+
+        return new LatLngBounds(ne, sw);
     }
 }

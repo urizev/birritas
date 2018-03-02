@@ -4,6 +4,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 public class RxMap {
@@ -33,5 +34,35 @@ public class RxMap {
                 }
             });
         });
+    }
+
+    public static Observable<Boolean> mapIsIdle(GoogleMap map) {
+        return Observable.<Boolean>create(e -> {
+            GoogleMap.OnCameraIdleListener idleListener = () -> {
+                if (e.isDisposed()) {
+                    return;
+                }
+                e.onNext(true);
+            };
+
+            GoogleMap.OnCameraMoveStartedListener moveListener = i -> {
+                if (e.isDisposed()) {
+                    return;
+                }
+
+                e.onNext(false);
+            };
+
+            e.setDisposable(new SimpleDisposable() {
+                @Override
+                protected void onDisposed() {
+                    map.setOnCameraMoveStartedListener(null);
+                    map.setOnCameraIdleListener(null);
+                }
+            });
+
+            map.setOnCameraIdleListener(idleListener);
+            map.setOnCameraMoveStartedListener(moveListener);
+        }).unsubscribeOn(AndroidSchedulers.mainThread());
     }
 }
