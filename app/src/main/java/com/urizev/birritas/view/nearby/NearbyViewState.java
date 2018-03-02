@@ -15,8 +15,10 @@ public abstract class NearbyViewState<VS> implements ViewState {
     @Nullable
     public abstract Throwable error();
     public abstract ImmutableList<VS> viewStates();
+    @Nullable
+    public abstract PlaceViewState selectedPlaceViewState();
 
-    public static <VS> NearbyViewState<VS> create(Coordinate coordinate, boolean shouldMove, Throwable error, ImmutableList<VS> viewStates) {
-        return new AutoValue_NearbyViewState<VS>(coordinate, shouldMove, error, viewStates);
+    public static <VS> NearbyViewState<VS> create(Coordinate coordinate, boolean shouldMove, Throwable error, ImmutableList<VS> viewStates, PlaceViewState selectedViewState) {
+        return new AutoValue_NearbyViewState<VS>(coordinate, shouldMove, error, viewStates, selectedViewState);
     }
 }

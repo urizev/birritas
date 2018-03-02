@@ -113,6 +113,12 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
         if (vs.shouldMove() && coordinate != null) {
             this.moveMapTo(coordinate);
         }
+
+        PlaceViewState spvs = vs.selectedPlaceViewState();
+        showPlaceCard(spvs != null);
+        if (spvs != null) {
+
+        }
     }
 
     private void moveMapTo(Coordinate coordinate) {
@@ -182,6 +188,17 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
                     getPresenter().mapIdleAt(center.latitude, center.longitude, radius);
                 })
                 .subscribe());
+
+        addDisposable(RxMap.markerClicks(map)
+                .observeOn(Schedulers.computation())
+                .map(marker -> viewStatesByMarker.get(marker))
+                .doOnNext(vs -> getPresenter().onPlaceSelected(vs.id()))
+                .subscribe());
+
+        addDisposable(RxMap.mapClicks(map)
+                .observeOn(Schedulers.computation())
+                .doOnNext(ll -> getPresenter().onPlaceSelected(null))
+                .subscribe());
     }
 
     @OnClick(R.id.go_to_user_location)
@@ -198,7 +215,7 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
         for (PlaceViewState pvs : vs.viewStates()) {
             builder = builder.add(this.placeToMarker(pvs));
         }
-        return NearbyViewState.create(vs.coordinate(), vs.shouldMove(), vs.error(), builder.build());
+        return NearbyViewState.create(vs.coordinate(), vs.shouldMove(), vs.error(), builder.build(), vs.selectedPlaceViewState());
     }
 
     private MarkerViewState placeToMarker(PlaceViewState pvs) {

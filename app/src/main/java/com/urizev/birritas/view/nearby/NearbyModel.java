@@ -11,6 +11,8 @@ import com.urizev.birritas.domain.entities.Place;
 @AutoValue
 public abstract class NearbyModel {
     public abstract ImmutableSet<Place> places();
+    @Nullable
+    public abstract String selectedPlaceId();
     public abstract boolean mapReady();
     public abstract boolean waitingUserCoordinate();
     @Nullable
@@ -25,6 +27,7 @@ public abstract class NearbyModel {
         builder = builder.addAll(places);
 
         return this.toBuilder()
+                .selectedPlaceId(selectedPlaceId())
                 .places(builder.build())
                 .error(null)
                 .build();
@@ -71,9 +74,16 @@ public abstract class NearbyModel {
                 .build();
     }
 
+    NearbyModel withSelection(String id) {
+        return toBuilder()
+                .selectedPlaceId(id)
+                .build();
+    }
+
     @AutoValue.Builder
     public static abstract class Builder {
         public abstract Builder places(ImmutableSet<Place> places);
+        public abstract Builder selectedPlaceId(String id);
         public abstract Builder mapReady(boolean mapReady);
         public abstract Builder waitingUserCoordinate(boolean waitingUserCoordinate);
         public abstract Builder mapCoordinate(Coordinate coordinate);

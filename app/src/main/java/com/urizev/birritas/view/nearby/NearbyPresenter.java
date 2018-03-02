@@ -69,12 +69,17 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
     private NearbyViewState<PlaceViewState> modelToViewState(NearbyModel model) {
         RxUtils.assertComputationThread();
 
+        PlaceViewState selectedViewState = null;
         ImmutableList.Builder<PlaceViewState> builder = new ImmutableList.Builder<>();
         for (Place place : model.places()) {
-            builder = builder.add(placeToPlaceViewState(place));
+            PlaceViewState vs = placeToPlaceViewState(place);
+            builder = builder.add();
+            if (place.id().equals(model.selectedPlaceId())) {
+                selectedViewState = vs;
+            }
         }
 
-        return NearbyViewState.create(model.mapCoordinate(), model.shouldMoveMap(), model.error(), builder.build());
+        return NearbyViewState.create(model.mapCoordinate(), model.shouldMoveMap(), model.error(), builder.build(), selectedViewState);
     }
 
     private PlaceViewState placeToPlaceViewState(Place place) {
@@ -117,5 +122,9 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
     void mapMoving() {
         Timber.d("Creando modelo con shouldMove = false");
         mModel.onNext(mModel.getValue().withMapMoving());
+    }
+
+    void onPlaceSelected(String id) {
+        mModel.onNext(mModel.getValue().withSelection(id));
     }
 }
