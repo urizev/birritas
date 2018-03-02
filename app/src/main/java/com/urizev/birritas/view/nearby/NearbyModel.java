@@ -74,9 +74,11 @@ public abstract class NearbyModel {
                 .build();
     }
 
-    NearbyModel withSelection(String id) {
+    NearbyModel withSelection(String id, Coordinate coordinate) {
         return toBuilder()
                 .selectedPlaceId(id)
+                .mapCoordinate(coordinate != null ? coordinate : mapCoordinate())
+                .shouldMoveMap(true)
                 .build();
     }
 

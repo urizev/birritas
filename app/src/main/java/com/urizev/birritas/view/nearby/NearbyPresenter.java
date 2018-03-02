@@ -11,11 +11,14 @@ import com.urizev.birritas.domain.entities.Place;
 import com.urizev.birritas.domain.usecases.NearbyUseCase;
 import com.urizev.birritas.view.common.Presenter;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 import timber.log.Timber;
 
 class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
+    private static final long LAST_LOCATION_TIME = TimeUnit.MINUTES.toMillis(10);
     private final NearbyUseCase mUseCase;
     private final BehaviorSubject<NearbyModel> mModel;
     private final BehaviorSubject<NearbyUseCase.SearchSpec> mSearchSpec;
@@ -29,19 +32,22 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
         this.mSearchSpec = BehaviorSubject.create();
         this.mRxLocation = rxLocation;
 
-        addDisposable(rxLocation.observe()
-                .map(location -> Coordinate.create(location.getLatitude(), location.getLongitude()))
-                .doOnNext(coordinate -> Timber.d("Coordinate: %s", coordinate))
-                .doOnNext(coordinate -> mModel.onNext(mModel.getValue().withUserCoordinate(coordinate)))
-                .subscribe());
         addDisposable(this.mModel
                 .observeOn(Schedulers.computation())
                 .distinctUntilChanged()
-                .doOnNext(m -> Timber.d("New model: %s", m))
                 .map(this::modelToViewState)
                 .doOnNext(this::publishViewState)
                 .subscribe());
         subscribeToSearchSpec();
+        listenUserLocation();
+    }
+
+    private void listenUserLocation() {
+        addDisposable(mRxLocation.observeLast(LAST_LOCATION_TIME)
+                .map(location -> Coordinate.create(location.getLatitude(), location.getLongitude()))
+                .doOnSuccess(coordinate -> Timber.d("Coordinate: %s", coordinate))
+                .doOnSuccess(coordinate -> mModel.onNext(mModel.getValue().withUserCoordinate(coordinate)))
+                .subscribe());
     }
 
     private void subscribeToSearchSpec() {
@@ -73,7 +79,7 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
         ImmutableList.Builder<PlaceViewState> builder = new ImmutableList.Builder<>();
         for (Place place : model.places()) {
             PlaceViewState vs = placeToPlaceViewState(place);
-            builder = builder.add();
+            builder = builder.add(vs);
             if (place.id().equals(model.selectedPlaceId())) {
                 selectedViewState = vs;
             }
@@ -95,36 +101,30 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
             }
         }
 
-        return PlaceViewState.create(place.id(), name, place.latitude(), place.longitude());
+        return PlaceViewState.create(place.id(), name, place.name(), place.streetAddress(), place.latitude(), place.longitude());
     }
 
     void mapIdleAt(double latitude, double longitude, int radius) {
         RxUtils.assertComputationThread();
-        Timber.d("Map moved to (%f;%f) %d", latitude, longitude, radius);
 
         Coordinate coordinate = Coordinate.create(latitude, longitude);
         NearbyModel newModel = mModel.getValue().withIdleLocation(coordinate);
         mModel.onNext(newModel);
         coordinate = newModel.mapCoordinate();
         if (coordinate != null) {
-            Timber.d("Searching at (%f;%f) %d", coordinate.latitude(), coordinate.longitude(), radius);
             mSearchSpec.onNext(NearbyUseCase.SearchSpec.create(coordinate.latitude(), coordinate.longitude(), radius));
-        }
-        else {
-            Timber.d("Search ignored move");
         }
     }
 
     void onGoToUserLocationClicked() {
-
+        listenUserLocation();
     }
 
     void mapMoving() {
-        Timber.d("Creando modelo con shouldMove = false");
         mModel.onNext(mModel.getValue().withMapMoving());
     }
 
-    void onPlaceSelected(String id) {
-        mModel.onNext(mModel.getValue().withSelection(id));
+    void onPlaceSelected(String id, Coordinate coordinate) {
+        mModel.onNext(mModel.getValue().withSelection(id, coordinate));
     }
 }
