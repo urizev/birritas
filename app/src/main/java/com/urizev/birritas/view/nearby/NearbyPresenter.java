@@ -7,6 +7,7 @@ import com.urizev.birritas.app.rx.RxLocation;
 import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.domain.entities.Brewery;
 import com.urizev.birritas.domain.entities.Coordinate;
+import com.urizev.birritas.domain.entities.ImageSet;
 import com.urizev.birritas.domain.entities.Place;
 import com.urizev.birritas.domain.usecases.NearbyUseCase;
 import com.urizev.birritas.view.common.Presenter;
@@ -92,6 +93,7 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
         RxUtils.assertComputationThread();
 
         String name = mNa;
+        String imageUrl = null;
         Brewery brewery = place.brewery();
         if (brewery != null) {
             if (brewery.shortName() != null) {
@@ -99,9 +101,14 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
             } else if (brewery.name() != null) {
                 name = brewery.name();
             }
+
+            ImageSet images = brewery.images();
+            if (images != null) {
+                imageUrl = images.squareMedium();
+            }
         }
 
-        return PlaceViewState.create(place.id(), name, place.name(), place.streetAddress(), place.latitude(), place.longitude());
+        return PlaceViewState.create(place.id(), name, imageUrl, place.streetAddress(), place.latitude(), place.longitude());
     }
 
     void mapIdleAt(double latitude, double longitude, int radius) {

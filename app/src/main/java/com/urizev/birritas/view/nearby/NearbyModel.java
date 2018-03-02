@@ -35,6 +35,7 @@ public abstract class NearbyModel {
 
     private Builder toBuilder() {
         return NearbyModel.builder()
+                .selectedPlaceId(selectedPlaceId())
                 .mapReady(mapReady())
                 .waitingUserCoordinate(waitingUserCoordinate())
                 .mapCoordinate(mapCoordinate())

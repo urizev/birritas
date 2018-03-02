@@ -8,6 +8,7 @@ import com.google.auto.value.AutoValue;
 public abstract class PlaceViewState {
     public abstract String id();
     public abstract String name();
+    @Nullable
     public abstract String imageUrl();
     @Nullable
     public abstract String address();

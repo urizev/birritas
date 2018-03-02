@@ -79,8 +79,6 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        defaultMarkerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
-        selectedMarkerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
         markersById = new HashMap<>();
         viewStatesByMarker = new HashMap<>();
         mMapBoundsPadding = (int) getResources().getDimension(R.dimen.map_region_padding);
@@ -177,6 +175,9 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
 
     private void onMapReady(GoogleMap map) {
         mMap = map;
+        defaultMarkerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+        selectedMarkerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
+
         bindPresenter();
         addDisposable(RxMap.mapIsIdle(map)
                 .observeOn(Schedulers.computation())
