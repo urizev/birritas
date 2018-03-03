@@ -1,52 +1,36 @@
 package com.urizev.birritas.app.rx;
 
-import android.content.ComponentCallbacks2;
-import android.content.Context;
-import android.content.res.Configuration;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
+import timber.log.Timber;
 
 @Singleton
-public class RxForeground implements ComponentCallbacks2 {
+public class RxForeground {
+    private static final long DEBOUNCE_MILLIS = 300;
+
     private final BehaviorSubject<Boolean> foregroundSubject;
     @Inject
-    public RxForeground(Context context) {
+    RxForeground() {
         this.foregroundSubject = BehaviorSubject.createDefault(false);
-        context.registerComponentCallbacks(this);
     }
 
-    public Observable<Boolean> observe() {
-        return foregroundSubject.distinctUntilChanged();
+    Observable<Boolean> observe() {
+        return foregroundSubject
+                .subscribeOn(Schedulers.computation())
+                .observeOn(Schedulers.computation())
+                .debounce(DEBOUNCE_MILLIS, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .doOnNext(fg -> Timber.d("Broadcasting foreground: %b", fg));
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration configuration) {
-
-    }
-
-    @Override
-    public void onLowMemory() {
-
-    }
-
-    @Override
-    public void onTrimMemory(int type) {
-        switch (type) {
-            case TRIM_MEMORY_RUNNING_MODERATE:
-            case TRIM_MEMORY_RUNNING_CRITICAL:
-            case TRIM_MEMORY_RUNNING_LOW:
-                foregroundSubject.onNext(true);
-                break;
-            case TRIM_MEMORY_COMPLETE:
-            case TRIM_MEMORY_MODERATE:
-            case TRIM_MEMORY_BACKGROUND:
-            case TRIM_MEMORY_UI_HIDDEN:
-                foregroundSubject.onNext(false);
-                break;
-        }
+    public void update(boolean fg) {
+        Timber.d("Received foreground: %b", fg);
+        foregroundSubject.onNext(fg);
     }
 }

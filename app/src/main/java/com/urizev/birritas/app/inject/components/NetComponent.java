@@ -1,5 +1,6 @@
 package com.urizev.birritas.app.inject.components;
 
+import com.urizev.birritas.app.base.BaseActivity;
 import com.urizev.birritas.app.inject.modules.AppModule;
 import com.urizev.birritas.app.inject.modules.NetModule;
 import com.urizev.birritas.view.beer.BeerFragment;
@@ -22,4 +23,6 @@ public interface NetComponent {
     void inject(BeerFragment fragment);
     void inject(BreweryFragment fragment);
     void inject(SearchFragment fragment);
+
+    void inject(BaseActivity activity);
 }

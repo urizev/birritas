@@ -17,6 +17,7 @@ import javax.inject.Singleton;
 
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
@@ -58,10 +59,12 @@ public class RxLocation extends LocationCallback {
                 .subscribeOn(Schedulers.computation())
                 .observeOn(Schedulers.computation());
 
-        mListenDisposable = Observable.zip(fgObservable, mPermissionStatusSubject, (fg, perm) -> fg && perm)
+        mListenDisposable = Observable.zip(fgObservable, mPermissionStatusSubject
                 .subscribeOn(Schedulers.computation())
                 .observeOn(Schedulers.computation())
+                .doOnNext(p -> Timber.d("Location Permission: %b", p)), (fg, perm) -> fg && perm)
                 .distinctUntilChanged()
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(this::listenLocationUpdates)
                 .subscribe();
     }
@@ -93,6 +96,7 @@ public class RxLocation extends LocationCallback {
     }
 
     private void listenLocationUpdates(boolean listen) {
+        RxUtils.assertMainThread();
         if (!checkPermission()) {
             return;
         }

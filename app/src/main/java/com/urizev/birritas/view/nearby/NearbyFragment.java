@@ -192,6 +192,7 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
 
     private void onMapReady(GoogleMap map) {
         mMap = map;
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(SphericalUtil.createBounds(new LatLng(RxLocation.DEFAULT_LOCATION.getLatitude(), RxLocation.DEFAULT_LOCATION.getLongitude()), RADIUS), mMapBoundsPadding));
         defaultMarkerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
         selectedMarkerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
 
@@ -237,8 +238,7 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
 
     @OnClick(R.id.go_to_user_location)
     public void onGoToUserLocationClicked(View view) {
-        Coordinate coordinate = Coordinate.create(37.774929, -122.419416);
-        this.moveMapTo(coordinate);
+        getPresenter().onGoToUserLocationClicked();
     }
 
     @OnClick(R.id.place_card)
