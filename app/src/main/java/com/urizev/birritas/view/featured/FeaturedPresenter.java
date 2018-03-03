@@ -134,7 +134,13 @@ class FeaturedPresenter extends Presenter<FeaturedViewState> {
         if (breweries != null && !breweries.isEmpty()) {
             List<String> breweryNames = new ArrayList<>(breweries.size());
             for(Brewery brewery : breweries) {
-                breweryNames.add(brewery.shortName());
+                String name = brewery.shortName();
+                if (TextUtils.isEmpty(name)) {
+                    name = brewery.name();
+                }
+                if (!TextUtils.isEmpty(name)) {
+                    breweryNames.add(name);
+                }
             }
             brewedBy = TextUtils.join(", ", breweryNames);
         }

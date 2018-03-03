@@ -113,7 +113,7 @@ class BreweryPresenter extends Presenter<BreweryPresenterViewState> {
         RxUtils.assertComputationThread();
 
         ImageSet labels = beer.labels();
-        String icon = labels != null ? labels.icon() : null;
+        String icon = labels != null ? labels.medium() : null;
         int srmColor = mNoSrmColor;
         String srmValue = mNa;
         SRM srm = beer.srm();

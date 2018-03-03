@@ -9,7 +9,7 @@
 
     <color name="bottomNavigation">#333</color>
     <color name="no_srm">#CCC</color>
-    <color name="colorImagePlaceholder">#cfc5ad</color>
+    <color name="colorImagePlaceholder">#fff8e1</color>
     <color name="colorHint">#7000</color>
     <color name="colorMapPlaceCard">#EFFF</color>
 </resources>
