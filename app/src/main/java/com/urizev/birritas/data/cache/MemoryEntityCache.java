@@ -52,133 +52,176 @@ public class MemoryEntityCache implements EntityCache {
     @Override
     public Beer getBeer(String id) {
         RxUtils.assertComputationThread();
-
-        return this.mBeers.get(id);
+        synchronized (mBeers) {
+            return this.mBeers.get(id);
+        }
     }
 
     @Override
     public void putBeer(Beer beer) {
         RxUtils.assertComputationThread();
-        mBeers.put(beer.id(), beer);
+        synchronized (mBeers) {
+            mBeers.put(beer.id(), beer);
+        }
     }
 
     @Override
     public Category getCategory(int id) {
         RxUtils.assertComputationThread();
-        return mCategories.get(id);
+        synchronized (mCategories) {
+            return mCategories.get(id);
+        }
     }
 
     @Override
     public void putCategory(Category category) {
         RxUtils.assertComputationThread();
-        mCategories.put(category.id(), category);
+        synchronized (mCategories) {
+            mCategories.put(category.id(), category);
+        }
     }
 
     @Override
     public Glass getGlass(int id) {
         RxUtils.assertComputationThread();
-        return mGlasses.get(id);
+        synchronized (mGlasses) {
+            return mGlasses.get(id);
+        }
     }
 
     @Override
     public void putGlass(Glass glass) {
         RxUtils.assertComputationThread();
-        mGlasses.put(glass.id(), glass);
+        synchronized (mGlasses) {
+            mGlasses.put(glass.id(), glass);
+        }
     }
 
     @Override
     public SRM getSRM(int id) {
         RxUtils.assertComputationThread();
-        return mSrms.get(id);
+        synchronized (mSrms) {
+            return mSrms.get(id);
+        }
     }
 
     @Override
     public void putSRM(SRM srm) {
         RxUtils.assertComputationThread();
-        mSrms.put(srm.id(), srm);
+        synchronized (mSrms) {
+            mSrms.put(srm.id(), srm);
+        }
     }
 
     @Override
     public Style getStyle(int id) {
         RxUtils.assertComputationThread();
-        return mStyles.get(id);
+        synchronized (mStyles) {
+            return mStyles.get(id);
+        }
     }
 
     @Override
     public void putStyle(Style style) {
         RxUtils.assertComputationThread();
-        mStyles.put(style.id(), style);
+        synchronized (mStyles) {
+            mStyles.put(style.id(), style);
+        }
     }
 
     @Override
     public Brewery getBrewery(String id) {
         RxUtils.assertComputationThread();
-        return mBreweries.get(id);
+        synchronized (mBreweries) {
+            return mBreweries.get(id);
+        }
     }
 
     @Override
     public void putBrewery(Brewery brewery) {
         RxUtils.assertComputationThread();
-        mBreweries.put(brewery.id(), brewery);
+        synchronized (mBreweries) {
+            mBreweries.put(brewery.id(), brewery);
+        }
     }
 
     @Override
     public Place getPlace(String id) {
         RxUtils.assertComputationThread();
-        return mPlaces.get(id);
+        synchronized (mPlaces) {
+            return mPlaces.get(id);
+        }
     }
 
     @Override
     public void putPlace(Place place) {
         RxUtils.assertComputationThread();
-        mPlaces.put(place.id(), place);
+        synchronized (mPlaces) {
+            mPlaces.put(place.id(), place);
+        }
     }
 
     @Override
     public Country getCountry(String id) {
         RxUtils.assertComputationThread();
-        return mCountries.get(id);
+        synchronized (mCountries) {
+            return mCountries.get(id);
+        }
     }
 
     @Override
     public void putCountry(Country country) {
         RxUtils.assertComputationThread();
-        mCountries.put(country.isoCode(), country);
+        synchronized (mCountries) {
+            mCountries.put(country.isoCode(), country);
+        }
     }
 
     @Override
     public Hop getHop(int id) {
         RxUtils.assertComputationThread();
-        return mHops.get(id);
+        synchronized (mHops) {
+            return mHops.get(id);
+        }
     }
 
     @Override
     public void putHop(Hop hop) {
         RxUtils.assertComputationThread();
-        mHops.put(hop.id(), hop);
+        synchronized (mHops) {
+            mHops.put(hop.id(), hop);
+        }
     }
 
     @Override
     public Yeast getYeast(int id) {
         RxUtils.assertComputationThread();
-        return mYeasts.get(id);
+        synchronized (mYeasts) {
+            return mYeasts.get(id);
+        }
     }
 
     @Override
     public void putYeast(Yeast yeast) {
         RxUtils.assertComputationThread();
-        mYeasts.put(yeast.id(), yeast);
+        synchronized (mYeasts) {
+            mYeasts.put(yeast.id(), yeast);
+        }
     }
 
     @Override
     public Malt getMalt(int id) {
         RxUtils.assertComputationThread();
-        return mMalts.get(id);
+        synchronized (mMalts) {
+            return mMalts.get(id);
+        }
     }
 
     @Override
     public void putMalt(Malt malt) {
         RxUtils.assertComputationThread();
-        mMalts.put(malt.id(), malt);
+        synchronized (mMalts) {
+            mMalts.put(malt.id(), malt);
+        }
     }
 }
