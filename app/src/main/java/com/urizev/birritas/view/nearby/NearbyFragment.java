@@ -260,7 +260,7 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
         for (PlaceViewState pvs : vs.viewStates()) {
             builder = builder.add(this.placeToMarker(pvs, pvs.id().equals(selectedPlaceId)));
         }
-        return NearbyViewState.create(vs.coordinate(), vs.shouldMove(), vs.error(), builder.build(), vs.selectedPlaceViewState(), model.requestPermission());
+        return NearbyViewState.create(vs.coordinate(), vs.shouldMove(), vs.error(), builder.build(), vs.selectedPlaceViewState(), vs.requestPermission());
     }
 
     private MarkerViewState placeToMarker(PlaceViewState pvs, boolean selected) {

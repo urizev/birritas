@@ -34,8 +34,10 @@ public class MainActivity extends BaseActivity {
 
         setSupportActionBar(toolbar);
 
+        bottomNavigation.setSelectedItemId(R.id.navigation_map);
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         viewPager.setAdapter(new MainPageAdapter(getSupportFragmentManager()));
+        viewPager.setCurrentItem(MainPageAdapter.POSITION_MAP);
     }
 
     @OnClick(R.id.search_box)

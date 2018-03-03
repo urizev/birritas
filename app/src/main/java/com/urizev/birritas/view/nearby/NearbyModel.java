@@ -46,7 +46,7 @@ public abstract class NearbyModel {
     }
 
     public static Builder builder() {
-        return new AutoValue_NearbyModel.Builder().mapReady(false);
+        return new AutoValue_NearbyModel.Builder().mapReady(false).requestPermission(false);
     }
 
     NearbyModel withError(Throwable throwable) {

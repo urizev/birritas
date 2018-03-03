@@ -20,17 +20,24 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
+import timber.log.Timber;
 
 @Singleton
 public class RxLocation extends LocationCallback {
     private static final String PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_INTERVAL = 10000;
     private static final int LOCATION_FASTEST_INTERVAL = 5000;
+    public static final Location DEFAULT_LOCATION = new Location ("internal");
+
+    static {
+        DEFAULT_LOCATION.setLatitude(37.774929);
+        DEFAULT_LOCATION.setLongitude(-122.419416);
+        DEFAULT_LOCATION.setTime(0);
+    }
 
     private final BehaviorSubject<Boolean> mPermissionStatusSubject;
     private final BehaviorSubject<Location> mLastLocationSubject;
     private final Context mContext;
-    private final Location mDefaultLocation;
     private final FusedLocationProviderClient mFusedLocationClient;
     private final LocationRequest mLocationRequest;
     private final Disposable mListenDisposable;
@@ -38,17 +45,14 @@ public class RxLocation extends LocationCallback {
     @Inject
     RxLocation(Context context, RxForeground foreground) {
         this.mContext = context.getApplicationContext();
-        this.mDefaultLocation = new Location("internal");
-        this.mDefaultLocation.setLatitude(37.774929);
-        this.mDefaultLocation.setLongitude(-122.419416);
-        this.mDefaultLocation.setTime(0);
+
         mLocationRequest = new LocationRequest()
                 .setInterval(LOCATION_INTERVAL)
                 .setFastestInterval(LOCATION_FASTEST_INTERVAL)
                 .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-        this.mLastLocationSubject = BehaviorSubject.createDefault(mDefaultLocation);
+        this.mLastLocationSubject = BehaviorSubject.create();
         this.mPermissionStatusSubject = BehaviorSubject.createDefault(checkPermission());
         Observable<Boolean> fgObservable = foreground.observe()
                 .subscribeOn(Schedulers.computation())
@@ -83,7 +87,9 @@ public class RxLocation extends LocationCallback {
 
     @Override
     public void onLocationResult(LocationResult result) {
-        mLastLocationSubject.onNext(result.getLastLocation());
+        Location location = result.getLastLocation();
+        Timber.d("Last location result: %f,%f", location.getLatitude(), location.getLongitude());
+        mLastLocationSubject.onNext(location);
     }
 
     private void listenLocationUpdates(boolean listen) {
@@ -92,9 +98,11 @@ public class RxLocation extends LocationCallback {
         }
 
         if (listen) {
+            Timber.d("Start to listen location updates");
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, this, null);
         }
         else {
+            Timber.d("Stop listening location updates");
             mFusedLocationClient.removeLocationUpdates(this);
         }
     }
