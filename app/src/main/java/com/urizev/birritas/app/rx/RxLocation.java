@@ -98,4 +98,8 @@ public class RxLocation extends LocationCallback {
             mFusedLocationClient.removeLocationUpdates(this);
         }
     }
+
+    public Observable<Boolean> observePermission() {
+        return Observable.fromCallable(this::checkPermission);
+    }
 }

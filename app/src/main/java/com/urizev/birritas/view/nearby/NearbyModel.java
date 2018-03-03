@@ -20,6 +20,7 @@ public abstract class NearbyModel {
     public abstract boolean shouldMoveMap();
     @Nullable
     public abstract Throwable error();
+    public abstract boolean requestPermission();
 
     NearbyModel mergePlaces(ImmutableList<Place> places) {
         ImmutableSet.Builder<Place> builder = new ImmutableSet.Builder<>();
@@ -54,6 +55,7 @@ public abstract class NearbyModel {
 
     NearbyModel withIdleLocation(Coordinate coordinate) {
         return toBuilder()
+                .requestPermission(requestPermission())
                 .mapCoordinate(mapReady() ? coordinate : mapCoordinate())
                 .mapReady(true)
                 .waitingUserCoordinate(false)
@@ -83,6 +85,12 @@ public abstract class NearbyModel {
                 .build();
     }
 
+    NearbyModel withRequestPermission(boolean requestPermission) {
+        return toBuilder()
+                .requestPermission(requestPermission)
+                .build();
+    }
+
     @AutoValue.Builder
     public static abstract class Builder {
         public abstract Builder places(ImmutableSet<Place> places);
@@ -92,6 +100,7 @@ public abstract class NearbyModel {
         public abstract Builder mapCoordinate(Coordinate coordinate);
         public abstract Builder shouldMoveMap(boolean shouldMoveMap);
         public abstract Builder error(Throwable error);
+        public abstract Builder requestPermission(boolean requestPermission);
 
         public abstract NearbyModel build();
     }

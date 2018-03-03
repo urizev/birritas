@@ -1,6 +1,7 @@
 package com.urizev.birritas.view.nearby;
 
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.urizev.birritas.R;
 import com.urizev.birritas.app.providers.image.ImageLoader;
 import com.urizev.birritas.app.providers.resources.ResourceProvider;
@@ -110,6 +112,11 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
         RxUtils.assertMainThread();
         Timber.d("Rendering map…");
 
+        if (vs.requestPermission()) {
+            getPresenter().clearRequestPermissions();
+            this.requestLocationPermissions();
+        }
+
         for (MarkerViewState movs : vs.viewStates()) {
             Marker marker = markersById.get(movs.id());
             if (marker == null) {
@@ -134,6 +141,16 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
             selectedPlaceAddress.setText(spvs.address());
             placeCard.setTag(spvs.id());
         }
+    }
+
+    private void requestLocationPermissions() {
+        addDisposable(new RxPermissions(getActivity())
+                .request(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+                .doOnNext(granted -> {
+                    rxLocation.updatePermission();
+                    getPresenter().onGoToUserLocationClicked();
+                })
+                .subscribe());
     }
 
     private void moveMapTo(Coordinate coordinate) {
@@ -243,7 +260,7 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
         for (PlaceViewState pvs : vs.viewStates()) {
             builder = builder.add(this.placeToMarker(pvs, pvs.id().equals(selectedPlaceId)));
         }
-        return NearbyViewState.create(vs.coordinate(), vs.shouldMove(), vs.error(), builder.build(), vs.selectedPlaceViewState());
+        return NearbyViewState.create(vs.coordinate(), vs.shouldMove(), vs.error(), builder.build(), vs.selectedPlaceViewState(), model.requestPermission());
     }
 
     private MarkerViewState placeToMarker(PlaceViewState pvs, boolean selected) {

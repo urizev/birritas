@@ -14,6 +14,7 @@ import com.urizev.birritas.view.common.Presenter;
 
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Maybe;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 import timber.log.Timber;
@@ -44,7 +45,18 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
     }
 
     private void listenUserLocation() {
-        addDisposable(mRxLocation.observeLast(LAST_LOCATION_TIME)
+        addDisposable(mRxLocation
+                .observePermission()
+                .firstElement()
+                .flatMap(granted -> {
+                    if (granted) {
+                        return mRxLocation.observeLast(LAST_LOCATION_TIME);
+                    }
+                    else {
+                        mModel.onNext(mModel.getValue().withRequestPermission(true));
+                        return Maybe.empty();
+                    }
+                })
                 .map(location -> Coordinate.create(location.getLatitude(), location.getLongitude()))
                 .doOnSuccess(coordinate -> Timber.d("Coordinate: %s", coordinate))
                 .doOnSuccess(coordinate -> mModel.onNext(mModel.getValue().withUserCoordinate(coordinate)))
@@ -89,7 +101,7 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
             }
         }
 
-        return NearbyViewState.create(model.mapCoordinate(), model.shouldMoveMap(), model.error(), builder.build(), selectedViewState);
+        return NearbyViewState.create(model.mapCoordinate(), model.shouldMoveMap(), model.error(), builder.build(), selectedViewState, model.requestPermission());
     }
 
     private PlaceViewState placeToPlaceViewState(Place place) {
@@ -139,5 +151,9 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
     void onPlaceSelected(String id, Coordinate coordinate) {
         Timber.d("Place selected: %s", id);
         mModel.onNext(mModel.getValue().withSelection(id, coordinate));
+    }
+
+    void clearRequestPermissions() {
+        mModel.onNext(mModel.getValue().withRequestPermission(false));
     }
 }

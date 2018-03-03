@@ -35,7 +35,7 @@ ext {
     butterknifeVersion = '8.8.1'
     playServicesVersion = '11.8.0'
     circleimageviewVersion = '2.2.0'
-    rxpermissionsVersion = '0.9.4@aar'
+    rxpermissionsVersion = '0.9.5@aar'
     autovaluemoshiVersion = '0.4.4'
     supportLibraryVersion = '26.1.0'
     okhttpdownloaderVersion = '1.1.0'
