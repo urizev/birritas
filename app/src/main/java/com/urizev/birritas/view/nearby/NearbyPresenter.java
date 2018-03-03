@@ -81,8 +81,11 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
         for (Place place : model.places()) {
             PlaceViewState vs = placeToPlaceViewState(place);
             builder = builder.add(vs);
-            if (place.id().equals(model.selectedPlaceId())) {
-                selectedViewState = vs;
+            Brewery brewery = place.brewery();
+            if (brewery != null) {
+                if (brewery.id().equals(model.selectedPlaceId())) {
+                    selectedViewState = vs;
+                }
             }
         }
 
@@ -95,7 +98,9 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
         String name = mNa;
         String imageUrl = null;
         Brewery brewery = place.brewery();
+        String breweryId = null;
         if (brewery != null) {
+            breweryId = brewery.id();
             if (brewery.shortName() != null) {
                 name = brewery.shortName();
             } else if (brewery.name() != null) {
@@ -108,7 +113,7 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
             }
         }
 
-        return PlaceViewState.create(place.id(), name, imageUrl, place.streetAddress(), place.latitude(), place.longitude());
+        return PlaceViewState.create(breweryId, name, imageUrl, place.streetAddress(), place.latitude(), place.longitude());
     }
 
     void mapIdleAt(double latitude, double longitude, int radius) {
@@ -132,6 +137,7 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
     }
 
     void onPlaceSelected(String id, Coordinate coordinate) {
+        Timber.d("Place selected: %s", id);
         mModel.onNext(mModel.getValue().withSelection(id, coordinate));
     }
 }

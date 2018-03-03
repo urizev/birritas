@@ -144,7 +144,9 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
         builder = builder.add(ImageViewStateAdapterDelegate.ViewState.create(pvs.imageUrl()));
         builder = builder.add(IbuAbvSrmViewStateAdapterDelegate.ViewState.create(pvs.ibu(), pvs.abv(), pvs.srm(), pvs.srmColor()));
         builder = builder.add(HeaderViewStateAdapterDelegate.ViewState.create(getResources().getString(R.string.brewed_by)));
-        builder = builder.add(BeerBreweryViewStateAdapterDelegate.ViewState.create(pvs.brewedById(), pvs.brewedBy()));
+        if (pvs.brewedById() != null) {
+            builder = builder.add(BeerBreweryViewStateAdapterDelegate.ViewState.create(pvs.brewedById(), pvs.brewedBy()));
+        }
         builder = builder.add(HeaderViewStateAdapterDelegate.ViewState.create(getResources().getString(R.string.style)));
         builder = builder.add(SingleLineViewStateAdapterDelegate.ViewState.create(pvs.style()));
         if (!pvs.ingredients().isEmpty()) {

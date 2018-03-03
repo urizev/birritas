@@ -227,7 +227,9 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
     @OnClick(R.id.place_card)
     public void onPlaceCardClicked(View v) {
         Intent intent = new Intent(this.getContext(), BreweryActivity.class);
-        intent.putExtra(BreweryActivity.EXTRA_BREWERY_ID, (String) v.getTag());
+        String id = (String) v.getTag();
+        Timber.d("Place clicked: %s", id);
+        intent.putExtra(BreweryActivity.EXTRA_BREWERY_ID, id);
         startActivity(intent);
     }
 

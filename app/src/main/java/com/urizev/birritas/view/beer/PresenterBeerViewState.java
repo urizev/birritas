@@ -12,6 +12,7 @@ public abstract class PresenterBeerViewState implements ViewState {
     @Nullable
     public abstract String imageUrl();
     public abstract String brewedBy();
+    @Nullable
     public abstract String brewedById();
     public abstract String style();
     public abstract String srm();
