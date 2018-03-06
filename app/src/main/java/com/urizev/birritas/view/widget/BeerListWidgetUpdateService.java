@@ -48,72 +48,62 @@ public class BeerListWidgetUpdateService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        AppWidgetManager manager = AppWidgetManager.getInstance(this);
 
         int widgetId = intent.getIntExtra(EXTRA_APPWIDGET_ID, INVALID_APPWIDGET_ID);
         if (widgetId == INVALID_APPWIDGET_ID) {
             return;
         }
 
-        updateAppWidget(appWidgetManager, widgetId);
-    }
+        UseCase<Void,ImmutableList<Beer>> useCase;
+        int type = BeerListWidgetConfigureActivity.loadPref (this, widgetId);
+        useCase = type == R.string.title_favorites ? mFavoriteBeersUseCase : mFeaturedBeersUseCase;
+        RemoteViews views = new RemoteViews(getPackageName(), R.layout.beer_list_widget);
+        String title = getString(type);
+        Intent remoteIntent = useCase.execute(null)
+                .map(this::beersToBundles)
+                .map(bundles -> {
+                    Intent i = new Intent(this, BeerListWidgetRemoveViewService.class);
+                    i.putExtra(BeerListWidgetRemoveViewService.VIEWSTATES, bundles);
+                    return i;
+                })
+                .blockingFirst();
 
-    private Intent bundlesToIntent(Bundle[] bundles) {
-        Intent intent = new Intent(this, BeerListWidgetRemoveViewService.class);
-        intent.putExtra(BeerListWidgetRemoveViewService.VIEWSTATES, bundles);
-        return intent;
+        views.setTextViewText(R.id.widget_title, title);
+        views.setRemoteAdapter(R.id.widget_list, remoteIntent);
+
+        manager.notifyAppWidgetViewDataChanged(widgetId, R.id.widget_list);
+        manager.updateAppWidget(widgetId, views);
     }
 
     private Bundle[] beersToBundles(ImmutableList<Beer> beers) {
         Bundle[] bundles = new Bundle[beers.size()];
         int index = 0;
         for (Beer beer : beers) {
-            bundles[index++] = beerToBundle(beer);
+            ImageSet labels = beer.labels();
+            String icon = labels != null ? labels.icon() : null;
+
+            String ibuValue = beer.ibu() == null ? mNa : String.format(Locale.getDefault(), "%.1f", beer.ibu());
+            String abvValue = beer.abv() == null ? mNa : String.format(Locale.getDefault(), "%.1f", beer.abv());
+            String brewedBy = "";
+            ImmutableList<Brewery> breweries = beer.breweries();
+            if (breweries != null && !breweries.isEmpty()) {
+                List<String> breweryNames = new ArrayList<>(breweries.size());
+                for(Brewery brewery : breweries) {
+                    breweryNames.add(brewery.shortName());
+                }
+                brewedBy = TextUtils.join(", ", breweryNames);
+            }
+
+            String styleName = "";
+            Style style = beer.style();
+            if (style != null) {
+                styleName = style.shortName();
+            }
+
+            bundles[index++] = BeerListWidgetBeerViewState.create(beer.id(), beer.name(), icon, styleName, brewedBy, abvValue, ibuValue).toBundle();;
         }
 
         return bundles;
-    }
-
-    private Bundle beerToBundle(Beer beer) {
-        ImageSet labels = beer.labels();
-        String icon = labels != null ? labels.icon() : null;
-
-        String ibuValue = beer.ibu() == null ? mNa : String.format(Locale.getDefault(), "%.1f", beer.ibu());
-        String abvValue = beer.abv() == null ? mNa : String.format(Locale.getDefault(), "%.1f", beer.abv());
-        String brewedBy = "";
-        ImmutableList<Brewery> breweries = beer.breweries();
-        if (breweries != null && !breweries.isEmpty()) {
-            List<String> breweryNames = new ArrayList<>(breweries.size());
-            for(Brewery brewery : breweries) {
-                breweryNames.add(brewery.shortName());
-            }
-            brewedBy = TextUtils.join(", ", breweryNames);
-        }
-
-        String styleName = "";
-        Style style = beer.style();
-        if (style != null) {
-            styleName = style.shortName();
-        }
-
-        return BeerListWidgetBeerViewState.create(beer.id(), beer.name(), icon, styleName, brewedBy, abvValue, ibuValue).toBundle();
-    }
-
-    private void updateAppWidget(AppWidgetManager manager, int widgetId) {
-        UseCase<Void,ImmutableList<Beer>> useCase;
-        int type = BeerListWidgetConfigureActivity.loadPref (this, widgetId);
-        useCase = type == R.string.title_favorites ? mFavoriteBeersUseCase : mFeaturedBeersUseCase;
-        RemoteViews views = new RemoteViews(getPackageName(), R.layout.beer_list_widget);
-        String title = getString(type);
-        Intent intent = useCase.execute(null)
-                .map(this::beersToBundles)
-                .map(this::bundlesToIntent)
-                .blockingFirst();
-
-        views.setTextViewText(R.id.widget_title, title);
-        views.setRemoteAdapter(R.id.widget_list, intent);
-
-        manager.notifyAppWidgetViewDataChanged(widgetId, R.id.widget_list);
-        manager.updateAppWidget(widgetId, views);
     }
 }

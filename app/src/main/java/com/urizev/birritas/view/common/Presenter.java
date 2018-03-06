@@ -18,10 +18,6 @@ public class Presenter<VS extends ViewState> {
         return mViewStateSubject;
     }
 
-    protected VS currentViewState() {
-        return mViewStateSubject.getValue();
-    }
-
     protected void publishViewState(VS vs) {
         mViewStateSubject.onNext(vs);
     }

@@ -70,6 +70,7 @@ public abstract class PresenterFragment<VS extends ViewState, PVS extends ViewSt
     @Override
     public void onDestroy() {
         mDisposables.dispose();
+        mPresenter.dispose();
         super.onDestroy();
     }
 

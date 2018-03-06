@@ -19,14 +19,12 @@ import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 import timber.log.Timber;
 
 @Singleton
 public class RxLocation extends LocationCallback {
-    private static final String PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_INTERVAL = 10000;
     private static final int LOCATION_FASTEST_INTERVAL = 5000;
     public static final Location DEFAULT_LOCATION = new Location ("internal");
@@ -42,7 +40,6 @@ public class RxLocation extends LocationCallback {
     private final Context mContext;
     private final FusedLocationProviderClient mFusedLocationClient;
     private final LocationRequest mLocationRequest;
-    private final Disposable mListenDisposable;
 
     @Inject
     RxLocation(Context context, RxForeground foreground) {
@@ -66,7 +63,7 @@ public class RxLocation extends LocationCallback {
                 .subscribeOn(Schedulers.computation())
                 .observeOn(Schedulers.computation()).doOnNext(p -> Timber.d("Location Permission: %b", p));
 
-        mListenDisposable = Observable.zip(fgObservable, permObservable, (fg, perm) -> fg && perm)
+        Observable.zip(fgObservable, permObservable, (fg, perm) -> fg && perm)
                 .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(this::listenLocationUpdates)
@@ -75,10 +72,6 @@ public class RxLocation extends LocationCallback {
 
     public void updatePermission() {
         mPermissionStatusSubject.onNext(checkPermission());
-    }
-
-    public Observable<Location> observe () {
-        return mLastLocationSubject;
     }
 
     public Maybe<Location> observeLast (long minTimeMillis) {

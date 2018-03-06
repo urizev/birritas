@@ -16,10 +16,6 @@ public class RxUtils {
         Preconditions.checkState(Looper.getMainLooper() == Looper.myLooper());
     }
 
-    public static void assertNonMainThread() {
-        Preconditions.checkState(Looper.getMainLooper() != Looper.myLooper());
-    }
-
     public static void assertIOThread() {
         assertThreadPrefix(PREFIX_IO);
     }

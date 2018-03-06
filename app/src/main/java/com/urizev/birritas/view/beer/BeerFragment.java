@@ -55,7 +55,6 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
     @Inject FavoritesBeerIdsUseCase mFavoritesBeerIdsUseCase;
     @Inject ResourceProvider mResourceProvider;
     private ImmutableList<ViewStateAdapterDelegate> mAdapterDelegates;
-    private boolean mIsTable;
     private ViewStateAdapter mAdapter;
 
     public static Fragment newInstance(String beerId) {
@@ -121,8 +120,6 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
     @Override
     protected boolean bindView(View view) {
         ButterKnife.bind(this, view);
-
-        mIsTable = getResources().getBoolean(R.bool.is_tablet);
 
         ActionBar actionBar = getBaseActivity().getSupportActionBar();
         if (actionBar != null) {
