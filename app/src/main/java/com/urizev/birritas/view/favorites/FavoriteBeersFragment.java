@@ -12,8 +12,8 @@ import com.urizev.birritas.app.providers.resources.ResourceProvider;
 import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.domain.usecases.FavoriteBeersUseCase;
 import com.urizev.birritas.domain.usecases.UpdateFavoriteBeerUseCase;
-import com.urizev.birritas.ui.MessageView;
 import com.urizev.birritas.ui.LoadingView;
+import com.urizev.birritas.ui.MessageView;
 import com.urizev.birritas.view.common.DirectPresenterFragment;
 
 import javax.inject.Inject;
@@ -22,7 +22,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class FavoriteBeersFragment extends DirectPresenterFragment<FavoriteBeersViewState,FavoriteBeersPresenter> {
     @BindView(R.id.favorites_content) RecyclerView mContentView;
@@ -64,14 +63,7 @@ public class FavoriteBeersFragment extends DirectPresenterFragment<FavoriteBeers
         mContentView.setVisibility(View.INVISIBLE);
         mLoadingView.setVisibility(View.INVISIBLE);
 
-        Throwable error = viewState.error();
-        if (error != null) {
-            Timber.e(error);
-            mMessageView.setIcon(R.drawable.ic_cloud_off_black_24dp);
-            mMessageView.setMessage(error.getMessage());
-            mMessageView.setVisibility(View.VISIBLE);
-        }
-        else if (viewState.loading()) {
+        if (viewState.loading()) {
             mLoadingView.setVisibility(View.VISIBLE);
         }
         else if (viewState.viewStates().isEmpty()) {

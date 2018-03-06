@@ -36,7 +36,6 @@ class FavoriteBeersPresenter extends Presenter<FavoriteBeersViewState> {
         this.mNa = resourceProvider.getString(R.string.n_a);
         this.model = BehaviorSubject.createDefault(FavoriteBeersModel.builder()
                 .beers(ImmutableList.of())
-                .error(null)
                 .loading(true)
                 .build());
 
@@ -69,7 +68,7 @@ class FavoriteBeersPresenter extends Presenter<FavoriteBeersViewState> {
         for (Beer beer : model.beers()) {
             builder = builder.add(this.beerToViewState(beer));
         }
-        return FavoriteBeersViewState.create(builder.build(), model.loading(), model.error());
+        return FavoriteBeersViewState.create(builder.build(), model.loading());
     }
 
     private FavoriteBeersItemViewState beerToViewState(Beer beer) {
