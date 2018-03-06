@@ -26,4 +26,8 @@
     <string name="header_beers">Beers</string>
     <string name="header_breweries">Breweries</string>
     <string name="no_results">No results found</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+    <string name="widget_activity_message">What kind of beers do you want to display in the widget?</string>
 </resources>

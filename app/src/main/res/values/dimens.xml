@@ -33,4 +33,12 @@
     <dimen name="cell_brewery_margin_bottom">6dp</dimen>
     <dimen name="map_place_card">160dp</dimen>
     <dimen name="map_region_padding">16dp</dimen>
+
+    <!--
+Refer to App Widget Documentation for margin information
+http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <dimen name="widget_margin">8dp</dimen>
+    <dimen name="widget_padding">8dp</dimen>
+    <dimen name="widget_list_divider_padding">72dp</dimen>
 </resources>

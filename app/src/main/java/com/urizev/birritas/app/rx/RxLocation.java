@@ -17,6 +17,7 @@ import javax.inject.Singleton;
 
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -55,14 +56,17 @@ public class RxLocation extends LocationCallback {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
         this.mLastLocationSubject = BehaviorSubject.create();
         this.mPermissionStatusSubject = BehaviorSubject.createDefault(checkPermission());
+
         Observable<Boolean> fgObservable = foreground.observe()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(Schedulers.computation());
 
-        mListenDisposable = Observable.zip(fgObservable, mPermissionStatusSubject
+
+        ObservableSource<Boolean> permObservable = mPermissionStatusSubject
                 .subscribeOn(Schedulers.computation())
-                .observeOn(Schedulers.computation())
-                .doOnNext(p -> Timber.d("Location Permission: %b", p)), (fg, perm) -> fg && perm)
+                .observeOn(Schedulers.computation()).doOnNext(p -> Timber.d("Location Permission: %b", p));
+
+        mListenDisposable = Observable.zip(fgObservable, permObservable, (fg, perm) -> fg && perm)
                 .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(this::listenLocationUpdates)

@@ -100,7 +100,8 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
     @Override
     protected NearbyPresenter createPresenter(Bundle savedInstanceState) {
         NearbyModel model = NearbyModel.builder()
-                .shouldMoveMap(false)
+                .mapCoordinate(Coordinate.create(RxLocation.DEFAULT_LOCATION.getLatitude(), RxLocation.DEFAULT_LOCATION.getLongitude()))
+                .shouldMoveMap(true)
                 .waitingUserCoordinate(true)
                 .places(ImmutableSet.of())
                 .build();
@@ -192,7 +193,7 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
 
     private void onMapReady(GoogleMap map) {
         mMap = map;
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(SphericalUtil.createBounds(new LatLng(RxLocation.DEFAULT_LOCATION.getLatitude(), RxLocation.DEFAULT_LOCATION.getLongitude()), RADIUS), mMapBoundsPadding));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(SphericalUtil.createBounds(new LatLng(RxLocation.DEFAULT_LOCATION.getLatitude(), RxLocation.DEFAULT_LOCATION.getLongitude()), RADIUS), mMapBoundsPadding));
         defaultMarkerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
         selectedMarkerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
 

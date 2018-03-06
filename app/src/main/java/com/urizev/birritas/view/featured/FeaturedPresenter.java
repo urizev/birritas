@@ -142,7 +142,9 @@ class FeaturedPresenter extends Presenter<FeaturedViewState> {
                     breweryNames.add(name);
                 }
             }
-            brewedBy = TextUtils.join(", ", breweryNames);
+            if (!breweryNames.isEmpty()) {
+                brewedBy = TextUtils.join(", ", breweryNames);
+            }
         }
 
         String styleName = "";

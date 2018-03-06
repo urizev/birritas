@@ -1,0 +1,157 @@
+@startuml
+
+BeerOwnership ..> Brewery
+BeerOwnership ..> Beer
+BreweryOwnership ..> Guild
+BreweryOwnership ..> Brewery
+Image --> Brewery
+Image --> Beer
+Image --> Guild
+Beer --> Style
+Beer --> Glass
+Style --> Category
+Location --> Brewery
+Ingredient ..> Beer
+Ingredient ..> Malt
+Ingredient ..> Yeast
+Ingredient ..> Hop
+
+class Beer {
+    *glass_id
+    *style_id
+    +id
+    +name
+    +nameDiplay
+    +description
+    +avb
+    +isOrganic
+    +createDate
+    +downloadDate
+    +updateDate
+    +status
+}
+
+class Brewery {
+    +id
+    +name
+    +nameShortDisplay
+    +description
+    +website
+    +isOrganic
+    +isMassOwned
+    +brandClassification
+    +status
+    +createDate
+    +downloadDate
+    +updateDate
+}
+
+class Image {
+    +id
+    +url
+    +item_id
+    +item_type
+    +size
+}
+
+class Glass {
+    +id
+    +name
+    +createDate
+    +downloadDate
+}
+
+class Style {
+    +category_id
+    +id
+    +name
+    +shortName
+    +description
+    +ibuMax
+    +ibuMin
+    +abvMax
+    +abvMin
+    +ogMax
+    +ofMax
+    +ofMin
+    +createDate
+    +downloadDate
+    +updateDate
+}
+
+class Category {
+    +id
+    +name
+    +createDate
+    +downloadDate
+}
+
+class BeerOwnership {
+    *brewery_id
+    *beer_id
+}
+
+class BreweryOwnership {
+    *guild_id
+    *brewery_id
+}
+
+class Guild {
+    +id
+    +name
+    +description
+    +website
+    +status
+    +createDate
+    +downloadDate
+    +updateDate
+}
+
+class Location {
+    *brewery_id
+    *country_id
+    +id
+    +name
+    +locationType
+    +phone
+    +website
+    +streetAddress
+    +extendedAddress
+    +hoursOfOperationExplicit
+    +hoursOfOperationNotes
+    +postalCode
+    +locality
+    +region
+    +timezoneId
+    +isClosed
+    +isPrimary
+    +inPlanning
+    +coordinate
+    +openToPublic
+    +status
+    +createDate
+    +downloadDate
+    +updateDate
+}
+
+class Ingredient {
+    *beer_id
+    *ingredient_type
+    *ingredient_id
+    +createDate
+    +downloadDate
+}
+
+class Country {
+    +id
+}
+
+class Hop {
+}
+
+class Malt {
+}
+
+class Yeast {
+}
+@enduml

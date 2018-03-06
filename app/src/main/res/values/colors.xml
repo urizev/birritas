@@ -12,4 +12,5 @@
     <color name="colorImagePlaceholder">#fff8e1</color>
     <color name="colorHint">#7000</color>
     <color name="colorMapPlaceCard">#EFFF</color>
+    <color name="colorWidgetListDivider">#777</color>
 </resources>

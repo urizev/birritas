@@ -3,15 +3,19 @@ package com.urizev.birritas.app.providers.image;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.squareup.picasso.Transformation;
 import com.urizev.birritas.R;
+import com.urizev.birritas.app.rx.SimpleDisposable;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
 
 @Singleton
@@ -35,6 +39,39 @@ public class PicassoImageLoader implements ImageLoader{
                 .placeholder(R.color.colorImagePlaceholder)
                 .error(android.R.color.black)
                 .into(target);
+    }
+
+    @Override
+    public Observable<Bitmap> load(String imageUrl) {
+        return Observable.create(e -> {
+            Target target = new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    if (e.isDisposed()) {
+                        return;
+                    }
+
+                    e.onNext(bitmap);
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
+                    if (e.isDisposed()) {
+                        return;
+                    }
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                }
+            };
+            e.setDisposable(new SimpleDisposable() {
+                @Override
+                protected void onDisposed() {}
+            });
+            picasso.load(imageUrl).into(target);
+        });
     }
 
     private static class CropWhitePaddingTransformer implements Transformation {

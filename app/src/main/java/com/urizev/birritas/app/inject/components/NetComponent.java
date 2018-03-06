@@ -9,6 +9,8 @@ import com.urizev.birritas.view.favorites.FavoriteBeersFragment;
 import com.urizev.birritas.view.featured.FeaturedFragment;
 import com.urizev.birritas.view.nearby.NearbyFragment;
 import com.urizev.birritas.view.search.SearchFragment;
+import com.urizev.birritas.view.widget.BeerListWidgetRemoveViewService;
+import com.urizev.birritas.view.widget.BeerListWidgetUpdateService;
 
 import javax.inject.Singleton;
 
@@ -25,4 +27,7 @@ public interface NetComponent {
     void inject(SearchFragment fragment);
 
     void inject(BaseActivity activity);
+
+    void inject(BeerListWidgetRemoveViewService service);
+    void inject(BeerListWidgetUpdateService service);
 }

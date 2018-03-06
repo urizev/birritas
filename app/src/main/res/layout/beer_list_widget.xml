@@ -1,0 +1,33 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="@dimen/widget_margin">
+
+    <TextView
+        tools:text="FAVORITAS"
+        android:id="@+id/widget_title"
+        android:padding="@dimen/widget_padding"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        style="@style/TextAppearance.AppCompat.Title"/>
+    <ListView
+        android:id="@+id/widget_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:divider="@drawable/widget_divider"
+        android:paddingLeft="@dimen/widget_padding"
+        android:paddingStart="@dimen/widget_padding"
+        android:paddingEnd="@dimen/widget_padding"
+        android:paddingRight="@dimen/widget_padding"
+        android:paddingBottom="@dimen/widget_padding"
+        android:contentDescription="@string/appwidget_text"
+        android:textSize="24sp"
+        android:textStyle="bold|italic"
+        tools:listitem="@layout/cell_beer_widget"/>
+
+</LinearLayout>

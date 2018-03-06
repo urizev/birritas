@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:background="@android:color/white"
+    android:id="@+id/cell_favorite_foreground"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/cell_favorite_padding_vertical"
+    android:paddingBottom="@dimen/cell_favorite_padding_vertical"
+    android:paddingLeft="@dimen/cell_favorite_padding_horizontal"
+    android:paddingStart="@dimen/cell_favorite_padding_horizontal"
+    android:paddingRight="@dimen/cell_favorite_padding_horizontal"
+    android:paddingEnd="@dimen/cell_favorite_padding_horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/beer_label"
+        android:src="@color/colorImagePlaceholder"
+        android:contentDescription="@string/beer_label_image"
+        android:layout_marginRight="@dimen/cell_favorite_image_margin"
+        android:layout_marginEnd="@dimen/cell_favorite_image_margin"
+        android:layout_width="@dimen/cell_beer_label_image_height"
+        android:layout_height="@dimen/cell_beer_label_image_height" />
+
+    <LinearLayout
+        android:paddingBottom="@dimen/card_title_padding_bottom"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/beer_title"
+            tools:text="Recipe title"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_marginRight="@dimen/card_title_padding_horizontal"
+            android:layout_marginEnd="@dimen/card_title_padding_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Subhead"/>
+
+        <TextView
+            android:id="@+id/beer_style"
+            tools:text="American Pale Ale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Base.TextAppearance.AppCompat.Body2"/>
+
+        <TextView
+            android:id="@+id/brewed_by"
+            tools:text="brewed by La Quince"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Base.TextAppearance.AppCompat.Caption"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:paddingBottom="@dimen/card_title_padding_bottom"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/ibu_param_name"
+                tools:text="IBU"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Caption"/>
+            <TextView
+                android:id="@+id/ibu_param_value"
+                tools:text="60"
+                android:paddingStart="8dp"
+                android:paddingLeft="8dp"
+                android:gravity="end"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/Base.TextAppearance.AppCompat.Body2"/>
+        </LinearLayout>
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/abv_param_name"
+                tools:text="ABV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Caption"/>
+            <TextView
+                android:id="@+id/abv_param_value"
+                tools:text="4.7"
+                android:paddingStart="8dp"
+                android:paddingLeft="8dp"
+                android:gravity="end"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/Base.TextAppearance.AppCompat.Body2"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
+
