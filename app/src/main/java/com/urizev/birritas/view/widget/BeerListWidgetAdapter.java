@@ -9,6 +9,8 @@ import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.R;
 import com.urizev.birritas.app.providers.image.ImageLoader;
 
+import timber.log.Timber;
+
 /**
  * Creado por jcvallejo en 4/3/18.
  */
@@ -17,12 +19,12 @@ class BeerListWidgetAdapter implements RemoteViewsService.RemoteViewsFactory {
     private final ImmutableList<BeerListWidgetBeerViewState> mViewStates;
     private final Context mContext;
     private final ImageLoader mImageLoader;
-    private RemoteViews remoteView;
 
-    public BeerListWidgetAdapter(Context context, ImmutableList<BeerListWidgetBeerViewState> viewStates, ImageLoader imageLoader) {
+    BeerListWidgetAdapter(Context context, ImmutableList<BeerListWidgetBeerViewState> viewStates, ImageLoader imageLoader) {
         this.mContext = context.getApplicationContext();
         this.mViewStates = viewStates;
         this.mImageLoader = imageLoader;
+        Timber.d("Viewstates: %d", viewStates.size());
     }
 
     @Override
@@ -44,8 +46,11 @@ class BeerListWidgetAdapter implements RemoteViewsService.RemoteViewsFactory {
     }
 
     @Override
-    public RemoteViews getViewAt(int i) {
-        BeerListWidgetBeerViewState vs = mViewStates.get(i);
+    public RemoteViews getViewAt(int pos) {
+
+        BeerListWidgetBeerViewState vs = mViewStates.get(pos);
+
+        Timber.d("Rendering viewstate %d: %s", pos, vs);
 
         RemoteViews remoteViews;
         remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.cell_beer_widget);
@@ -67,12 +72,12 @@ class BeerListWidgetAdapter implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public int getViewTypeCount() {
-        return 0;
+        return 1;
     }
 
     @Override
-    public long getItemId(int i) {
-        return 0;
+    public long getItemId(int pos) {
+        return pos;
     }
 
     @Override

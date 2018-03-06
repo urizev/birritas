@@ -113,6 +113,7 @@ public class BeerListWidgetUpdateService extends IntentService {
         views.setTextViewText(R.id.widget_title, title);
         views.setRemoteAdapter(R.id.widget_list, intent);
 
+        manager.notifyAppWidgetViewDataChanged(widgetId, R.id.widget_list);
         manager.updateAppWidget(widgetId, views);
     }
 }
