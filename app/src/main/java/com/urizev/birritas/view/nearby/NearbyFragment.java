@@ -270,7 +270,7 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
         MarkerOptions options = new MarkerOptions()
                 .title(pvs.name())
                 .icon(selected ? selectedMarkerIcon : defaultMarkerIcon)
-                .position(new LatLng(pvs.latitude(), pvs.longitude()));
+                .position(new LatLng(pvs.coordinate().latitude(), pvs.coordinate().longitude()));
         return MarkerViewState.create(pvs.id(), selected, options);
     }
 }
