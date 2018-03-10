@@ -125,7 +125,7 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
             }
         }
 
-        return PlaceViewState.create(breweryId, name, imageUrl, place.streetAddress(), place.latitude(), place.longitude());
+        return PlaceViewState.create(breweryId, name, imageUrl, place.streetAddress(), place.coordinate());
     }
 
     void mapIdleAt(double latitude, double longitude, int radius) {

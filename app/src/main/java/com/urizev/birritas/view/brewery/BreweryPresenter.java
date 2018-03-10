@@ -99,7 +99,7 @@ class BreweryPresenter extends Presenter<BreweryPresenterViewState> {
 
             Place mainLocation = brewery.getMainPlace();
             if (mainLocation != null) {
-                coordinate = Coordinate.create(mainLocation.latitude(), mainLocation.longitude());
+                coordinate = mainLocation.coordinate();
                 address = mainLocation.streetAddress();
             }
 

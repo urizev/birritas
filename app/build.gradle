@@ -10,7 +10,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-
+        multiDexEnabled true
         buildConfigField('String', 'BREWERYDB_API_KEY', "$brewerydbApiKey")
     }
     buildTypes {
@@ -23,18 +23,6 @@ android {
         }
     }
 
-    flavorDimensions "stage"
-    productFlavors {
-        dev {
-            dimension "stage"
-            //noinspection DevModeObsolete
-            minSdkVersion 21
-            versionNameSuffix "-dev"
-            resConfigs "en", "xxhdpi"
-        }
-
-        prod { dimension "stage" }
-    }
     configurations.all {
         resolutionStrategy.force 'com.google.code.findbugs:jsr305:2.0.1'
     }

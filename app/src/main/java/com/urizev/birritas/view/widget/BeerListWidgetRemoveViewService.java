@@ -2,6 +2,7 @@ package com.urizev.birritas.view.widget;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.widget.RemoteViewsService;
 
 import com.google.common.collect.ImmutableList;
@@ -18,9 +19,10 @@ public class BeerListWidgetRemoveViewService extends RemoteViewsService {
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
         App app = (App) getApplication();
         app.getNetComponent().inject(this);
-        Bundle[] bundles = (Bundle[]) intent.getParcelableArrayExtra(VIEWSTATES);
+        Parcelable[] parcelables = intent.getParcelableArrayExtra(VIEWSTATES);
         ImmutableList.Builder<BeerListWidgetBeerViewState> builder = new ImmutableList.Builder<>();
-        for (Bundle bundle : bundles) {
+        for (Parcelable parcelable : parcelables) {
+            Bundle bundle = (Bundle) parcelable;
             builder = builder.add(BeerListWidgetBeerViewState.fromBundle(bundle));
         }
         return new BeerListWidgetAdapter(getApplicationContext(), builder.build(), mImageLoader);

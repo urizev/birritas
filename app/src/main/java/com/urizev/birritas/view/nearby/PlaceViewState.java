@@ -3,6 +3,7 @@ package com.urizev.birritas.view.nearby;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
+import com.urizev.birritas.domain.entities.Coordinate;
 
 @AutoValue
 public abstract class PlaceViewState {
@@ -12,10 +13,9 @@ public abstract class PlaceViewState {
     public abstract String imageUrl();
     @Nullable
     public abstract String address();
-    public abstract double latitude();
-    public abstract double longitude();
+    public abstract Coordinate coordinate
 
-    public static PlaceViewState create(String id, String name, String imageUrl, String address, double latitude, double longitude) {
-        return new AutoValue_PlaceViewState(id, name, imageUrl, address, latitude, longitude);
+    public static PlaceViewState create(String id, String name, String imageUrl, String address, Coordinate coordinate) {
+        return new AutoValue_PlaceViewState(id, name, imageUrl, address, coordinate);
     }
 }

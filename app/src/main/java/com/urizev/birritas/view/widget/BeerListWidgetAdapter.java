@@ -9,6 +9,8 @@ import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.R;
 import com.urizev.birritas.app.providers.image.ImageLoader;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -59,7 +61,10 @@ class BeerListWidgetAdapter implements RemoteViewsService.RemoteViewsFactory {
         remoteViews.setTextViewText(R.id.brewed_by, vs.brewedBy());
         remoteViews.setTextViewText(R.id.ibu_param_value, vs.ibu());
         remoteViews.setTextViewText(R.id.abv_param_value, vs.abv());
-        Bitmap bitmap = mImageLoader.load(vs.imageUrl()).blockingFirst();
+        Bitmap bitmap = mImageLoader.load(vs.imageUrl())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.trampoline())
+                .blockingFirst();
         remoteViews.setImageViewBitmap(R.id.beer_label, bitmap);
 
         return remoteViews;

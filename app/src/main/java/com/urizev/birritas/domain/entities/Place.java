@@ -22,8 +22,7 @@ public abstract class Place {
     public abstract String phone();
     @Nullable
     public abstract String website();
-    public abstract double latitude();
-    public abstract double longitude();
+    public abstract Coordinate coordinate();
     public abstract boolean isPrimary();
     public abstract boolean isPlanning();
     public abstract boolean isClosed();
@@ -40,6 +39,29 @@ public abstract class Place {
         return new AutoValue_Place.Builder();
     }
 
+    public Builder toBuilder() {
+        return new AutoValue_Place.Builder()
+                .id(id())
+                .name(name())
+                .streetAddress(streetAddress())
+                .extendedAddress(extendedAddress())
+                .locality(locality())
+                .region(region())
+                .postalCode(postalCode())
+                .phone(phone())
+                .website(website())
+                .coordinate(coordinate())
+                .isPlanning(isPlanning())
+                .isPrimary(isPrimary())
+                .isClosed(isClosed())
+                .openToPublic(openToPublic())
+                .locationType(locationType())
+                .yearOpened(yearOpened())
+                .status(status())
+                .country(country())
+                .brewery(brewery());
+    }
+
     @AutoValue.Builder
     public static abstract class Builder {
         public abstract Builder id(String id);
@@ -51,8 +73,7 @@ public abstract class Place {
         public abstract Builder postalCode(String postalCode);
         public abstract Builder phone(String phone);
         public abstract Builder website(String website);
-        public abstract Builder latitude(double latitude);
-        public abstract Builder longitude(double longitude);
+        public abstract Builder coordinate(Coordinate coordinate);
         public abstract Builder isPrimary(boolean isPrimary);
         public abstract Builder isPlanning(boolean isPlanning);
         public abstract Builder isClosed(boolean isClosed);
