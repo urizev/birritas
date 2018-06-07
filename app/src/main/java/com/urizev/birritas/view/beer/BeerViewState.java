@@ -20,13 +20,16 @@ public abstract class BeerViewState implements ViewState {
 
     public abstract ImmutableList<ViewState> mainViewStates();
 
+    public abstract boolean favorite();
+
     public static BeerViewState create(String name,
                                        String imageUrl,
                                        String abv,
                                        String ibu,
                                        String srm,
                                        int srmColor,
-                                       ImmutableList<ViewState> mainViewStates) {
-        return new AutoValue_BeerViewState(name, imageUrl, abv, ibu, srm, srmColor, mainViewStates);
+                                       ImmutableList<ViewState> mainViewStates,
+                                       boolean favorite) {
+        return new AutoValue_BeerViewState(name, imageUrl, abv, ibu, srm, srmColor, mainViewStates, favorite);
     }
 }

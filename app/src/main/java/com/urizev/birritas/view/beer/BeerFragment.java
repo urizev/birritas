@@ -18,6 +18,7 @@ import com.urizev.birritas.app.providers.resources.ResourceProvider;
 import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.domain.usecases.BeerDetailsUseCase;
 import com.urizev.birritas.domain.usecases.FavoritesBeerIdsUseCase;
+import com.urizev.birritas.domain.usecases.UpdateFavoriteBeerUseCase;
 import com.urizev.birritas.view.beer.adapter.BeerBreweryViewStateAdapterDelegate;
 import com.urizev.birritas.view.beer.adapter.IbuAbvSrmViewStateAdapterDelegate;
 import com.urizev.birritas.view.beer.adapter.IngredientViewStateAdapterDelegate;
@@ -35,6 +36,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerViewState,BeerPresenter> implements ViewStateAdapterDelegate.ViewStateAdapterDelegateClickListener {
     private static final String EXTRA_BEER_ID = "beerId";
@@ -53,6 +55,8 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
     @Inject ImageLoader mImageLoader;
     @Inject BeerDetailsUseCase mBeerDetailsUseCase;
     @Inject FavoritesBeerIdsUseCase mFavoritesBeerIdsUseCase;
+    @Inject UpdateFavoriteBeerUseCase mUpdateFavoriteBeerUseCase;
+
     @Inject ResourceProvider mResourceProvider;
     private ImmutableList<ViewStateAdapterDelegate> mAdapterDelegates;
     private ViewStateAdapter mAdapter;
@@ -97,7 +101,7 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
     @Override
     protected BeerPresenter createPresenter(Bundle savedInstanceState) {
         String beerId = getArguments().getString(EXTRA_BEER_ID);
-        return new BeerPresenter(beerId, mBeerDetailsUseCase, mFavoritesBeerIdsUseCase, mResourceProvider);
+        return new BeerPresenter(beerId, mBeerDetailsUseCase, mFavoritesBeerIdsUseCase, mUpdateFavoriteBeerUseCase, mResourceProvider);
     }
 
     @Override
@@ -115,6 +119,13 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
 
         mAdapter.setItems(vs.mainViewStates());
         mAdapter.notifyDataSetChanged();
+
+        fabAction.setSelected(vs.favorite());
+    }
+
+    @OnClick(R.id.fav_action)
+    public void onFavoriteClicked() {
+        getPresenter().onFavoriteClicked(!fabAction.isSelected());
     }
 
     @Override
@@ -153,8 +164,10 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
             }
         }
 
-        return BeerViewState.create(pvs.name(), pvs.imageUrl(), pvs.abv(), pvs.ibu(), pvs.srm(), pvs.srmColor(), builder.build());
+        return BeerViewState.create(pvs.name(), pvs.imageUrl(), pvs.abv(), pvs.ibu(), pvs.srm(), pvs.srmColor(), builder.build(), pvs.favorite());
     }
+
+
 
     @Override
     public void onViewStateAdapterDelegateClicked(ViewState viewState, int position) {

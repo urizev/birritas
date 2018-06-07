@@ -19,6 +19,7 @@ import com.urizev.birritas.domain.entities.Style;
 import com.urizev.birritas.domain.entities.Yeast;
 import com.urizev.birritas.domain.usecases.BeerDetailsUseCase;
 import com.urizev.birritas.domain.usecases.FavoritesBeerIdsUseCase;
+import com.urizev.birritas.domain.usecases.UpdateFavoriteBeerUseCase;
 import com.urizev.birritas.view.common.Presenter;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ class BeerPresenter extends Presenter<PresenterBeerViewState> {
     private final String mHyphen;
     private final BeerDetailsUseCase mBeerDetailsUseCase;
     private final FavoritesBeerIdsUseCase mFavoritesBeerIdsUseCase;
+    private final UpdateFavoriteBeerUseCase mUpdateFavoriteBeerUseCase;
     private final String mNa;
     private final String mBeerId;
     private final int mNoSrm;
@@ -43,10 +45,12 @@ class BeerPresenter extends Presenter<PresenterBeerViewState> {
     BeerPresenter(@NonNull String beerId,
                   @NonNull BeerDetailsUseCase beerDetailsUseCase,
                   @NonNull FavoritesBeerIdsUseCase favoritesBeerIdsUseCase,
+                  @NonNull UpdateFavoriteBeerUseCase updateFavoriteBeerUseCase,
                   @NonNull ResourceProvider resourceProvider) {
         this.mBeerId = beerId;
         this.mBeerDetailsUseCase = beerDetailsUseCase;
         this.mFavoritesBeerIdsUseCase = favoritesBeerIdsUseCase;
+        this.mUpdateFavoriteBeerUseCase = updateFavoriteBeerUseCase;
         this.mNa = resourceProvider.getString(R.string.n_a);
         this.mNoSrm = resourceProvider.getColor(R.color.no_srm);
         this.mHyphen = resourceProvider.getString(R.string.hyphen);
@@ -143,5 +147,12 @@ class BeerPresenter extends Presenter<PresenterBeerViewState> {
 
         return PresenterBeerViewState.create(name, imageUrl, brewedBy, brewedById, styleText, srmText, srmColor,
                 ibuText, abvText, ingredients.build(), favorite);
+    }
+
+    public void onFavoriteClicked(boolean selected) {
+        String id = mBeerModel.getValue().beer().id();
+        addDisposable(mUpdateFavoriteBeerUseCase
+                .execute(UpdateFavoriteBeerUseCase.FavoriteEvent.create(id, selected))
+                .subscribe());
     }
 }
