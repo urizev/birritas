@@ -12,6 +12,10 @@
         android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingLeft="@dimen/favorites_margin"
+        android:paddingStart="@dimen/favorites_margin"
+        android:paddingRight="@dimen/favorites_margin"
+        android:paddingEnd="@dimen/favorites_margin"
         tools:listitem="@layout/cell_beer_card"/>
     <com.urizev.birritas.ui.MessageView
         android:id="@+id/favorites_error"

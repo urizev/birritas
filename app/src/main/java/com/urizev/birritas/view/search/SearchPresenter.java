@@ -59,7 +59,9 @@ class SearchPresenter extends Presenter<SearchViewState> {
 
     @Override
     protected void dispose() {
-        mSearchDisposable.dispose();
+        if (mSearchDisposable != null) {
+            mSearchDisposable.dispose();
+        }
         super.dispose();
     }
 
