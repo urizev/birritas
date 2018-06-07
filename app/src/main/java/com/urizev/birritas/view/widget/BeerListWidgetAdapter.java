@@ -1,6 +1,8 @@
 package com.urizev.birritas.view.widget;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -8,6 +10,7 @@ import android.widget.RemoteViewsService;
 import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.R;
 import com.urizev.birritas.app.providers.image.ImageLoader;
+import com.urizev.birritas.view.beer.BeerActivity;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -61,11 +64,15 @@ class BeerListWidgetAdapter implements RemoteViewsService.RemoteViewsFactory {
         remoteViews.setTextViewText(R.id.brewed_by, vs.brewedBy());
         remoteViews.setTextViewText(R.id.ibu_param_value, vs.ibu());
         remoteViews.setTextViewText(R.id.abv_param_value, vs.abv());
-        Bitmap bitmap = mImageLoader.load(vs.imageUrl())
+        Bitmap bitmap = mImageLoader.loadCircle(vs.imageUrl())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(Schedulers.trampoline())
                 .blockingFirst();
         remoteViews.setImageViewBitmap(R.id.beer_label, bitmap);
+        Intent intent = new Intent(mContext, BeerActivity.class);
+        intent.putExtra(BeerActivity.EXTRA_BEER_ID, vs.id());
+        PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
+        remoteViews.setOnClickPendingIntent(R.id.beer_cell, pendingIntent);
 
         return remoteViews;
     }
@@ -87,6 +94,6 @@ class BeerListWidgetAdapter implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public boolean hasStableIds() {
-        return false;
+        return true;
     }
 }

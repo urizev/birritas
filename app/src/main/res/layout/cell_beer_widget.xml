@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     android:background="@android:color/white"
-    android:id="@+id/cell_favorite_foreground"
+    android:id="@+id/beer_cell"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -14,7 +14,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:id="@+id/beer_label"
         android:src="@color/colorImagePlaceholder"
         android:contentDescription="@string/beer_label_image"

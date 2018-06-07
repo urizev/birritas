@@ -2,7 +2,10 @@ package com.urizev.birritas.app.providers.image;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
@@ -22,12 +25,13 @@ import okhttp3.OkHttpClient;
 public class PicassoImageLoader implements ImageLoader{
     private static final Transformation CROP_WHITE_PADDING_TRANSFORMER = new CropWhitePaddingTransformer();
     private final Picasso picasso;
+    private Transformation circleTransformer;
 
     @Inject
     PicassoImageLoader(Context context, OkHttpClient client) {
         // TODO - Uses OkHttpClient
-        this.picasso = new Picasso.Builder(context)
-                .build();
+        this.picasso = new Picasso.Builder(context).build();
+        this.circleTransformer = new CircleImageTransformer();
     }
 
 
@@ -74,6 +78,40 @@ public class PicassoImageLoader implements ImageLoader{
         });
     }
 
+    @Override
+    public Observable<Bitmap> loadCircle(String imageUrl) {
+        return Observable.create(e -> {
+            Target target = new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    if (e.isDisposed()) {
+                        return;
+                    }
+
+                    e.onNext(bitmap);
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
+                    if (e.isDisposed()) {
+                        return;
+                    }
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                }
+            };
+            e.setDisposable(new SimpleDisposable() {
+                @Override
+                protected void onDisposed() {}
+            });
+            picasso.load(imageUrl)
+                    .transform(circleTransformer)
+                    .into(target);
+        });    }
+
     private static class CropWhitePaddingTransformer implements Transformation {
         @Override
         public Bitmap transform(Bitmap source) {
@@ -111,6 +149,43 @@ public class PicassoImageLoader implements ImageLoader{
         @Override
         public String key() {
             return "crop-white-padding";
+        }
+    }
+
+    public static class CircleImageTransformer implements Transformation {
+        @Inject
+        public CircleImageTransformer() {}
+
+        public Bitmap transform(Bitmap source) {
+            int size = Math.min(source.getWidth(), source.getHeight());
+
+            int x = (source.getWidth() - size) / 2;
+            int y = (source.getHeight() - size) / 2;
+
+            Bitmap squaredBitmap = Bitmap.createBitmap(source, x, y, size, size);
+            if (squaredBitmap != source) {
+                source.recycle();
+            }
+
+            Bitmap bitmap = Bitmap.createBitmap(size, size, source.getConfig());
+
+            Canvas canvas = new Canvas(bitmap);
+            Paint paint = new Paint();
+            BitmapShader shader = new BitmapShader(squaredBitmap,
+                    BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP);
+            paint.setShader(shader);
+            paint.setAntiAlias(true);
+
+            float r = size / 2f;
+            canvas.drawCircle(r, r, r, paint);
+
+            squaredBitmap.recycle();
+            return bitmap;
+        }
+
+        @Override
+        public String key() {
+            return "circle";
         }
     }
 }
