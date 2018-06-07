@@ -20,7 +20,8 @@ public abstract class NearbyModel {
     public abstract boolean shouldMoveMap();
     @Nullable
     public abstract Throwable error();
-    public abstract boolean requestPermission();
+    public abstract boolean requestLocationPermission();
+    public abstract boolean hasLocationPermission();
 
     NearbyModel mergePlaces(ImmutableList<Place> places) {
         ImmutableSet.Builder<Place> builder = new ImmutableSet.Builder<>();
@@ -41,6 +42,8 @@ public abstract class NearbyModel {
                 .waitingUserCoordinate(waitingUserCoordinate())
                 .mapCoordinate(mapCoordinate())
                 .shouldMoveMap(shouldMoveMap())
+                .requestLocationPermission(requestLocationPermission())
+                .hasLocationPermission(hasLocationPermission())
                 .error(error())
                 .places(places());
     }
@@ -48,7 +51,8 @@ public abstract class NearbyModel {
     public static Builder builder() {
         return new AutoValue_NearbyModel.Builder()
                 .mapReady(false)
-                .requestPermission(false);
+                .hasLocationPermission(false)
+                .requestLocationPermission(false);
     }
 
     NearbyModel withError(Throwable throwable) {
@@ -57,7 +61,7 @@ public abstract class NearbyModel {
 
     NearbyModel withIdleLocation(Coordinate coordinate) {
         return toBuilder()
-                .requestPermission(requestPermission())
+                .requestLocationPermission(requestLocationPermission())
                 .mapCoordinate(mapReady() ? coordinate : mapCoordinate())
                 .mapReady(true)
                 .waitingUserCoordinate(false)
@@ -67,7 +71,7 @@ public abstract class NearbyModel {
 
     NearbyModel withUserCoordinate(Coordinate coordinate) {
         return toBuilder()
-                .mapCoordinate(waitingUserCoordinate() ? coordinate : mapCoordinate())
+                .mapCoordinate(coordinate)
                 .waitingUserCoordinate(false)
                 .shouldMoveMap(true)
                 .build();
@@ -87,9 +91,18 @@ public abstract class NearbyModel {
                 .build();
     }
 
-    NearbyModel withRequestPermission(boolean requestPermission) {
+    NearbyModel withRequestPermission(boolean requestLocationPermission) {
         return toBuilder()
-                .requestPermission(requestPermission)
+                .hasLocationPermission(!requestLocationPermission && hasLocationPermission())
+                .requestLocationPermission(requestLocationPermission)
+                .build();
+    }
+
+
+
+    NearbyModel withHasPermission() {
+        return toBuilder()
+                .hasLocationPermission(true)
                 .build();
     }
 
@@ -102,7 +115,8 @@ public abstract class NearbyModel {
         public abstract Builder mapCoordinate(Coordinate coordinate);
         public abstract Builder shouldMoveMap(boolean shouldMoveMap);
         public abstract Builder error(Throwable error);
-        public abstract Builder requestPermission(boolean requestPermission);
+        public abstract Builder requestLocationPermission(boolean requestLocationPermission);
+        public abstract Builder hasLocationPermission(boolean hasLocationPermission);
 
         public abstract NearbyModel build();
     }

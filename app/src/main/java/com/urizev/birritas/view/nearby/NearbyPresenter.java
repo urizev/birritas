@@ -50,6 +50,7 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
                 .firstElement()
                 .flatMap(granted -> {
                     if (granted) {
+                        mModel.onNext(mModel.getValue().withHasPermission());
                         return mRxLocation.observeLast(LAST_LOCATION_TIME);
                     }
                     else {
@@ -101,7 +102,7 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
             }
         }
 
-        return NearbyViewState.create(model.mapCoordinate(), model.shouldMoveMap(), model.error(), builder.build(), selectedViewState, model.requestPermission());
+        return NearbyViewState.create(model.mapCoordinate(), model.shouldMoveMap(), model.error(), builder.build(), selectedViewState, model.requestLocationPermission(), model.hasLocationPermission());
     }
 
     private PlaceViewState placeToPlaceViewState(Place place) {
@@ -141,6 +142,7 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
     }
 
     void onGoToUserLocationClicked() {
+        mModel.onNext(mModel.getValue().withMapMoving());
         listenUserLocation();
     }
 
@@ -153,7 +155,7 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
         mModel.onNext(mModel.getValue().withSelection(id, coordinate));
     }
 
-    void clearRequestPermissions() {
+    void clearRequestLocationPermissions() {
         mModel.onNext(mModel.getValue().withRequestPermission(false));
     }
 }

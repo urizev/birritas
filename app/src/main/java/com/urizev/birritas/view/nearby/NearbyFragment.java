@@ -2,6 +2,7 @@ package com.urizev.birritas.view.nearby;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -77,6 +78,7 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
     private int mMapBoundsPadding;
     private BitmapDescriptor defaultMarkerIcon;
     private BitmapDescriptor selectedMarkerIcon;
+    private boolean mMyLocationEnabled;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,8 +115,8 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
         RxUtils.assertMainThread();
         Timber.d("Rendering map…");
 
-        if (vs.requestPermission()) {
-            getPresenter().clearRequestPermissions();
+        if (vs.requestLocationPermission()) {
+            getPresenter().clearRequestLocationPermissions();
             this.requestLocationPermissions();
         }
 
@@ -141,6 +143,17 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
             selectedPlaceName.setText(spvs.name());
             selectedPlaceAddress.setText(spvs.address());
             placeCard.setTag(spvs.id());
+        }
+
+        this.setMyLocationEnabled(vs.hasLocationPermission());
+    }
+
+    // Parameter is calculated based on granted permission
+    @SuppressLint("MissingPermission")
+    private void setMyLocationEnabled(boolean myLocationEnabled) {
+        if (this.mMyLocationEnabled != myLocationEnabled) {
+            this.mMyLocationEnabled = myLocationEnabled;
+            mMap.setMyLocationEnabled(myLocationEnabled);
         }
     }
 
@@ -238,7 +251,7 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
     }
 
     @OnClick(R.id.go_to_user_location)
-    public void onGoToUserLocationClicked(View view) {
+    public void onGoToUserLocationClicked() {
         getPresenter().onGoToUserLocationClicked();
     }
 
@@ -261,7 +274,7 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
         for (PlaceViewState pvs : vs.viewStates()) {
             builder = builder.add(this.placeToMarker(pvs, pvs.id().equals(selectedPlaceId)));
         }
-        return NearbyViewState.create(vs.coordinate(), vs.shouldMove(), vs.error(), builder.build(), vs.selectedPlaceViewState(), vs.requestPermission());
+        return NearbyViewState.create(vs.coordinate(), vs.shouldMove(), vs.error(), builder.build(), vs.selectedPlaceViewState(), vs.requestLocationPermission(), vs.hasLocationPermission());
     }
 
     private MarkerViewState placeToMarker(PlaceViewState pvs, boolean selected) {
