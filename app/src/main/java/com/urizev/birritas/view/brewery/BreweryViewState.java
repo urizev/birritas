@@ -20,13 +20,15 @@ public abstract class BreweryViewState implements ViewState {
     public abstract String address();
 
     public abstract ImmutableList<ViewState> mainViewStates();
+    public abstract ImmutableList<ViewState> sideViewStates();
 
     public static BreweryViewState create(String name,
                                           String imageUrl,
                                           String established,
                                           Coordinate coordinate,
                                           String address,
-                                          ImmutableList<ViewState> mainViewStates) {
-        return new AutoValue_BreweryViewState(name, imageUrl, established, coordinate, address, mainViewStates);
+                                          ImmutableList<ViewState> mainViewStates,
+                                          ImmutableList<ViewState> sideViewStates) {
+        return new AutoValue_BreweryViewState(name, imageUrl, established, coordinate, address, mainViewStates, sideViewStates);
     }
 }

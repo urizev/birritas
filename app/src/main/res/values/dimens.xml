@@ -15,6 +15,7 @@
     <dimen name="cell_swipe_drawable_padding">8dp</dimen>
     <dimen name="detail_beer_label_image_width">128dp</dimen>
     <dimen name="brewery_side_width">240dp</dimen>
+    <dimen name="brewery_side_map_height">192dp</dimen>
     <dimen name="header_top_margin">16dp</dimen>
     <dimen name="header_bottom_margin">8dp</dimen>
     <dimen name="search_box_elevation">2dp</dimen>
@@ -42,4 +43,5 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="widget_padding">8dp</dimen>
     <dimen name="widget_list_divider_padding">72dp</dimen>
     <dimen name="favorites_margin">0dp</dimen>
+    <dimen name="cell_beer_slim_margin">0dp</dimen>
 </resources>
