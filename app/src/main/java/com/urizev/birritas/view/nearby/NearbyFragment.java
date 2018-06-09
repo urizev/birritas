@@ -13,7 +13,9 @@ import android.support.constraint.ConstraintSet;
 import android.support.design.widget.FloatingActionButton;
 import android.support.transition.AutoTransition;
 import android.support.transition.TransitionManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,7 +54,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerViewState>,NearbyViewState<PlaceViewState>,NearbyPresenter> {
     private static final long PLACE_CARD_TRANSITION_DURATION = 300;
@@ -110,10 +111,17 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
         return new NearbyPresenter(nearbyUseCase, model, resourceProvider, rxLocation);
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        markersById.clear();
+        viewStatesByMarker.clear();
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
     @Override
     protected void renderViewState(NearbyViewState<MarkerViewState> vs) {
         RxUtils.assertMainThread();
-        Timber.d("Rendering map…");
 
         if (vs.requestLocationPermission()) {
             getPresenter().clearRequestLocationPermissions();
@@ -259,7 +267,6 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
     public void onPlaceCardClicked(View v) {
         Intent intent = new Intent(this.getContext(), BreweryActivity.class);
         String id = (String) v.getTag();
-        Timber.d("Place clicked: %s", id);
         intent.putExtra(BreweryActivity.EXTRA_BREWERY_ID, id);
         startActivity(intent);
     }

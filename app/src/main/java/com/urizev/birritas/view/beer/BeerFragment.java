@@ -3,11 +3,14 @@ package com.urizev.birritas.view.beer;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.R;
@@ -38,6 +41,8 @@ import butterknife.OnClick;
 
 public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerViewState,BeerPresenter> implements ViewStateAdapterDelegate.ViewStateAdapterDelegateClickListener {
     private static final String EXTRA_BEER_ID = "beerId";
+    private static final String KEY_MAIN_LIST_STATE = "com.urizev.birritas.view.beer.mainListState";
+    private static final String KEY_SIDE_LIST_STATE = "com.urizev.birritas.view.beer.sideListState";
 
     @BindView(R.id.main_recycler) RecyclerView mMainRecyclerView;
     @Nullable @BindView(R.id.side_recycler) RecyclerView mSideRecyclerView;
@@ -52,6 +57,9 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
     private ImmutableList<ViewStateAdapterDelegate> mAdapterDelegates;
     private ViewStateAdapter mMainAdapter;
     private ViewStateAdapter mSideAdapter;
+    private Parcelable mMainListState;
+    private Parcelable mSideListState;
+    private boolean mListStateShouldBeRestored;
 
     public static Fragment newInstance(String beerId) {
         Fragment fragment = new BeerFragment();
@@ -90,6 +98,28 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
         return R.layout.fragment_beer_detail;
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_MAIN_LIST_STATE)) {
+            this.mMainListState = savedInstanceState.getParcelable(KEY_MAIN_LIST_STATE);
+            this.mSideListState = savedInstanceState.getParcelable(KEY_SIDE_LIST_STATE);
+            this.mListStateShouldBeRestored = true;
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Parcelable mainListState = mMainRecyclerView.getLayoutManager().onSaveInstanceState();
+        outState.putParcelable(KEY_MAIN_LIST_STATE, mainListState);
+        if (mSideRecyclerView != null) {
+            Parcelable sideListState = mSideRecyclerView.getLayoutManager().onSaveInstanceState();
+            outState.putParcelable(KEY_SIDE_LIST_STATE, sideListState);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
     @Override
     protected BeerPresenter createPresenter(Bundle savedInstanceState) {
         String beerId = getArguments().getString(EXTRA_BEER_ID);
@@ -107,9 +137,17 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
 
         mMainAdapter.setItems(vs.mainViewStates());
         mMainAdapter.notifyDataSetChanged();
-        if (mSideRecyclerView != null) {
+        if (mListStateShouldBeRestored) {
+            mListStateShouldBeRestored = false;
+            mMainRecyclerView.getLayoutManager().onRestoreInstanceState(mMainListState);
+        }
+        if (mSideRecyclerView != null && mSideAdapter != null) {
             mSideAdapter.setItems(vs.sideViewStates());
             mSideAdapter.notifyDataSetChanged();
+            if (mListStateShouldBeRestored && mSideListState != null) {
+                mListStateShouldBeRestored = false;
+                mSideRecyclerView.getLayoutManager().onRestoreInstanceState(mSideListState);
+            }
         }
 
         fabAction.setSelected(vs.favorite());

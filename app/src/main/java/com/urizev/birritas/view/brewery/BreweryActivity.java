@@ -2,9 +2,9 @@ package com.urizev.birritas.view.brewery;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MenuItem;
 
 import com.urizev.birritas.app.base.BaseActivity;
-import com.urizev.birritas.view.beer.BeerFragment;
 
 public class BreweryActivity extends BaseActivity {
     public static final String EXTRA_BREWERY_ID = "breweryId";
@@ -25,5 +25,16 @@ public class BreweryActivity extends BaseActivity {
                     .add(android.R.id.content, BreweryFragment.newInstance(brewery))
                     .commit();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

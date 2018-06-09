@@ -2,9 +2,13 @@ package com.urizev.birritas.view.favorites;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.urizev.birritas.R;
 import com.urizev.birritas.app.providers.image.ImageLoader;
@@ -24,6 +28,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class FavoriteBeersFragment extends DirectPresenterFragment<FavoriteBeersViewState,FavoriteBeersPresenter> {
+    private static final String KEY_LIST_STATE = "com.urizev.birritas.view.favorites.listState";
+
     @BindView(R.id.favorites_content) RecyclerView mContentView;
     @BindView(R.id.favorites_loading) LoadingView mLoadingView;
     @BindView(R.id.favorites_error)
@@ -37,6 +43,8 @@ public class FavoriteBeersFragment extends DirectPresenterFragment<FavoriteBeers
     private FavoriteBeersAdapter mAdapter;
     private FavoriteBeersTouchCallback mTouchCallback;
     private Disposable mTouchDisposable;
+    private Parcelable mListState;
+    private boolean mListStateShouldBeRestored;
 
     @Override
     public void onAttach(Context context) {
@@ -48,6 +56,23 @@ public class FavoriteBeersFragment extends DirectPresenterFragment<FavoriteBeers
     @Override
     protected int getLayoutRes() {
         return R.layout.fragment_favorites;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_LIST_STATE)) {
+            this.mListState = savedInstanceState.getParcelable(KEY_LIST_STATE);
+            this.mListStateShouldBeRestored = true;
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Parcelable listState = mContentView.getLayoutManager().onSaveInstanceState();
+        outState.putParcelable(KEY_LIST_STATE, listState);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -73,6 +98,10 @@ public class FavoriteBeersFragment extends DirectPresenterFragment<FavoriteBeers
         }
         else {
             mAdapter.update(viewState.viewStates());
+            if (mListStateShouldBeRestored) {
+                mListStateShouldBeRestored = false;
+                mContentView.getLayoutManager().onRestoreInstanceState(mListState);
+            }
             mContentView.setVisibility(View.VISIBLE);
         }
     }

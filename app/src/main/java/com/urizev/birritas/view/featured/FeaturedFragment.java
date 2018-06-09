@@ -2,8 +2,12 @@ package com.urizev.birritas.view.featured;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.urizev.birritas.R;
 import com.urizev.birritas.app.providers.image.ImageLoader;
@@ -24,6 +28,8 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class FeaturedFragment extends DirectPresenterFragment<FeaturedViewState,FeaturedPresenter> {
+    private static final String KEY_LIST_STATE = "com.urizev.birritas.view.featured.listState";
+
     @BindView(R.id.featured_content) RecyclerView mContentView;
     @BindView(R.id.featured_loading) LoadingView mLoadingView;
     @BindView(R.id.featured_error)
@@ -36,6 +42,8 @@ public class FeaturedFragment extends DirectPresenterFragment<FeaturedViewState,
     @Inject UpdateFavoriteBeerUseCase mUpdateFavoriteBeerUseCase;
 
     private FeaturedAdapter mAdapter;
+    private Parcelable mListState;
+    private boolean mListStateShouldBeRestored;
 
     public FeaturedFragment() {}
 
@@ -48,6 +56,23 @@ public class FeaturedFragment extends DirectPresenterFragment<FeaturedViewState,
     @Override
     protected int getLayoutRes() {
         return R.layout.fragment_featured;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_LIST_STATE)) {
+            this.mListState = savedInstanceState.getParcelable(KEY_LIST_STATE);
+            this.mListStateShouldBeRestored = true;
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Parcelable listState = mContentView.getLayoutManager().onSaveInstanceState();
+        outState.putParcelable(KEY_LIST_STATE, listState);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -74,6 +99,10 @@ public class FeaturedFragment extends DirectPresenterFragment<FeaturedViewState,
         }
         else {
             mAdapter.update(viewState.viewStates());
+            if (mListStateShouldBeRestored) {
+                mListStateShouldBeRestored = false;
+                mContentView.getLayoutManager().onRestoreInstanceState(mListState);
+            }
             mContentView.setVisibility(View.VISIBLE);
         }
     }

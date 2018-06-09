@@ -1,5 +1,7 @@
 package com.urizev.birritas.view.beer;
 
+import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.view.common.ViewState;
@@ -8,6 +10,7 @@ import com.urizev.birritas.view.common.ViewState;
 public abstract class BeerViewState implements ViewState {
     public abstract String name();
 
+    @Nullable
     public abstract String imageUrl();
 
     public abstract String abv();

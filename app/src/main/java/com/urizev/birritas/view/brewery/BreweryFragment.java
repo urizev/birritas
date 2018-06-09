@@ -3,11 +3,14 @@ package com.urizev.birritas.view.brewery;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -41,18 +44,23 @@ import butterknife.ButterKnife;
 
 public class BreweryFragment extends PresenterFragment<BreweryViewState,BreweryPresenterViewState,BreweryPresenter> implements ViewStateAdapterDelegate.ViewStateAdapterDelegateClickListener {
     private static final String EXTRA_BREWERY_ID = "beerId";
+    private static final String KEY_MAIN_LIST_STATE = "com.urizev.birritas.view.brewery.mainListState";
+    private static final String KEY_SIDE_LIST_STATE = "com.urizev.birritas.view.brewery.sideListState";
 
-    @BindView(R.id.main_recycler) RecyclerView mMainRecycler;
-    @Nullable @BindView(R.id.side_recycler) RecyclerView mSideRecycler;
+    @BindView(R.id.main_recycler) RecyclerView mMainRecyclerView;
+    @Nullable @BindView(R.id.side_recycler) RecyclerView mSideRecyclerView;
 
     @Inject ImageLoader mImageLoader;
     @Inject BreweryDetailsUseCase mBreweryDetailsUseCase;
     @Inject ResourceProvider mResourceProvider;
 
     private ViewStateAdapter mMainAdapter;
-    private ViewStateAdapter mSideAdapter;
+    @Nullable private ViewStateAdapter mSideAdapter;
     private ImmutableList<ViewStateAdapterDelegate> mAdapterDelegates;
     private BitmapDescriptor mSelectedMarkerIcon;
+    private Parcelable mMainListState;
+    @Nullable private Parcelable mSideListState;
+    private boolean mListStateShouldBeRestored;
 
     public static Fragment newInstance(String beerId) {
         Fragment fragment = new BreweryFragment();
@@ -93,6 +101,28 @@ public class BreweryFragment extends PresenterFragment<BreweryViewState,BreweryP
         return R.layout.fragment_brewery_detail;
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_MAIN_LIST_STATE)) {
+            this.mMainListState = savedInstanceState.getParcelable(KEY_MAIN_LIST_STATE);
+            this.mSideListState = savedInstanceState.getParcelable(KEY_SIDE_LIST_STATE);
+            this.mListStateShouldBeRestored = true;
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Parcelable mainListState = mMainRecyclerView.getLayoutManager().onSaveInstanceState();
+        outState.putParcelable(KEY_MAIN_LIST_STATE, mainListState);
+        if (mSideRecyclerView != null) {
+            Parcelable sideListState = mSideRecyclerView.getLayoutManager().onSaveInstanceState();
+            outState.putParcelable(KEY_SIDE_LIST_STATE, sideListState);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
     @Override
     protected BreweryPresenter createPresenter(Bundle savedInstanceState) {
         String breweryId = getArguments().getString(EXTRA_BREWERY_ID);
@@ -110,9 +140,17 @@ public class BreweryFragment extends PresenterFragment<BreweryViewState,BreweryP
 
         mMainAdapter.setItems(vs.mainViewStates());
         mMainAdapter.notifyDataSetChanged();
-        if (mSideAdapter != null) {
+        if (mListStateShouldBeRestored) {
+            mListStateShouldBeRestored = false;
+            mMainRecyclerView.getLayoutManager().onRestoreInstanceState(mMainListState);
+        }
+        if (mSideRecyclerView != null && mSideAdapter != null) {
             mSideAdapter.setItems(vs.sideViewStates());
             mSideAdapter.notifyDataSetChanged();
+            if (mListStateShouldBeRestored && mSideListState != null) {
+                mListStateShouldBeRestored = false;
+                mSideRecyclerView.getLayoutManager().onRestoreInstanceState(mSideListState);
+            }
         }
     }
 
@@ -127,10 +165,10 @@ public class BreweryFragment extends PresenterFragment<BreweryViewState,BreweryP
         }
 
         mMainAdapter = new ViewStateAdapter(mAdapterDelegates);
-        mMainRecycler.setAdapter(mMainAdapter);
-        if (mSideRecycler != null) {
+        mMainRecyclerView.setAdapter(mMainAdapter);
+        if (mSideRecyclerView != null) {
             mSideAdapter = new ViewStateAdapter(mAdapterDelegates);
-            mSideRecycler.setAdapter(mSideAdapter);
+            mSideRecyclerView.setAdapter(mSideAdapter);
         }
 
         return true;
@@ -142,7 +180,7 @@ public class BreweryFragment extends PresenterFragment<BreweryViewState,BreweryP
 
         ImmutableList.Builder<ViewState> mainViewStates = new ImmutableList.Builder<>();
         ImmutableList.Builder<ViewState> sideViewStates = new ImmutableList.Builder<>();
-        if (mSideRecycler == null) {
+        if (mSideRecyclerView == null) {
             mainViewStates.add(ImageYearAddressViewStateAdapterDelegate.ViewState.create(vs.imageUrl(), vs.established(), vs.address()));
         }
         else {

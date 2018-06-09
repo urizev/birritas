@@ -1,6 +1,7 @@
 package com.urizev.birritas.view.common.adapter;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,7 @@ public class ImageViewStateAdapterDelegate extends ViewStateAdapterDelegate<Imag
 
     @AutoValue
     public static abstract class ViewState implements com.urizev.birritas.view.common.ViewState {
+        @Nullable
         public abstract String imageUrl();
 
         public static ViewState create(String imageUrl) {

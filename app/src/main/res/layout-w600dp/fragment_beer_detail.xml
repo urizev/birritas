@@ -14,6 +14,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/main_recycler"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        android:background="@android:color/white"
         android:layout_marginLeft="@dimen/brewery_side_width"
         android:layout_marginStart="@dimen/brewery_side_width"
         android:layout_width="match_parent"
