@@ -78,7 +78,7 @@ class FeaturedPresenter extends Presenter<FeaturedViewState> {
                 .build());
     }
 
-    private void loadData() {
+    void loadData() {
         if (mLoadingDataDisposable != null) {
             return;
         }

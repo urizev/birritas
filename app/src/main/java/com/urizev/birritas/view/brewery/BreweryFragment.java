@@ -23,6 +23,8 @@ import com.urizev.birritas.app.providers.resources.ResourceProvider;
 import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.domain.entities.Coordinate;
 import com.urizev.birritas.domain.usecases.BreweryDetailsUseCase;
+import com.urizev.birritas.ui.LoadingView;
+import com.urizev.birritas.ui.MessageView;
 import com.urizev.birritas.view.beer.BeerActivity;
 import com.urizev.birritas.view.brewery.adapter.AddressViewStateAdapterDelegate;
 import com.urizev.birritas.view.brewery.adapter.BrewerySideMapViewStateAdapterDelegate;
@@ -41,12 +43,16 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class BreweryFragment extends PresenterFragment<BreweryViewState,BreweryPresenterViewState,BreweryPresenter> implements ViewStateAdapterDelegate.ViewStateAdapterDelegateClickListener {
     private static final String EXTRA_BREWERY_ID = "beerId";
     private static final String KEY_MAIN_LIST_STATE = "com.urizev.birritas.view.brewery.mainListState";
     private static final String KEY_SIDE_LIST_STATE = "com.urizev.birritas.view.brewery.sideListState";
 
+    @BindView(R.id.content) View mContentView;
+    @BindView(R.id.loading) LoadingView mLoadingView;
+    @BindView(R.id.error) MessageView mMessageView;
     @BindView(R.id.main_recycler) RecyclerView mMainRecyclerView;
     @Nullable @BindView(R.id.side_recycler) RecyclerView mSideRecyclerView;
 
@@ -138,6 +144,21 @@ public class BreweryFragment extends PresenterFragment<BreweryViewState,BreweryP
             actionBar.setTitle(vs.name());
         }
 
+        mContentView.setVisibility(View.INVISIBLE);
+        mLoadingView.setVisibility(View.INVISIBLE);
+        mMessageView.setVisibility(View.INVISIBLE);
+        Throwable throwable = vs.throwable();
+        if (vs.loading()) {
+            mLoadingView.setVisibility(View.VISIBLE);
+        }
+        else if (throwable != null) {
+            mMessageView.setVisibility(View.VISIBLE);
+            mMessageView.setMessage(throwable.getLocalizedMessage());
+        }
+        else {
+            mContentView.setVisibility(View.VISIBLE);
+        }
+
         mMainAdapter.setItems(vs.mainViewStates());
         mMainAdapter.notifyDataSetChanged();
         if (mListStateShouldBeRestored) {
@@ -216,7 +237,7 @@ public class BreweryFragment extends PresenterFragment<BreweryViewState,BreweryP
                 mainViewStates.add(BeerSlimViewStateAdapterDelegate.ViewState.create(beer.id(), beer.title(), beer.imageUrl(), beer.style(), beer.brewedBy(), beer.ibuValue(), beer.abvValue()));
             }
         }
-        return BreweryViewState.create(vs.name(), vs.imageUrl(), vs.established(), vs.coordinate(), vs.address(), mainViewStates.build(), sideViewStates.build());
+        return BreweryViewState.create(vs.loading(), vs.throwable(), vs.name(), vs.imageUrl(), vs.established(), vs.coordinate(), vs.address(), mainViewStates.build(), sideViewStates.build());
     }
 
     @Override
@@ -228,5 +249,10 @@ public class BreweryFragment extends PresenterFragment<BreweryViewState,BreweryP
             intent.putExtra(BeerActivity.EXTRA_BEER_ID, vs.id());
             startActivity(intent);
         }
+    }
+
+    @OnClick(R.id.error)
+    protected void onErrorClicked() {
+        getPresenter().reloadBrewery();
     }
 }

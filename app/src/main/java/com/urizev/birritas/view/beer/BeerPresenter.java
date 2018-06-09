@@ -54,7 +54,7 @@ class BeerPresenter extends Presenter<PresenterBeerViewState> {
         this.mNa = resourceProvider.getString(R.string.n_a);
         this.mNoSrm = resourceProvider.getColor(R.color.no_srm);
         this.mHyphen = resourceProvider.getString(R.string.hyphen);
-        this.mBeerModel = BehaviorSubject.createDefault(BeerModel.builder().build());
+        this.mBeerModel = BehaviorSubject.createDefault(BeerModel.builder().loading(true).build());
         observeModels();
         loadBeer(mBeerId);
     }
@@ -65,6 +65,8 @@ class BeerPresenter extends Presenter<PresenterBeerViewState> {
                 .observeOn(Schedulers.computation())
                 .flatMap(id -> mBeerDetailsUseCase.execute(id).subscribeOn(Schedulers.computation()))
                 .map(beer -> mBeerModel.getValue().withBeer(beer))
+                .startWith(mBeerModel.getValue().withLoading(true))
+                .onErrorReturn(throwable -> mBeerModel.getValue().withThrowable(throwable))
                 .doOnNext(mBeerModel::onNext)
                 .subscribe());
     }
@@ -91,7 +93,6 @@ class BeerPresenter extends Presenter<PresenterBeerViewState> {
         String srmText = mNa;
         String ibuText = mNa;
         String abvText = mNa;
-        int srmColor = mNoSrm;
         ImmutableList.Builder<String> ingredients = new ImmutableList.Builder<>();
         Beer beer = model.beer();
         boolean favorite = favorites.contains(mBeerId);
@@ -145,14 +146,23 @@ class BeerPresenter extends Presenter<PresenterBeerViewState> {
             }
         }
 
-        return PresenterBeerViewState.create(name, imageUrl, brewedBy, brewedById, styleText, srmText, srmColor,
+        return PresenterBeerViewState.create(model.loading(), model.throwable(), name, imageUrl, brewedBy, brewedById, styleText, srmText, mNoSrm,
                 ibuText, abvText, ingredients.build(), favorite);
     }
 
     public void onFavoriteClicked(boolean selected) {
-        String id = mBeerModel.getValue().beer().id();
+        Beer beer = mBeerModel.getValue().beer();
+        if (beer == null) {
+             return;
+        }
+
+        String id = beer.id();
         addDisposable(mUpdateFavoriteBeerUseCase
                 .execute(UpdateFavoriteBeerUseCase.FavoriteEvent.create(id, selected))
                 .subscribe());
+    }
+
+    public void reloadBeer() {
+        loadBeer(mBeerId);
     }
 }

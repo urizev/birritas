@@ -8,6 +8,10 @@ import com.urizev.birritas.view.common.ViewState;
 
 @AutoValue
 public abstract class BeerViewState implements ViewState {
+    public abstract boolean loading();
+    @Nullable
+    public abstract Throwable throwable();
+
     public abstract String name();
 
     @Nullable
@@ -26,7 +30,9 @@ public abstract class BeerViewState implements ViewState {
 
     public abstract boolean favorite();
 
-    public static BeerViewState create(String name,
+    public static BeerViewState create(boolean loading,
+                                       Throwable throwable,
+                                       String name,
                                        String imageUrl,
                                        String abv,
                                        String ibu,
@@ -35,6 +41,6 @@ public abstract class BeerViewState implements ViewState {
                                        ImmutableList<ViewState> mainViewStates,
                                        ImmutableList<ViewState> sideViewStates,
                                        boolean favorite) {
-        return new AutoValue_BeerViewState(name, imageUrl, abv, ibu, srm, srmColor, mainViewStates, sideViewStates, favorite);
+        return new AutoValue_BeerViewState(loading, throwable, name, imageUrl, abv, ibu, srm, srmColor, mainViewStates, sideViewStates, favorite);
     }
 }

@@ -43,17 +43,19 @@ class BreweryPresenter extends Presenter<BreweryPresenterViewState> {
         this.mBreweryId = beerId;
         this.mBreweryDetailsUseCase = breweryDetailsUseCase;
         mResourceProvider = resourceProvider;
-        this.mBreweryModel = BehaviorSubject.createDefault(BreweryModel.builder().build());
+        this.mBreweryModel = BehaviorSubject.createDefault(BreweryModel.builder().loading(true).build());
         observeModels();
-        loadBeer(mBreweryId);
+        loadBrewery(mBreweryId);
     }
 
-    private void loadBeer(String beerId) {
+    private void loadBrewery(String beerId) {
         addDisposable(Observable.just(beerId)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(Schedulers.computation())
                 .flatMap(id -> mBreweryDetailsUseCase.execute(id).subscribeOn(Schedulers.computation()))
                 .map(beer -> mBreweryModel.getValue().withBrewery(beer))
+                .startWith(mBreweryModel.getValue().withLoading(true))
+                .onErrorReturn(throwable -> mBreweryModel.getValue().withThrowable(throwable))
                 .doOnNext(mBreweryModel::onNext)
                 .subscribe());
     }
@@ -106,7 +108,7 @@ class BreweryPresenter extends Presenter<BreweryPresenterViewState> {
             description = brewery.description();
         }
 
-        return BreweryPresenterViewState.create(name, imageUrl, established, coordinate, address, description, beersBuilder.build());
+        return BreweryPresenterViewState.create(model.loading(), model.throwable(), name, imageUrl, established, coordinate, address, description, beersBuilder.build());
     }
 
     private BreweryBeerPresenterViewState beerToViewState(Beer beer) {
@@ -144,5 +146,9 @@ class BreweryPresenter extends Presenter<BreweryPresenterViewState> {
         }
 
         return BreweryBeerPresenterViewState.create(beer.id(), beer.name(), icon, styleName, brewedBy,srmColor, srmValue, ibuValue, abvValue);
+    }
+
+    public void reloadBrewery() {
+        loadBrewery(mBreweryId);
     }
 }

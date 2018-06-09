@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -32,8 +33,7 @@ public class FavoriteBeersFragment extends DirectPresenterFragment<FavoriteBeers
 
     @BindView(R.id.favorites_content) RecyclerView mContentView;
     @BindView(R.id.favorites_loading) LoadingView mLoadingView;
-    @BindView(R.id.favorites_error)
-    MessageView mMessageView;
+    @BindView(R.id.favorites_error) MessageView mMessageView;
 
     @Inject FavoriteBeersUseCase mFavoriteBeersUseCase;
     @Inject UpdateFavoriteBeerUseCase mUpdateFavoriteBeerUseCase;
@@ -129,5 +129,10 @@ public class FavoriteBeersFragment extends DirectPresenterFragment<FavoriteBeers
             mTouchDisposable = null;
         }
         super.onDestroyView();
+    }
+
+    @OnClick(R.id.favorites_error)
+    protected void onErrorClicked() {
+        getPresenter().reloadData();
     }
 }

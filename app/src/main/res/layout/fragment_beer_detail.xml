@@ -5,21 +5,37 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+    <FrameLayout
+        android:id="@+id/content"
+        android:visibility="invisible"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fav_action"
-        app:fabSize="normal"
-        android:src="@drawable/fav_selector"
-        android:tint="@android:color/white"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_gravity="bottom|end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fav_action"
+            app:fabSize="normal"
+            android:src="@drawable/fav_selector"
+            android:tint="@android:color/white"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_gravity="bottom|end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
+
+    <com.urizev.birritas.ui.LoadingView
+    android:id="@+id/loading"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+
+    <com.urizev.birritas.ui.MessageView
+    android:id="@+id/error"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
 </FrameLayout>

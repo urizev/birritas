@@ -20,6 +20,8 @@ import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.domain.usecases.BeerDetailsUseCase;
 import com.urizev.birritas.domain.usecases.FavoritesBeerIdsUseCase;
 import com.urizev.birritas.domain.usecases.UpdateFavoriteBeerUseCase;
+import com.urizev.birritas.ui.LoadingView;
+import com.urizev.birritas.ui.MessageView;
 import com.urizev.birritas.view.beer.adapter.BeerBreweryViewStateAdapterDelegate;
 import com.urizev.birritas.view.beer.adapter.IbuAbvSrmViewStateAdapterDelegate;
 import com.urizev.birritas.view.beer.adapter.IngredientViewStateAdapterDelegate;
@@ -44,6 +46,9 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
     private static final String KEY_MAIN_LIST_STATE = "com.urizev.birritas.view.beer.mainListState";
     private static final String KEY_SIDE_LIST_STATE = "com.urizev.birritas.view.beer.sideListState";
 
+    @BindView(R.id.content) View mContentView;
+    @BindView(R.id.loading) LoadingView mLoadingView;
+    @BindView(R.id.error) MessageView mMessageView;
     @BindView(R.id.main_recycler) RecyclerView mMainRecyclerView;
     @Nullable @BindView(R.id.side_recycler) RecyclerView mSideRecyclerView;
     @BindView(R.id.fav_action) View fabAction;
@@ -135,6 +140,21 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
             actionBar.setTitle(vs.name());
         }
 
+        mContentView.setVisibility(View.INVISIBLE);
+        mLoadingView.setVisibility(View.INVISIBLE);
+        mMessageView.setVisibility(View.INVISIBLE);
+        Throwable throwable = vs.throwable();
+        if (vs.loading()) {
+            mLoadingView.setVisibility(View.VISIBLE);
+        }
+        else if (throwable != null) {
+            mMessageView.setVisibility(View.VISIBLE);
+            mMessageView.setMessage(throwable.getLocalizedMessage());
+        }
+        else {
+            mContentView.setVisibility(View.VISIBLE);
+        }
+
         mMainAdapter.setItems(vs.mainViewStates());
         mMainAdapter.notifyDataSetChanged();
         if (mListStateShouldBeRestored) {
@@ -187,7 +207,7 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
 
         ImmutableList.Builder<ViewState> builder = mSideRecyclerView != null ? sideBuilder : mainBuilder;
         builder = builder.add(ImageViewStateAdapterDelegate.ViewState.create(pvs.imageUrl()));
-        builder = builder.add(IbuAbvSrmViewStateAdapterDelegate.ViewState.create(pvs.ibu(), pvs.abv(), pvs.srm(), pvs.srmColor()));
+        builder.add(IbuAbvSrmViewStateAdapterDelegate.ViewState.create(pvs.ibu(), pvs.abv(), pvs.srm(), pvs.srmColor()));
         mainBuilder = mainBuilder.add(HeaderViewStateAdapterDelegate.ViewState.create(getResources().getString(R.string.brewed_by)));
         if (pvs.brewedById() != null) {
             mainBuilder = mainBuilder.add(BeerBreweryViewStateAdapterDelegate.ViewState.create(pvs.brewedById(), pvs.brewedBy()));
@@ -201,7 +221,7 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
             }
         }
 
-        return BeerViewState.create(pvs.name(), pvs.imageUrl(), pvs.abv(), pvs.ibu(), pvs.srm(), pvs.srmColor(), mainBuilder.build(), sideBuilder.build(), pvs.favorite());
+        return BeerViewState.create(pvs.loading(), pvs.throwable(), pvs.name(), pvs.imageUrl(), pvs.abv(), pvs.ibu(), pvs.srm(), pvs.srmColor(), mainBuilder.build(), sideBuilder.build(), pvs.favorite());
     }
 
 
@@ -215,5 +235,10 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
             intent.putExtra(BreweryActivity.EXTRA_BREWERY_ID, vs.id());
             startActivity(intent);
         }
+    }
+
+    @OnClick(R.id.error)
+    protected void onErrorClicked() {
+        getPresenter().reloadBeer();
     }
 }

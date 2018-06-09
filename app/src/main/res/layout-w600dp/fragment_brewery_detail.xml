@@ -1,22 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/side_recycler"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        android:layout_width="@dimen/brewery_side_width"
-        android:layout_height="match_parent" />
-
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/main_recycler"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        android:background="@android:color/white"
+    <FrameLayout
+        android:id="@+id/content"
+        android:visibility="invisible"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/side_recycler"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            android:layout_width="@dimen/brewery_side_width"
+            android:layout_height="match_parent" />
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/main_recycler"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            android:background="@android:color/white"
+            android:layout_marginLeft="@dimen/brewery_side_width"
+            android:layout_marginStart="@dimen/brewery_side_width"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+    <com.urizev.birritas.ui.LoadingView
+    android:id="@+id/loading"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+
+    <com.urizev.birritas.ui.MessageView
+    android:id="@+id/error"
+    android:visibility="invisible"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+</FrameLayout>

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -27,6 +28,7 @@ class FavoriteBeersPresenter extends Presenter<FavoriteBeersViewState> {
     private final UpdateFavoriteBeerUseCase updateFavoriteBeerUseCase;
     private final BehaviorSubject<FavoriteBeersModel> model;
     private final String mNa;
+    private Disposable mLoadFavoritesDisposable;
 
     FavoriteBeersPresenter(FavoriteBeersUseCase favoriteBeersUseCase,
                            UpdateFavoriteBeerUseCase updateFavoriteBeerUseCase,
@@ -44,12 +46,26 @@ class FavoriteBeersPresenter extends Presenter<FavoriteBeersViewState> {
     }
 
     private void observeFavorites() {
-        addDisposable(this.favoriteBeersUseCase.execute(null)
+        if (mLoadFavoritesDisposable != null) {
+            return;
+        }
+
+        this.mLoadFavoritesDisposable = this.favoriteBeersUseCase.execute(null)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(Schedulers.computation())
                 .map(beers -> model.getValue().withBeers(beers))
+                .onErrorReturn(throwable -> model.getValue().withThrowable(throwable))
                 .doOnNext(model::onNext)
-                .subscribe());
+                .subscribe();
+    }
+
+    void reloadData() {
+        if (mLoadFavoritesDisposable != null) {
+            mLoadFavoritesDisposable.dispose();
+            mLoadFavoritesDisposable = null;
+        }
+
+        observeFavorites();
     }
 
     private void observeModelUpdates() {
@@ -118,5 +134,13 @@ class FavoriteBeersPresenter extends Presenter<FavoriteBeersViewState> {
                 .subscribeOn(Schedulers.computation())
                 .observeOn(Schedulers.computation())
                 .subscribe();
+    }
+
+    @Override
+    protected void dispose() {
+        super.dispose();
+        if (mLoadFavoritesDisposable != null) {
+            mLoadFavoritesDisposable.dispose();
+        }
     }
 }

@@ -5,9 +5,26 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/main_recycler"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/main_recycler"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+    <com.urizev.birritas.ui.LoadingView
+        android:id="@+id/loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <com.urizev.birritas.ui.MessageView
+        android:id="@+id/error"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </FrameLayout>

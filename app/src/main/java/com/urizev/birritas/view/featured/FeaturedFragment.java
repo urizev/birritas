@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -32,8 +33,7 @@ public class FeaturedFragment extends DirectPresenterFragment<FeaturedViewState,
 
     @BindView(R.id.featured_content) RecyclerView mContentView;
     @BindView(R.id.featured_loading) LoadingView mLoadingView;
-    @BindView(R.id.featured_error)
-    MessageView mMessageView;
+    @BindView(R.id.featured_error) MessageView mMessageView;
 
     @Inject ImageLoader mImageLoader;
     @Inject ResourceProvider mResourceProvider;
@@ -118,5 +118,10 @@ public class FeaturedFragment extends DirectPresenterFragment<FeaturedViewState,
                 .subscribe());
         mContentView.setAdapter(mAdapter);
         return true;
+    }
+
+    @OnClick(R.id.featured_error)
+    protected void onErrorClicked() {
+        getPresenter().loadData();
     }
 }

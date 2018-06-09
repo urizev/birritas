@@ -8,6 +8,10 @@ import com.urizev.birritas.view.common.ViewState;
 
 @AutoValue
 public abstract class PresenterBeerViewState implements ViewState {
+    public abstract boolean loading();
+    @Nullable
+    public abstract Throwable throwable();
+
     public abstract String name();
     @Nullable
     public abstract String imageUrl();
@@ -22,7 +26,9 @@ public abstract class PresenterBeerViewState implements ViewState {
     public abstract ImmutableList<String> ingredients();
     public abstract boolean favorite();
 
-    public static PresenterBeerViewState create(String name,
+    public static PresenterBeerViewState create(boolean loading,
+                                                Throwable throwable,
+                                                String name,
                                                 String imageUrl,
                                                 String brewedBy,
                                                 String brewedById,
@@ -33,6 +39,6 @@ public abstract class PresenterBeerViewState implements ViewState {
                                                 String abv,
                                                 ImmutableList<String> ingredients,
                                                 boolean favorite) {
-        return new AutoValue_PresenterBeerViewState(name, imageUrl, brewedBy, brewedById, style, srm, srmColor, ibu, abv, ingredients, favorite);
+        return new AutoValue_PresenterBeerViewState(loading, throwable, name, imageUrl, brewedBy, brewedById, style, srm, srmColor, ibu, abv, ingredients, favorite);
     }
 }
