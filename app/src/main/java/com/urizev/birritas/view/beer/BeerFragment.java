@@ -8,8 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.R;
@@ -41,15 +39,8 @@ import butterknife.OnClick;
 public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerViewState,BeerPresenter> implements ViewStateAdapterDelegate.ViewStateAdapterDelegateClickListener {
     private static final String EXTRA_BEER_ID = "beerId";
 
-    @Nullable
-    @BindView(R.id.beer_label) ImageView labelView;
-    @Nullable
-    @BindView(R.id.srm_value) TextView srmView;
-    @Nullable
-    @BindView(R.id.ibu_value) TextView ibuView;
-    @Nullable
-    @BindView(R.id.abv_value) TextView abvView;
-    @BindView(R.id.recycler) RecyclerView recyclerView;
+    @BindView(R.id.main_recycler) RecyclerView mMainRecyclerView;
+    @Nullable @BindView(R.id.side_recycler) RecyclerView mSideRecyclerView;
     @BindView(R.id.fav_action) View fabAction;
 
     @Inject ImageLoader mImageLoader;
@@ -59,7 +50,8 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
 
     @Inject ResourceProvider mResourceProvider;
     private ImmutableList<ViewStateAdapterDelegate> mAdapterDelegates;
-    private ViewStateAdapter mAdapter;
+    private ViewStateAdapter mMainAdapter;
+    private ViewStateAdapter mSideAdapter;
 
     public static Fragment newInstance(String beerId) {
         Fragment fragment = new BeerFragment();
@@ -108,17 +100,17 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
     protected void renderViewState(BeerViewState vs) {
         RxUtils.assertMainThread();
 
-        getBaseActivity().getSupportActionBar().setTitle(vs.name());
-
-        if (labelView != null && srmView != null && ibuView != null && abvView != null) {
-            mImageLoader.load(vs.imageUrl(), labelView);
-            srmView.setText(vs.srm());
-            ibuView.setText(vs.ibu());
-            abvView.setText(vs.abv());
+        ActionBar actionBar = getBaseActivity().getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(vs.name());
         }
 
-        mAdapter.setItems(vs.mainViewStates());
-        mAdapter.notifyDataSetChanged();
+        mMainAdapter.setItems(vs.mainViewStates());
+        mMainAdapter.notifyDataSetChanged();
+        if (mSideRecyclerView != null) {
+            mSideAdapter.setItems(vs.sideViewStates());
+            mSideAdapter.notifyDataSetChanged();
+        }
 
         fabAction.setSelected(vs.favorite());
     }
@@ -138,8 +130,13 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
             actionBar.setDisplayShowHomeEnabled(true);
         }
 
-        mAdapter = new ViewStateAdapter(mAdapterDelegates);
-        recyclerView.setAdapter(mAdapter);
+        mMainAdapter = new ViewStateAdapter(mAdapterDelegates);
+        mMainRecyclerView.setAdapter(mMainAdapter);
+
+        if (mSideRecyclerView != null) {
+            mSideAdapter = new ViewStateAdapter(mAdapterDelegates);
+            mSideRecyclerView.setAdapter(mSideAdapter);
+        }
 
         return true;
     }
@@ -147,24 +144,26 @@ public class BeerFragment extends PresenterFragment<BeerViewState,PresenterBeerV
 
     @Override
     protected BeerViewState prepareViewState(PresenterBeerViewState pvs) {
-        ImmutableList.Builder<ViewState> builder = new ImmutableList.Builder<>();
+        ImmutableList.Builder<ViewState> mainBuilder = new ImmutableList.Builder<>();
+        ImmutableList.Builder<ViewState> sideBuilder = new ImmutableList.Builder<>();
 
+        ImmutableList.Builder<ViewState> builder = mSideRecyclerView != null ? sideBuilder : mainBuilder;
         builder = builder.add(ImageViewStateAdapterDelegate.ViewState.create(pvs.imageUrl()));
         builder = builder.add(IbuAbvSrmViewStateAdapterDelegate.ViewState.create(pvs.ibu(), pvs.abv(), pvs.srm(), pvs.srmColor()));
-        builder = builder.add(HeaderViewStateAdapterDelegate.ViewState.create(getResources().getString(R.string.brewed_by)));
+        mainBuilder = mainBuilder.add(HeaderViewStateAdapterDelegate.ViewState.create(getResources().getString(R.string.brewed_by)));
         if (pvs.brewedById() != null) {
-            builder = builder.add(BeerBreweryViewStateAdapterDelegate.ViewState.create(pvs.brewedById(), pvs.brewedBy()));
+            mainBuilder = mainBuilder.add(BeerBreweryViewStateAdapterDelegate.ViewState.create(pvs.brewedById(), pvs.brewedBy()));
         }
-        builder = builder.add(HeaderViewStateAdapterDelegate.ViewState.create(getResources().getString(R.string.style)));
-        builder = builder.add(SingleLineViewStateAdapterDelegate.ViewState.create(pvs.style()));
+        mainBuilder = mainBuilder.add(HeaderViewStateAdapterDelegate.ViewState.create(getResources().getString(R.string.style)));
+        mainBuilder = mainBuilder.add(SingleLineViewStateAdapterDelegate.ViewState.create(pvs.style()));
         if (!pvs.ingredients().isEmpty()) {
-            builder = builder.add(HeaderViewStateAdapterDelegate.ViewState.create(getResources().getString(R.string.ingredients)));
+            mainBuilder = mainBuilder.add(HeaderViewStateAdapterDelegate.ViewState.create(getResources().getString(R.string.ingredients)));
             for (String ingredient : pvs.ingredients()) {
-                builder = builder.add(IngredientViewStateAdapterDelegate.ViewState.create(ingredient));
+                mainBuilder = mainBuilder.add(IngredientViewStateAdapterDelegate.ViewState.create(ingredient));
             }
         }
 
-        return BeerViewState.create(pvs.name(), pvs.imageUrl(), pvs.abv(), pvs.ibu(), pvs.srm(), pvs.srmColor(), builder.build(), pvs.favorite());
+        return BeerViewState.create(pvs.name(), pvs.imageUrl(), pvs.abv(), pvs.ibu(), pvs.srm(), pvs.srmColor(), mainBuilder.build(), sideBuilder.build(), pvs.favorite());
     }
 
 

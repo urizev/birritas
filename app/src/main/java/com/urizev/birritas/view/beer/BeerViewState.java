@@ -19,6 +19,7 @@ public abstract class BeerViewState implements ViewState {
     public abstract int srmColor();
 
     public abstract ImmutableList<ViewState> mainViewStates();
+    public abstract ImmutableList<ViewState> sideViewStates();
 
     public abstract boolean favorite();
 
@@ -29,7 +30,8 @@ public abstract class BeerViewState implements ViewState {
                                        String srm,
                                        int srmColor,
                                        ImmutableList<ViewState> mainViewStates,
+                                       ImmutableList<ViewState> sideViewStates,
                                        boolean favorite) {
-        return new AutoValue_BeerViewState(name, imageUrl, abv, ibu, srm, srmColor, mainViewStates, favorite);
+        return new AutoValue_BeerViewState(name, imageUrl, abv, ibu, srm, srmColor, mainViewStates, sideViewStates, favorite);
     }
 }

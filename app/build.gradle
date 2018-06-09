@@ -44,6 +44,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:$playServicesVersion"
     implementation "com.google.firebase:firebase-database:$firebaseVersion"
     implementation "com.google.firebase:firebase-auth:$firebaseVersion"
+    implementation "com.google.firebase:firebase-core:$firebaseVersion"
     implementation "com.google.guava:guava:$guavaVersion-android"
     implementation "com.google.dagger:dagger:$daggerVersion"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
@@ -61,7 +62,7 @@ dependencies {
     implementation "de.hdodenhof:circleimageview:$circleimageviewVersion"
     implementation "com.hannesdorfmann:adapterdelegates3:$adapterdelegatesVersion"
 
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation "com.android.support.constraint:constraint-layout:$constraintlayoutVersion"
     compileOnly "com.google.auto.value:auto-value:$autovalueVersion"
     compileOnly "com.ryanharter.auto.value:auto-value-moshi-annotations:$autovaluemoshiVersion"
 

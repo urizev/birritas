@@ -7,7 +7,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.2'
+        classpath 'com.android.tools.build:gradle:3.1.3'
         classpath 'com.google.gms:google-services:3.1.1'
     }
 }
@@ -28,18 +28,19 @@ ext {
     rxjavaVersion = '2.1.7'
     picassoVersion = '2.5.2'
     retrofitVersion = '2.3.0'
-    firebaseVersion = '11.8.0'
+    firebaseVersion = '15.0.0'
     rxandroidVersion = '2.0.1'
     rxbindingVersion = '2.1.0'
     autovalueVersion = '1.5.2'
     butterknifeVersion = '8.8.1'
-    playServicesVersion = '11.8.0'
+    playServicesVersion = '15.0.0'
     circleimageviewVersion = '2.2.0'
     rxpermissionsVersion = '0.9.5@aar'
     autovaluemoshiVersion = '0.4.4'
     supportLibraryVersion = '26.1.0'
     okhttpdownloaderVersion = '1.1.0'
     adapterdelegatesVersion = '3.0.1'
+    constraintlayoutVersion = '1.1.1'
 }
 
 task clean(type: Delete) {
