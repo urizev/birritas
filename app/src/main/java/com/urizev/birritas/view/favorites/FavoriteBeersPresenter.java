@@ -84,7 +84,11 @@ class FavoriteBeersPresenter extends Presenter<FavoriteBeersViewState> {
         if (breweries != null && !breweries.isEmpty()) {
             List<String> breweryNames = new ArrayList<>(breweries.size());
             for(Brewery brewery : breweries) {
-                breweryNames.add(brewery.shortName());
+                String name = brewery.shortName();
+                if (name == null) {
+                    name = brewery.name();
+                }
+                breweryNames.add(name);
             }
             brewedBy = TextUtils.join(", ", breweryNames);
         }

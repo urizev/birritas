@@ -90,7 +90,11 @@ public class BeerListWidgetUpdateService extends IntentService {
             if (breweries != null && !breweries.isEmpty()) {
                 List<String> breweryNames = new ArrayList<>(breweries.size());
                 for(Brewery brewery : breweries) {
-                    breweryNames.add(brewery.shortName());
+                    String name = brewery.shortName();
+                    if (name == null) {
+                        name = brewery.name();
+                    }
+                    breweryNames.add(name);
                 }
                 brewedBy = TextUtils.join(", ", breweryNames);
             }
@@ -99,9 +103,12 @@ public class BeerListWidgetUpdateService extends IntentService {
             Style style = beer.style();
             if (style != null) {
                 styleName = style.shortName();
+                if (styleName == null) {
+                    styleName = style.name();
+                }
             }
 
-            bundles[index++] = BeerListWidgetBeerViewState.create(beer.id(), beer.name(), icon, styleName, brewedBy, abvValue, ibuValue).toBundle();;
+            bundles[index++] = BeerListWidgetBeerViewState.create(beer.id(), beer.name(), icon, brewedBy, styleName, abvValue, ibuValue).toBundle();
         }
 
         return bundles;

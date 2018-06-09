@@ -13,10 +13,21 @@ android {
         multiDexEnabled true
         buildConfigField('String', 'BREWERYDB_API_KEY', "$brewerydbApiKey")
     }
+
+    signingConfigs {
+        release {
+            storeFile file("birritas.jks")
+            storePassword 'birritas14'
+            keyAlias 'birritas'
+            keyPassword 'birritas14'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
         debug {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -26,6 +37,7 @@ android {
     configurations.all {
         resolutionStrategy.force 'com.google.code.findbugs:jsr305:2.0.1'
     }
+
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
