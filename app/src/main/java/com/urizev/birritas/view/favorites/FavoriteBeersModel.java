@@ -1,5 +1,7 @@
 package com.urizev.birritas.view.favorites;
 
+import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.urizev.birritas.domain.entities.Beer;
@@ -8,6 +10,7 @@ import com.urizev.birritas.domain.entities.Beer;
 public abstract class FavoriteBeersModel {
     public abstract ImmutableList<Beer> beers();
     public abstract boolean loading();
+    @Nullable
     public abstract Throwable throwable();
 
     FavoriteBeersModel withBeers(ImmutableList<Beer> beers) {
