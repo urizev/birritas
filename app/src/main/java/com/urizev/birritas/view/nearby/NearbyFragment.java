@@ -41,6 +41,7 @@ import com.urizev.birritas.app.rx.RxUtils;
 import com.urizev.birritas.app.utils.SphericalUtil;
 import com.urizev.birritas.domain.entities.Coordinate;
 import com.urizev.birritas.domain.usecases.NearbyUseCase;
+import com.urizev.birritas.ui.MapMessageView;
 import com.urizev.birritas.view.brewery.BreweryActivity;
 import com.urizev.birritas.view.common.PresenterFragment;
 
@@ -55,14 +56,16 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerViewState>,NearbyViewState<PlaceViewState>,NearbyPresenter> {
+public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerViewState>,NearbyViewState<PlaceViewState>,NearbyPresenter> implements MapMessageView.MapMessageViewListener {
     private static final long PLACE_CARD_TRANSITION_DURATION = 300;
     private static final int RADIUS = 5000;
+    private static final long MESSAGE_TRANSITION_DURATION = 150;
 
     private GoogleMap mMap;
     private Map<Marker, MarkerViewState> viewStatesByMarker;
     private Map<String,Marker> markersById;
     @BindView(R.id.constraint_layout) ConstraintLayout constraintLayout;
+    @BindView(R.id.map_message) MapMessageView messageView;
     @BindView(R.id.place_card) View placeCard;
     @BindView(R.id.place_selected_image) ImageView selectedPlaceImage;
     @BindView(R.id.place_selected_name) TextView selectedPlaceName;
@@ -73,13 +76,12 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
     @Inject ResourceProvider resourceProvider;
     @Inject RxLocation rxLocation;
     @Inject ImageLoader imageLoader;
-    private ConstraintSet mPlaceCardHiddenConstraintSet;
-    private ConstraintSet mPlaceCardShowedConstraintSet;
-    private AutoTransition mPlaceCardTransition;
     private int mMapBoundsPadding;
     private BitmapDescriptor defaultMarkerIcon;
     private BitmapDescriptor selectedMarkerIcon;
     private boolean mMyLocationEnabled;
+    private boolean mPlaceCardShowed;
+    private boolean mMessageShowed;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,6 +106,7 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
     protected NearbyPresenter createPresenter(Bundle savedInstanceState) {
         NearbyModel model = NearbyModel.builder()
                 .mapCoordinate(Coordinate.create(RxLocation.DEFAULT_LOCATION.getLatitude(), RxLocation.DEFAULT_LOCATION.getLongitude()))
+                .loading(true)
                 .shouldMoveMap(true)
                 .waitingUserCoordinate(true)
                 .places(ImmutableSet.of())
@@ -122,6 +125,15 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
     @Override
     protected void renderViewState(NearbyViewState<MarkerViewState> vs) {
         RxUtils.assertMainThread();
+
+        Throwable throwable = vs.throwable();
+        showMessage(vs.loading() || throwable != null);
+        if (vs.loading()) {
+            messageView.setLoading();
+        }
+        else if (throwable != null) {
+            messageView.setError(throwable.getLocalizedMessage());
+        }
 
         if (vs.requestLocationPermission()) {
             getPresenter().clearRequestLocationPermissions();
@@ -184,8 +196,36 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
     }
 
     private void showPlaceCard(boolean show) {
-        ConstraintSet set = show ? mPlaceCardShowedConstraintSet : mPlaceCardHiddenConstraintSet;
-        TransitionManager.beginDelayedTransition(constraintLayout, mPlaceCardTransition);
+        if (this.mPlaceCardShowed == show) {
+            return;
+        }
+        this.mPlaceCardShowed = show;
+
+        AutoTransition transition = new AutoTransition();
+        transition.setDuration(PLACE_CARD_TRANSITION_DURATION);
+        ConstraintSet set = new ConstraintSet();
+        set.clone(constraintLayout);
+        set.clear(R.id.place_card, show ? ConstraintSet.TOP : ConstraintSet.BOTTOM);
+        set.addToVerticalChain(R.id.place_card, show ? ConstraintSet.UNSET : ConstraintSet.BOTTOM, show ? ConstraintSet.PARENT_ID : ConstraintSet.UNSET);
+
+        TransitionManager.beginDelayedTransition(constraintLayout, transition);
+        set.applyTo(constraintLayout);
+    }
+
+    private void showMessage(boolean show) {
+        if (this.mMessageShowed == show) {
+            return;
+        }
+        this.mMessageShowed = show;
+
+        AutoTransition transition = new AutoTransition();
+        transition.setDuration(MESSAGE_TRANSITION_DURATION);
+        ConstraintSet set = new ConstraintSet();
+        set.clone(constraintLayout);
+        set.clear(R.id.map_message, show ? ConstraintSet.BOTTOM : ConstraintSet.TOP);
+        set.addToVerticalChain(R.id.map_message, show ? ConstraintSet.PARENT_ID : ConstraintSet.UNSET, show ? ConstraintSet.UNSET : ConstraintSet.TOP);
+
+        TransitionManager.beginDelayedTransition(constraintLayout, transition);
         set.applyTo(constraintLayout);
     }
 
@@ -193,21 +233,12 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
     protected boolean bindView(View view) {
         ButterKnife.bind(this, view);
 
-        mPlaceCardTransition = new AutoTransition();
-        mPlaceCardTransition.setDuration(PLACE_CARD_TRANSITION_DURATION);
-
-        mPlaceCardHiddenConstraintSet = new ConstraintSet();
-        mPlaceCardHiddenConstraintSet.clone(constraintLayout);
-        mPlaceCardShowedConstraintSet = new ConstraintSet();
-        mPlaceCardShowedConstraintSet.clone(mPlaceCardHiddenConstraintSet);
-
-        mPlaceCardShowedConstraintSet.clear(R.id.place_card, ConstraintSet.TOP);
-        mPlaceCardShowedConstraintSet.addToVerticalChain(R.id.place_card, ConstraintSet.UNSET, ConstraintSet.PARENT_ID);
-
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this::onMapReady);
         }
+
+        messageView.setListener(this);
 
         return false;
     }
@@ -261,6 +292,7 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
     @OnClick(R.id.go_to_user_location)
     public void onGoToUserLocationClicked() {
         getPresenter().onGoToUserLocationClicked();
+        showMessage(!mPlaceCardShowed);
     }
 
     @OnClick(R.id.place_card)
@@ -281,7 +313,7 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
         for (PlaceViewState pvs : vs.viewStates()) {
             builder = builder.add(this.placeToMarker(pvs, pvs.id().equals(selectedPlaceId)));
         }
-        return NearbyViewState.create(vs.coordinate(), vs.shouldMove(), vs.error(), builder.build(), vs.selectedPlaceViewState(), vs.requestLocationPermission(), vs.hasLocationPermission());
+        return NearbyViewState.create(vs.coordinate(), vs.shouldMove(), vs.loading(), vs.throwable(), builder.build(), vs.selectedPlaceViewState(), vs.requestLocationPermission(), vs.hasLocationPermission());
     }
 
     private MarkerViewState placeToMarker(PlaceViewState pvs, boolean selected) {
@@ -292,5 +324,10 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
                 .icon(selected ? selectedMarkerIcon : defaultMarkerIcon)
                 .position(new LatLng(pvs.coordinate().latitude(), pvs.coordinate().longitude()));
         return MarkerViewState.create(pvs.id(), selected, options);
+    }
+
+    @Override
+    public void onRetryClicked(MapMessageView view) {
+        getPresenter().onRetryClicked();
     }
 }

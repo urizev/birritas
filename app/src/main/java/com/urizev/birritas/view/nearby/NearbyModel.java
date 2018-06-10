@@ -10,6 +10,9 @@ import com.urizev.birritas.domain.entities.Place;
 
 @AutoValue
 public abstract class NearbyModel {
+    public abstract boolean loading();
+    @Nullable
+    public abstract Throwable throwable();
     public abstract ImmutableSet<Place> places();
     @Nullable
     public abstract String selectedPlaceId();
@@ -18,22 +21,8 @@ public abstract class NearbyModel {
     @Nullable
     public abstract Coordinate mapCoordinate();
     public abstract boolean shouldMoveMap();
-    @Nullable
-    public abstract Throwable error();
     public abstract boolean requestLocationPermission();
     public abstract boolean hasLocationPermission();
-
-    NearbyModel mergePlaces(ImmutableList<Place> places) {
-        ImmutableSet.Builder<Place> builder = new ImmutableSet.Builder<>();
-        builder = builder.addAll(places());
-        builder = builder.addAll(places);
-
-        return this.toBuilder()
-                .selectedPlaceId(selectedPlaceId())
-                .places(builder.build())
-                .error(null)
-                .build();
-    }
 
     private Builder toBuilder() {
         return NearbyModel.builder()
@@ -44,7 +33,8 @@ public abstract class NearbyModel {
                 .shouldMoveMap(shouldMoveMap())
                 .requestLocationPermission(requestLocationPermission())
                 .hasLocationPermission(hasLocationPermission())
-                .error(error())
+                .loading(loading())
+                .throwable(throwable())
                 .places(places());
     }
 
@@ -55,8 +45,24 @@ public abstract class NearbyModel {
                 .requestLocationPermission(false);
     }
 
-    NearbyModel withError(Throwable throwable) {
-        return toBuilder().error(throwable).build();
+    NearbyModel mergePlaces(ImmutableList<Place> places) {
+        ImmutableSet.Builder<Place> builder = new ImmutableSet.Builder<>();
+        builder = builder.addAll(places());
+        builder = builder.addAll(places);
+
+        return this.toBuilder()
+                .selectedPlaceId(selectedPlaceId())
+                .places(builder.build())
+                .loading(false)
+                .throwable(null)
+                .build();
+    }
+
+    NearbyModel withThrowable(Throwable throwable) {
+        return toBuilder()
+                .loading(throwable == null)
+                .throwable(throwable)
+                .build();
     }
 
     NearbyModel withIdleLocation(Coordinate coordinate) {
@@ -108,13 +114,14 @@ public abstract class NearbyModel {
 
     @AutoValue.Builder
     public static abstract class Builder {
+        public abstract Builder loading(boolean loading);
         public abstract Builder places(ImmutableSet<Place> places);
         public abstract Builder selectedPlaceId(String id);
         public abstract Builder mapReady(boolean mapReady);
         public abstract Builder waitingUserCoordinate(boolean waitingUserCoordinate);
         public abstract Builder mapCoordinate(Coordinate coordinate);
         public abstract Builder shouldMoveMap(boolean shouldMoveMap);
-        public abstract Builder error(Throwable error);
+        public abstract Builder throwable(Throwable throwable);
         public abstract Builder requestLocationPermission(boolean requestLocationPermission);
         public abstract Builder hasLocationPermission(boolean hasLocationPermission);
 

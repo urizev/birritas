@@ -79,8 +79,9 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
                 .onErrorReturn(throwable -> {
                     RxUtils.assertComputationThread();
                     Timber.e(throwable);
-                    return mModel.getValue().withError(throwable);
+                    return mModel.getValue().withThrowable(throwable);
                 })
+                .startWith(mModel.getValue().withThrowable(null))
                 .doOnNext(mModel::onNext)
                 .doFinally(() -> Timber.d("Completed!"))
                 .subscribe());
@@ -102,7 +103,15 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
             }
         }
 
-        return NearbyViewState.create(model.mapCoordinate(), model.shouldMoveMap(), model.error(), builder.build(), selectedViewState, model.requestLocationPermission(), model.hasLocationPermission());
+        return NearbyViewState.create(
+                model.mapCoordinate(),
+                model.shouldMoveMap(),
+                model.loading(),
+                model.throwable(),
+                builder.build(),
+                selectedViewState,
+                model.requestLocationPermission(),
+                model.hasLocationPermission());
     }
 
     private PlaceViewState placeToPlaceViewState(Place place) {
@@ -157,5 +166,9 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
 
     void clearRequestLocationPermissions() {
         mModel.onNext(mModel.getValue().withRequestPermission(false));
+    }
+
+    public void onRetryClicked() {
+        subscribeToSearchSpec();
     }
 }

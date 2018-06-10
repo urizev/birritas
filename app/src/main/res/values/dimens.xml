@@ -40,4 +40,7 @@
     <dimen name="favorites_margin">0dp</dimen>
     <dimen name="cell_beer_slim_margin">0dp</dimen>
     <dimen name="featured_grid_horizontal_padding">20dp</dimen>
+    <dimen name="map_message_progress_padding">8dp</dimen>
+    <dimen name="map_message_size">24dp</dimen>
+    <dimen name="map_message_padding">24dp</dimen>
 </resources>
