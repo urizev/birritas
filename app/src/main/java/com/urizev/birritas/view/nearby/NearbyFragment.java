@@ -206,7 +206,7 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
         ConstraintSet set = new ConstraintSet();
         set.clone(constraintLayout);
         set.clear(R.id.place_card, show ? ConstraintSet.TOP : ConstraintSet.BOTTOM);
-        set.addToVerticalChain(R.id.place_card, show ? ConstraintSet.UNSET : ConstraintSet.BOTTOM, show ? ConstraintSet.PARENT_ID : ConstraintSet.UNSET);
+        set.connect(R.id.place_card, show ? ConstraintSet.BOTTOM : ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
 
         TransitionManager.beginDelayedTransition(constraintLayout, transition);
         set.applyTo(constraintLayout);
@@ -223,7 +223,7 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
         ConstraintSet set = new ConstraintSet();
         set.clone(constraintLayout);
         set.clear(R.id.map_message, show ? ConstraintSet.BOTTOM : ConstraintSet.TOP);
-        set.addToVerticalChain(R.id.map_message, show ? ConstraintSet.PARENT_ID : ConstraintSet.UNSET, show ? ConstraintSet.UNSET : ConstraintSet.TOP);
+        set.connect(R.id.map_message, show ? ConstraintSet.TOP : ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
 
         TransitionManager.beginDelayedTransition(constraintLayout, transition);
         set.applyTo(constraintLayout);
@@ -248,7 +248,7 @@ public class NearbyFragment extends PresenterFragment<NearbyViewState<MarkerView
         //mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(SphericalUtil.createBounds(new LatLng(RxLocation.DEFAULT_LOCATION.getLatitude(), RxLocation.DEFAULT_LOCATION.getLongitude()), RADIUS), mMapBoundsPadding));
         defaultMarkerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
         selectedMarkerIcon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
-
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
         bindPresenter();
         addDisposable(RxMap.mapIsIdle(map)
                 .observeOn(Schedulers.computation())

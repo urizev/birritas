@@ -39,7 +39,7 @@ public class MapMessageView extends CardView {
 
     public void setLoading () {
         this.progressBar.setVisibility(View.VISIBLE);
-        this.textView.setText(R.string.loading_);
+        this.textView.setText(R.string.searching_breweries_in_area_);
         this.button.setVisibility(GONE);
     }
 

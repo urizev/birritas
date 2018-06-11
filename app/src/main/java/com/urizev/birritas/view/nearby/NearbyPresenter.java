@@ -66,14 +66,12 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
 
     private void subscribeToSearchSpec() {
         addDisposable(mSearchSpec
-                .doOnNext(s -> Timber.d("Searching…"))
-                .doFinally(() -> Timber.d("Completed??"))
+                .doOnNext(s -> mModel.onNext(mModel.getValue().withThrowable(null)))
                 .subscribeOn(Schedulers.computation())
                 .switchMap(mUseCase::execute)
                 .observeOn(Schedulers.computation())
                 .map(places -> {
                     RxUtils.assertComputationThread();
-                    Timber.d("Places %d", places.size());
                     return mModel.getValue().mergePlaces(places);
                 })
                 .onErrorReturn(throwable -> {
@@ -81,9 +79,7 @@ class NearbyPresenter extends Presenter<NearbyViewState<PlaceViewState>> {
                     Timber.e(throwable);
                     return mModel.getValue().withThrowable(throwable);
                 })
-                .startWith(mModel.getValue().withThrowable(null))
                 .doOnNext(mModel::onNext)
-                .doFinally(() -> Timber.d("Completed!"))
                 .subscribe());
     }
 
