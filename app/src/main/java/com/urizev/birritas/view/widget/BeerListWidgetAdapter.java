@@ -1,6 +1,5 @@
 package com.urizev.birritas.view.widget;
 
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -69,10 +68,10 @@ class BeerListWidgetAdapter implements RemoteViewsService.RemoteViewsFactory {
                 .observeOn(Schedulers.trampoline())
                 .blockingFirst();
         remoteViews.setImageViewBitmap(R.id.beer_label, bitmap);
-        Intent intent = new Intent(mContext, BeerActivity.class);
-        intent.putExtra(BeerActivity.EXTRA_BEER_ID, vs.id());
-        PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
-        remoteViews.setOnClickPendingIntent(R.id.beer_cell, pendingIntent);
+        Intent fillInIntent = new Intent();
+        fillInIntent.putExtra(BeerActivity.EXTRA_BEER_ID, vs.id());
+        remoteViews.setOnClickFillInIntent(R.id.beer_cell, fillInIntent);
+
 
         return remoteViews;
     }

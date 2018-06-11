@@ -1,6 +1,7 @@
 package com.urizev.birritas.view.widget;
 
 import android.app.IntentService;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.urizev.birritas.domain.entities.Style;
 import com.urizev.birritas.domain.usecases.FavoriteBeersUseCase;
 import com.urizev.birritas.domain.usecases.FeaturedBeersUseCase;
 import com.urizev.birritas.domain.usecases.UseCase;
+import com.urizev.birritas.view.beer.BeerActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +72,9 @@ public class BeerListWidgetUpdateService extends IntentService {
                 .blockingFirst();
 
         views.setTextViewText(R.id.widget_title, title);
+        Intent intentTemplate = new Intent(this, BeerActivity.class);
+        PendingIntent startActivityPendingIntent = PendingIntent.getActivity(this, 0, intentTemplate, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setPendingIntentTemplate(R.id.widget_list, startActivityPendingIntent);
         views.setRemoteAdapter(R.id.widget_list, remoteIntent);
 
         manager.notifyAppWidgetViewDataChanged(widgetId, R.id.widget_list);
