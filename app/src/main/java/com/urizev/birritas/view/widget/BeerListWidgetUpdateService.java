@@ -18,7 +18,6 @@ import com.urizev.birritas.domain.entities.ImageSet;
 import com.urizev.birritas.domain.entities.Style;
 import com.urizev.birritas.domain.usecases.FavoriteBeersUseCase;
 import com.urizev.birritas.domain.usecases.FeaturedBeersUseCase;
-import com.urizev.birritas.domain.usecases.UseCase;
 import com.urizev.birritas.view.beer.BeerActivity;
 
 import java.util.ArrayList;
@@ -26,6 +25,8 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
+
+import io.reactivex.Observable;
 
 import static android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID;
 import static android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID;
@@ -57,12 +58,22 @@ public class BeerListWidgetUpdateService extends IntentService {
             return;
         }
 
-        UseCase<Void,ImmutableList<Beer>> useCase;
+        Observable<ImmutableList<Beer>> useCase;
         int type = BeerListWidgetConfigureActivity.loadPref (this, widgetId);
-        useCase = type == R.string.title_favorites ? mFavoriteBeersUseCase : mFeaturedBeersUseCase;
+        switch (type) {
+            case R.string.title_favorites:
+                useCase = mFavoriteBeersUseCase.execute(null);
+                break;
+            case R.string.title_featured:
+                useCase = mFeaturedBeersUseCase.execute(null);
+                break;
+            default:
+                return;
+        }
+
         RemoteViews views = new RemoteViews(getPackageName(), R.layout.beer_list_widget);
         String title = getString(type);
-        Intent remoteIntent = useCase.execute(null)
+        Intent remoteIntent = useCase
                 .map(this::beersToBundles)
                 .map(bundles -> {
                     Intent i = new Intent(this, BeerListWidgetRemoveViewService.class);

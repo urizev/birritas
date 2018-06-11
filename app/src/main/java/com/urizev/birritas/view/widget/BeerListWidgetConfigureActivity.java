@@ -27,7 +27,7 @@ public class BeerListWidgetConfigureActivity extends Activity {
 
     static int loadPref(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        return prefs.getInt(PREF_PREFIX_KEY + appWidgetId, R.string.title_featured);
+        return prefs.getInt(PREF_PREFIX_KEY + appWidgetId, -1);
     }
 
     public static void deletePref(Context context, int appWidgetId) {

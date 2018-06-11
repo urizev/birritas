@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.urizev.birritas.R;
@@ -13,10 +14,6 @@ import javax.inject.Inject;
 
 import static android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID;
 
-/**
- * Implementation of App Widget functionality.
- * App Widget Configuration implemented in {@link BeerListWidgetConfigureActivity BeerListWidgetConfigureActivity}
- */
 public class BeerListWidget extends AppWidgetProvider {
 
     @Inject
@@ -26,7 +23,13 @@ public class BeerListWidget extends AppWidgetProvider {
                                 int appWidgetId) {
         int widgetText = BeerListWidgetConfigureActivity.loadPref (context, appWidgetId);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.beer_list_widget_loading);
-        views.setTextViewText(R.id.widget_title, context.getText(widgetText));
+        if (widgetText <= 0) {
+            views.setViewVisibility(R.id.widget_title, View.GONE);
+        }
+        else {
+            views.setViewVisibility(R.id.widget_title, View.VISIBLE);
+            views.setTextViewText(R.id.widget_title, context.getText(widgetText));
+        }
 
         Intent intent = new Intent(context, BeerListWidgetUpdateService.class);
         intent.putExtra(EXTRA_APPWIDGET_ID, appWidgetId);
